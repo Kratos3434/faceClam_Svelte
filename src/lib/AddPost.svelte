@@ -7,6 +7,9 @@
   import AddPhoto from 'svelte-material-icons/PlusBoxMultiple.svelte';
 	import Loading from "./Loading.svelte";
 	import { openAddPost } from "$lib";
+	import { checkValidFileType } from "../helpers";
+	import { userBaseURL } from "../env";
+  import { useQueryClient } from "@tanstack/svelte-query";
 
   export let token: string | undefined;
   export let user: UserProps;
@@ -15,19 +18,51 @@
   let photo: File | null;
   let error = "";
   let loading = false;
+  let spanEl: any;
+  const queryClient = useQueryClient();
 
-  const handleDescription = (e: any) => {
-    description = e.target.value
+  const handleDescription = () => {
+    description = spanEl.innerText;
   }
 
   const handleFile = (e: any) => {
     photo = e.target.files[0];
   }
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
-    console.log(`Description: ${description}`);
-    console.log("Photo: ", photo);
+    loading = true;
+    if (photo) {
+      const fileType = photo.type;
+      if (!checkValidFileType(fileType)) {
+        error = "Invalid image or video";
+        loading = false;
+        return false;
+      } 
+    }
+    
+    const formdata: any = new FormData();
+    formdata.append("description", description);
+    formdata.append("featureImage", photo);
+    const res = await fetch(`${userBaseURL}/add/post`, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${token}`
+      },
+      body: formdata
+    });
+    const data = await res.json();
+
+    if (!data.status) {
+      error = data.error;
+      loading = false;
+    } else {
+      queryClient.invalidateQueries({
+        queryKey: ['posts'],
+        refetchType: 'active'
+      })
+      $openAddPost = false;
+    }
   }
 </script>
 
@@ -51,7 +86,7 @@
           <a href={`${user.firstName}.${user.lastName}.${user.id}`} class="tw-text-[15px] tw-text-black tw-font-[500] hover:tw-underline">
             {user.firstName} {user.lastName}
           </a>
-          <div class="tw-flex tw-px-[8px] tw-py-[4px] tw-items-center tw-rounded-md tw-bg-gray-200">
+          <div class="tw-flex tw-px-[8px] tw-py-[4px] tw-items-center tw-rounded-md tw-bg-gray-200 tw-gap-1">
             <Public width={12} height={12} />
             <span class="tw-text-[13px]">Public</span>
           </div>
@@ -59,7 +94,7 @@
       </div>
       <form on:submit={handleSubmit}>
         <div class="tw-flex tw-flex-col tw-gap-5">
-          <span contenteditable={true} spellcheck={false} class="tw-w-full tw-outline-none tw-resize-none tw-relative statusBox tw-cursor-text" aria-label={`What's on your mind ${user.firstName}`} tabindex={0} role="textbox" placeholder={`What's on your mind, ${user.firstName}?`} on:input={handleDescription}>
+          <span contenteditable={true} spellcheck={false} class="tw-w-full tw-outline-none tw-resize-none tw-relative statusBox tw-cursor-text" aria-label={`What's on your mind ${user.firstName}`} tabindex={0} role="textbox" placeholder={`What's on your mind, ${user.firstName}?`} on:input={handleDescription} bind:this={spanEl}>
 
           </span>
           {#if !photo}
@@ -116,5 +151,8 @@
 {#if loading}
   <Modal>
     <Loading width={70} height={70} />
+    <span class="tw-text-white tw-font-bold tw-text-[18px] tw-pt-3">
+      This may take a while, please wait...
+    </span>
   </Modal>
 {/if}

@@ -5,7 +5,7 @@
   export let data: LayoutData;
 </script>
 
-<NavBar token={data.token} isLoggedIn={data.loggedIn} user={data.user} />
-<main class="tw-pt-[70px]">
+<NavBar token={data.token} user={data.user} />
+<main class="">
   <slot />
 </main>
