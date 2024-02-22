@@ -9,3 +9,5 @@ export const openSignup = writable(false);
 export const openPopup = writable(false);
 
 export const openAddPost = writable(false);
+
+export const openAddStatus = writable(false);

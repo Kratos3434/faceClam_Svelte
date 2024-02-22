@@ -1,6 +1,5 @@
 <script lang="ts">
   export let token: string | undefined;
-  export let isLoggedIn: boolean;
 
   import { page } from '$app/stores';
   import logo from '$lib/assets/clam.png';
@@ -112,7 +111,7 @@
     <button class="tw-fixed  tw-left-0 tw-top-[58px] tw-w-full tw-h-full tw-overflow-auto tw-px-3 tw-cursor-default" on:click={() => showModal = false}>
       <div class="tw-absolute tw-right-0 tw-top-[5px] tw-pr-2">
         <div class="tw-rounded-md tw-bg-white tw-w-[360px] tw-shadow-md tw-flex tw-flex-col tw-text-[15px] tw-text-black tw-font-bold">
-          {#if isLoggedIn}
+          {#if user}
             <button class="tw-px-[8px] tw-flex tw-py-[12px] tw-items-center tw-gap-2 hover:tw-rounded-md hover:tw-bg-gray-200 tw-cursor-pointer" on:click={logout}>
               <div class="tw-rounded-[1000px] tw-bg-[#F0F2F5] tw-p-1">
                 <Logout width={20} height={20} />

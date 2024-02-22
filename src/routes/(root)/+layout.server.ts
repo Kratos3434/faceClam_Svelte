@@ -1,7 +1,7 @@
 import { userBaseURL } from "../../env";
 import type { LayoutServerLoad } from "./$types";
 
-export const load = (async ({ cookies}) => {
+export const load = (async ({ cookies, fetch}) => {
   const token = cookies.get('token');
   let userData = null;
   const res = await fetch(`${userBaseURL}/authenticate`, {

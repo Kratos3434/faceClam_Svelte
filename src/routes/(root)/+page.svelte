@@ -3,7 +3,7 @@
 	import SigninPopUpModal from "$lib/SigninPopUpModal.svelte";
 	import { onMount } from "svelte";
   import type { LayoutData } from "./$types";
-  import { openPopup, openAddPost } from "$lib";
+  import { openPopup, openAddPost, openAddStatus } from "$lib";
 	import { publicBaseURL } from "../../env";
 	import PostCard from "$lib/PostCard.svelte";
 	import type { PostProps } from "../../types";
@@ -11,6 +11,7 @@
   import { createQuery } from "@tanstack/svelte-query";
 	import WhatsOnYourMind from "$lib/WhatsOnYourMind.svelte";
   import AddPost from '$lib/AddPost.svelte';
+	import AddStatus from "$lib/AddStatus.svelte";
 
   let posts: PostProps[] | null;
 
@@ -27,7 +28,9 @@
 
   onMount(() => {
     const timeout = setTimeout(() => {
-      $openPopup = true;
+      if (!data.loggedIn) {
+        $openPopup = true;
+      }
     }, 5000);
 
     return () => clearTimeout(timeout);
@@ -36,11 +39,15 @@
   export let data: LayoutData;
 </script>
 
+<svelte:head>
+  <title>faceClam</title>
+</svelte:head>
+
 {#if !data.loggedIn && $openPopup}
   <SigninPopUpModal />
 {/if}
 
-<div class="tw-flex tw-justify-center tw-gap-[32px]">
+<div class="tw-flex tw-justify-center tw-gap-[32px] tw-pt-[70px]">
   <HomeSideNav user={data.user} />
   <div class="tw-flex tw-flex-col tw-w-[680px] tw-gap-4 home-lg:tw-pl-0 tw-pl-5 home-xxl:tw-pl-0">
     {#if $query.isLoading}
@@ -65,4 +72,8 @@
 
 {#if $openAddPost}
   <AddPost user={data.user} token={data.token} />
+{/if}
+
+{#if $openAddStatus}
+  <AddStatus user={data.user} token={data.token} />
 {/if}

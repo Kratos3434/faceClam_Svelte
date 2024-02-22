@@ -3,8 +3,7 @@
   import placeholder from '$lib/assets/placeholder.png';
   import Photo from 'svelte-material-icons/ImageMultiple.svelte';
   import Emoticon from 'svelte-material-icons/EmoticonOutline.svelte';
-  import { openAddPost } from "$lib";
-	import AddPost from "./AddPost.svelte";
+  import { openAddPost, openAddStatus } from "$lib";
 
   export let user: UserProps;
 
@@ -23,15 +22,15 @@
 </script>
 
 <div class="tw-rounded-md tw-bg-white tw-shadow-md tw-flex tw-flex-col tw-px-[16px] tw-pt-[12px] tw-pb-[10px] tw-gap-3">
-  <div class="tw-flex tw-gap-2 tw-items-center">
+  <div class="tw-flex tw-gap-2 tw-items-center tw-shrink-0">
     <a href={`/${user.firstName}.${user.lastName}.${user.id}`}>
-      <img src={user.profilePicture ? user.profilePicture : placeholder} width="40" height="40" alt={`${user.firstName} ${user.lastName}`} class="tw-rounded-[1000px] tw-w-[40px] tw-h-[40px]" />
+      <img src={user.profilePicture ? user.profilePicture : placeholder} width={40} height={40} alt={`${user.firstName} ${user.lastName}`} class="tw-rounded-[1000px] tw-w-[40px] tw-h-[40px]" />
     </a>
-    <div class="tw-rounded-[20px] tw-py-[8px] tw-px-[12px] tw-w-full tw-cursor-pointer tw-bg-[#F0F2F5] hover:tw-bg-gray-300">
+    <button class="tw-text-start tw-rounded-[20px] tw-py-[8px] tw-px-[12px] tw-w-full tw-cursor-pointer tw-bg-[#F0F2F5] hover:tw-bg-gray-300" on:click={() => $openAddStatus = true}>
       <span class="tw-text-[17px] tw-text-[#65676B]">
         What's on your mind, {user.firstName} {user.lastName}?
       </span>
-    </div>
+    </button>
   </div>
   <hr />
   <div class="tw-flex tw-justify-center">
