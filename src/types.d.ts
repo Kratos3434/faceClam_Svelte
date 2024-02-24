@@ -21,8 +21,14 @@ export interface PostProps {
   author: UserProps,
   likes: LikeProps[],
   comments: CommentProps[],
+  _count: CountProps,
   createdAt: string,
   updatedAt?: string
+}
+
+interface CountProps {
+  likes: number,
+  comments: number
 }
 
 export interface LikeProps {

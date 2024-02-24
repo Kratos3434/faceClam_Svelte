@@ -3,7 +3,7 @@
 	import SigninPopUpModal from "$lib/SigninPopUpModal.svelte";
 	import { onMount } from "svelte";
   import type { LayoutData } from "./$types";
-  import { openPopup, openAddPost, openAddStatus } from "$lib";
+  import { openPopup, openAddPost, openAddStatus, viewLikes, viewPost } from "$lib";
 	import { publicBaseURL } from "../../env";
 	import PostCard from "$lib/PostCard.svelte";
 	import type { PostProps } from "../../types";
@@ -12,6 +12,8 @@
 	import WhatsOnYourMind from "$lib/WhatsOnYourMind.svelte";
   import AddPost from '$lib/AddPost.svelte';
 	import AddStatus from "$lib/AddStatus.svelte";
+	import ViewLikes from "$lib/ViewLikes.svelte";
+	import ViewPost from "$lib/ViewPost.svelte";
 
   let posts: PostProps[] | null;
 
@@ -68,12 +70,21 @@
   <div class="home-xl:tw-flex tw-flex-col tw-hidden tw-w-[260px]">
     <span class="tw-text-[17px] tw-text-[#65676B]">Friends</span>
   </div>
+  {#if $openAddPost}
+    <AddPost user={data.user} token={data.token} />
+  {/if}
+  
+  {#if $openAddStatus}
+    <AddStatus user={data.user} token={data.token} />
+  {/if}
+
+  {#if $viewLikes.status}
+    <ViewLikes currentUser={data.user} />
+  {/if}
+
+  {#if $viewPost.status}
+    <ViewPost token={data.token} currentUser={data.user}  />
+  {/if}
 </div>
 
-{#if $openAddPost}
-  <AddPost user={data.user} token={data.token} />
-{/if}
 
-{#if $openAddStatus}
-  <AddStatus user={data.user} token={data.token} />
-{/if}
