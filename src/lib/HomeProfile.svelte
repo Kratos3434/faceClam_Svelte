@@ -7,6 +7,9 @@
 	import { openAddPost, openAddStatus } from "$lib";
 	import AddPost from "./AddPost.svelte";
 	import AddStatus from "./AddStatus.svelte";
+  import { createQuery } from "@tanstack/svelte-query";
+	import Loading from "./Loading.svelte";
+	import PostCard from "./PostCard.svelte";
 
   export let user: UserProps;
   export let token: string | undefined;
@@ -18,6 +21,18 @@
   const handleBio = (e: any) => {
     bio = e.target.value;
   }
+
+  const getPostsByUserId = async () => {
+    const res = await fetch(`http://localhost:8080/v1/public/post/user/${user.id}`);
+    const data = await res.json();
+    return data.data;
+  }
+
+  const query = createQuery({
+    queryKey: ['userPosts'],
+    queryFn: () => getPostsByUserId()
+  });
+
 </script>
 
 <div class="tw-flex tw-flex-col tw-items-center tw-mt-5 tw-w-full">
@@ -114,7 +129,18 @@
 
     <!-- Right side -->
     <div class="tw-flex tw-flex-col tw-gap-4 tw-max-w-[680px] tw-w-full">
-      <WhatsOnYourMind user={user} />
+      {#if $query.isLoading}
+        <div class="tw-flex tw-justify-center">
+          <Loading width={70} height={70} />
+        </div>
+      {:else if $query.isError}
+        <p>Something went wrong :{"("}</p>
+      {:else if $query.isSuccess}
+        <WhatsOnYourMind user={user} />
+        {#each $query.data as post}
+          <PostCard {post} currentUser={user} {token} />
+        {/each}
+      {/if}
     </div>
     <!-- Right side end-->
   </div>

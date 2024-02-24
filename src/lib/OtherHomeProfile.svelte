@@ -2,12 +2,24 @@
 	import { monthToString } from "../helpers";
 	import type { UserProps } from "../types";
   import Clock from 'svelte-material-icons/Clock.svelte';
+  import { createQuery } from "@tanstack/svelte-query";
+  import Loading from "./Loading.svelte";
+  import PostCard from "./PostCard.svelte";
 
   export let user: UserProps;
   export let token: string | undefined;
   export let currentUser: UserProps;
 
+  const getPostsByUserId = async () => {
+    const res = await fetch(`http://localhost:8080/v1/public/post/user/${user.id}`);
+    const data = await res.json();
+    return data.data;
+  }
 
+  const query = createQuery({
+    queryKey: ['userPosts'],
+    queryFn: () => getPostsByUserId()
+  });
 </script>
 
 <div class="tw-flex tw-flex-col tw-items-center tw-mt-5 tw-w-full">
@@ -50,6 +62,17 @@
           Posts
         </span>
       </div>
+      {#if $query.isLoading}
+        <div class="tw-flex tw-justify-center">
+          <Loading width={70} height={70} />
+        </div>
+      {:else if $query.isError}
+        <p>Something went wrong :{"("}</p>
+      {:else if $query.isSuccess}
+        {#each $query.data as post}
+          <PostCard {post} currentUser={user} {token} />
+        {/each}
+      {/if}
     </div>
     <!-- Right side end-->
   </div>

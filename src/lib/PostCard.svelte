@@ -7,7 +7,7 @@
   import Like from 'svelte-material-icons/ThumbUpOutline.svelte';
   import Chat from 'svelte-material-icons/ChatOutline.svelte';
   import Reply from 'svelte-material-icons/ReplyOutline.svelte';
-  import { openPopup } from "$lib";
+  import { openPopup, viewLikes, viewPost } from "$lib";
 
   export let post: PostProps;
   export let currentUser: UserProps | null = null;
@@ -20,9 +20,9 @@
 
 <div class="tw-rounded-md tw-shadow-md tw-max-w-[680px] tw-w-full tw-bg-white tw-flex tw-flex-col">
   <div class={`tw-flex tw-flex-col tw-px-[16px] tw-pt-[12px] ${post.featureImage && "tw-pb-[16px]"}`}>
-    <div class="tw-flex tw-gap-2">
+    <div class="tw-flex tw-gap-2 tw-items-center">
       <a href={`${post.author.firstName}.${post.author.lastName}.${post.author.id}`} class="tw-max-w-[40px] tw-max-h-[40px] tw-w-full tw-h-full tw-rounded-[1000px]">
-        <img src={`${post.author.profilePicture ? post.author.profilePicture : placeholder}`} width="40" height="40" alt={`${post.author.firstName} ${post.author.lastName}`} class="tw-rounded-[1000px] tw-max-w-[40px] tw-w-full tw-max-h-[40px] tw-h-full" />
+        <img src={`${post.author.profilePicture ? post.author.profilePicture : placeholder}`} width="40" height="40" alt={`${post.author.firstName} ${post.author.lastName}`} class="tw-rounded-[1000px] tw-w-[40px] tw-h-[40px]" />
       </a>
       <div class="tw-flex tw-justify-between tw-flex-1">
         <div class="tw-flex tw-flex-col">
@@ -52,13 +52,19 @@
     {/if}
   {/if}
   <div class="tw-flex tw-justify-between tw-px-5 tw-text-[#65676B] tw-text-[15px] tw-py-2">
-    <span class="tw-cursor-pointer hover:tw-underline">
+    <button class="tw-cursor-pointer hover:tw-underline" on:click={() => {
+      $viewLikes.postId = post.id;
+      $viewLikes.status = true
+    }}>
       {post.likes.length} likes
-    </span>
+    </button>
     <div>
-      <span class="tw-cursor-pointer hover:tw-underline">
+      <button class="tw-cursor-pointer hover:tw-underline" on:click={() => {
+        $viewPost.post = post;
+        $viewPost.status = true;
+      }}>
         {post.comments.length} comments
-      </span>
+      </button>
       <span>
         {post.shares} shares
       </span>
@@ -76,6 +82,10 @@
     </button>
     <button class="tw-flex tw-gap-2 tw-items-center hover:tw-bg-gray-200 tw-cursor-pointer hover:tw-rounded-md tw-w-full tw-justify-center tw-py-3" on:click={() => {
       if (!currentUser) openThePopup();
+      else {
+        $viewPost.post = post;
+        $viewPost.status = true;
+      }
     }}>
       <Chat width={20} height={20} />
       Comment
