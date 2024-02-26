@@ -1,5 +1,5 @@
 import { error } from "@sveltejs/kit";
-import { publicBaseURL, userBaseURL } from "../../../env";
+import { publicBaseURL, userBaseURL } from "../../../../env";
 import type { LayoutServerLoad } from "./$types";
 
 export const load = (async ({cookies, params, fetch}) => {
@@ -7,7 +7,7 @@ export const load = (async ({cookies, params, fetch}) => {
 
   const res = await fetch(`${publicBaseURL}/user/${params.name}`);
   const data = await res.json();
-  
+
   if (!data.status) {
     error(404, {
       message: 'Not found'

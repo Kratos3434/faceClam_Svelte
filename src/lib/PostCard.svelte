@@ -8,13 +8,40 @@
   import Chat from 'svelte-material-icons/ChatOutline.svelte';
   import Reply from 'svelte-material-icons/ReplyOutline.svelte';
   import { openPopup, viewLikes, viewPost } from "$lib";
+	import { userBaseURL } from "../env";
 
   export let post: PostProps;
   export let currentUser: UserProps | null = null;
   export let token: string | undefined;
-
+  let isLiked = post.likes.some(e => e.userId === currentUser?.id);
+  let likes = post.likes.length;
   const openThePopup = () => {
     $openPopup = true;
+  }
+
+  const likePost = async () => {
+    await fetch(`${userBaseURL}/like/post/${post.id}`, {
+      method: 'PUT',
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+  }
+
+  const handleLike = async () => {
+    switch (isLiked) {
+      case true:
+        likes--;
+        isLiked = false;
+        break;
+      case false:
+        likes++;
+        isLiked = true;
+        break;
+    }
+
+    await likePost();
   }
 </script>
 
@@ -56,7 +83,7 @@
       $viewLikes.postId = post.id;
       $viewLikes.status = true
     }}>
-      {post.likes.length} likes
+      {likes} likes
     </button>
     <div>
       <button class="tw-cursor-pointer hover:tw-underline" on:click={() => {
@@ -74,18 +101,18 @@
     <hr />
   </div>
   <div class="tw-flex tw-justify-evenly tw-text-[#65676B] tw-text-[15px] tw-font-bold tw-items-center tw-px-[20px] tw-py-1">
-    <button class={`tw-flex tw-gap-2 tw-items-center hover:tw-bg-gray-200 tw-cursor-pointer hover:tw-rounded-md tw-w-full tw-justify-center tw-py-3 ${post.likes.some(e => e.userId === currentUser?.id) && "tw-text-blue-600"}`} on:click={() => {
+    <button class={`tw-flex tw-gap-2 tw-items-center hover:tw-bg-gray-200 tw-cursor-pointer hover:tw-rounded-md tw-w-full tw-justify-center tw-py-3 ${isLiked && "tw-text-blue-600"}`} on:click={() => {
       if (!currentUser) openThePopup();
+      else {
+        handleLike();
+      }
     }}>
       <Like width={20} height={20} />
       Like
     </button>
     <button class="tw-flex tw-gap-2 tw-items-center hover:tw-bg-gray-200 tw-cursor-pointer hover:tw-rounded-md tw-w-full tw-justify-center tw-py-3" on:click={() => {
-      if (!currentUser) openThePopup();
-      else {
-        $viewPost.post = post;
-        $viewPost.status = true;
-      }
+      $viewPost.post = post;
+      $viewPost.status = true;
     }}>
       <Chat width={20} height={20} />
       Comment

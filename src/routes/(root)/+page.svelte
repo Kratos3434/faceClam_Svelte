@@ -11,8 +11,6 @@
   import { createQuery } from "@tanstack/svelte-query";
 	import WhatsOnYourMind from "$lib/WhatsOnYourMind.svelte";
 
-  let posts: PostProps[] | null;
-
   const getPosts = async () => {
     const res = await fetch(`${publicBaseURL}/post/list`);
     const data = await res.json();
@@ -41,10 +39,6 @@
 <svelte:head>
   <title>faceClam</title>
 </svelte:head>
-
-{#if !data.loggedIn && $openPopup}
-  <SigninPopUpModal />
-{/if}
 
 <div class="tw-flex tw-justify-center tw-gap-[32px] tw-pt-[70px]">
   {#if data.currentUser}
