@@ -22,12 +22,11 @@ export const load = (async ({cookies, params, fetch}) => {
     }
   });
   const verifyData = await verify.json();
-  
+
   return {
     token: token,
     param: params.name,
     verified: verifyData.status,
-    currentUser: verifyData.data,
     user: data.data
   }
 }) satisfies LayoutServerLoad;

@@ -10,6 +10,7 @@
   import { createQuery } from "@tanstack/svelte-query";
 	import Loading from "./Loading.svelte";
 	import PostCard from "./PostCard.svelte";
+	import { publicBaseURL } from "../env";
 
   export let user: UserProps;
   export let token: string | undefined;
@@ -23,13 +24,13 @@
   }
 
   const getPostsByUserId = async () => {
-    const res = await fetch(`http://localhost:8080/v1/public/post/user/${user.id}`);
+    const res = await fetch(`${publicBaseURL}/post/user/${user.id}`);
     const data = await res.json();
     return data.data;
   }
 
   const query = createQuery({
-    queryKey: ['userPosts'],
+    queryKey: ['userPosts', user.id],
     queryFn: () => getPostsByUserId()
   });
 
@@ -140,6 +141,10 @@
         {#each $query.data as post}
           <PostCard {post} currentUser={user} {token} />
         {/each}
+        <hr class="tw-my-1" />
+        <div class="tw-py-2">
+          <small>You are updated :{")"}</small>
+        </div>
       {/if}
     </div>
     <!-- Right side end-->

@@ -13,7 +13,7 @@
   const sideBar = [
     {
       image: {
-        source: user ? (user.profilePicture ? user.profilePicture : placeholder) : placeholder,
+        source: user?.profilePicture ? user.profilePicture : placeholder,
         width: 36,
         height: 36 
       },

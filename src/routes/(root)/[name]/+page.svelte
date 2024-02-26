@@ -2,6 +2,7 @@
 	import HomeProfile from "$lib/HomeProfile.svelte";
 	import OtherHomeProfile from "$lib/OtherHomeProfile.svelte";
   import type { LayoutData } from "./$types";
+  import { page } from '$app/stores';
 
   export let data: LayoutData;
 </script>
@@ -9,5 +10,5 @@
 {#if data.verified}
   <HomeProfile user={data.user} token={data.token} />
 {:else}
-  <OtherHomeProfile user={data.user} token={data.token} currentUser={data.currentUser} />
+  <OtherHomeProfile user={data.user} token={data.token} currentUser={$page.data.currentUser} />
 {/if}
