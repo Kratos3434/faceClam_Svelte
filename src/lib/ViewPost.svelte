@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { CommentProps, UserProps } from "../types";
-  import { viewPost } from "$lib";
+  import { openPopup, viewPost } from "$lib";
   import Close from 'svelte-material-icons/Close.svelte';
   import placeholder from '$lib/assets/placeholder.png';
 	import { generateDate } from "../helpers";
@@ -11,10 +11,10 @@
   import MenuDown from 'svelte-material-icons/MenuDown.svelte';
   import Forum from 'svelte-material-icons/Forum.svelte';
   import Send from 'svelte-material-icons/Send.svelte';
-  import { createQuery } from "@tanstack/svelte-query";
+  import { createQuery, useQueryClient } from "@tanstack/svelte-query";
   import Loading from "./Loading.svelte";
 	import Comment from "./Comment.svelte";
-	import { publicBaseURL } from "../env";
+	import { publicBaseURL, userBaseURL } from "../env";
 
   export let token: string | undefined;
   export let currentUser: UserProps | null;
@@ -22,12 +22,13 @@
   let divEl: any;
   let comment = "";
   let loading = false;
+  const queryClient = useQueryClient();
 
   const handleComment = () => {
     comment = divEl.innerText;
   }
 
-  const post = $viewPost.post;
+  let post = $viewPost.post;
 
   const getCommentByPostId = async (): Promise<CommentProps[]> => {
     const res = await fetch(`${publicBaseURL}/comment/post/${post?.id}`);
@@ -39,7 +40,48 @@
     queryKey: ['comments', post?.id],
     queryFn: () => getCommentByPostId()
   });
-</script>
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    if (!currentUser) {
+      $openPopup = true;
+      comment = "";
+      divEl.innerText = "";
+      return false;
+    }
+
+    loading = true;
+
+    const res = await fetch(`${userBaseURL}/add/comment`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        comment,
+        postId: post?.id
+      })
+    });
+
+    const data = await res.json();
+
+    if (data.status) {
+      comment = "";
+      divEl.innerText = "";
+      queryClient.invalidateQueries({
+        queryKey: ['posts'],
+        refetchType: 'active'
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['comments', post?.id],
+        refetchType: 'active'
+      });
+      post = data.data.post;
+      loading = false;
+    }
+  }
+</script> 
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -154,7 +196,7 @@ on:click={() => $viewPost.status = false}>
       <div class="tw-flex tw-px-[16px] tw-py-[9px] tw-max-w-[700px] tw-w-full tw-bg-white tw-rounded-b-md tw-gap-[4px] tw-shadow-2xl tw-border-t-[1px]">
         <img src={currentUser?.profilePicture ? currentUser.profilePicture : placeholder} width={32} height={32} alt={`${currentUser?.firstName} ${currentUser?.lastName}`} 
         class="tw-rounded-[1000px] tw-w-[32px] tw-h-[32px]" />
-        <form class="tw-w-full tw-rounded-md tw-bg-gray-200 tw-break-words tw-flex tw-flex-col tw-px-[12px] tw-py-[8px]">
+        <form class="tw-w-full tw-rounded-md tw-bg-gray-200 tw-break-words tw-flex tw-flex-col tw-px-[12px] tw-py-[8px]" on:submit={handleSubmit}>
           <div contenteditable={true} role="textbox" tabindex={0} placeholder="Write a comment..." bind:this={divEl} on:input={handleComment} class="tw-outline-none tw-whitespace-pre-wrap commentBox tw-cursor-text tw-break-all">
 
           </div>
