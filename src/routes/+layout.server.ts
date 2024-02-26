@@ -1,7 +1,7 @@
-import { userBaseURL } from "../../env";
+import { userBaseURL } from "../env";
 import type { LayoutServerLoad } from "./$types";
 
-export const load = (async ({ cookies, fetch}) => {
+export const load = (async ({ cookies, fetch }) => {
   const token = cookies.get('token');
   let userData = null;
   const res = await fetch(`${userBaseURL}/authenticate`, {
@@ -28,9 +28,10 @@ export const load = (async ({ cookies, fetch}) => {
       userData = uData.data;
     }
   }
+
   return {
     token: token,
     loggedIn: data.status,
-    user: userData
+    currentUser: userData
   }
 }) satisfies LayoutServerLoad;

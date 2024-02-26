@@ -5,6 +5,8 @@
   import placeholder from '$lib/assets/placeholder.png';
   import AddFriendIcon from 'svelte-material-icons/AccountPlus.svelte';
   import Close from 'svelte-material-icons/Close.svelte';
+	import { publicBaseURL } from "../env";
+  import { createQuery } from "@tanstack/svelte-query";
 
   export let currentUser: UserProps | null;
 
@@ -14,11 +16,15 @@
   }
 
   const getLikesByPostId = async (): Promise<LikeProps[]> => {
-    const res = await fetch(`http://localhost:8080/v1/public/like/post/${$viewLikes.postId}`);
+    const res = await fetch(`${publicBaseURL}/like/post/${$viewLikes.postId}`);
     const data = await res.json();
     return data.data;
   }
 
+  const query = createQuery({
+    queryKey: ['likes', $viewLikes.postId],
+    queryFn: () => getLikesByPostId(),
+  })
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -37,49 +43,49 @@
         </div>
       </div>
       <div class="tw-h-[370px] tw-overflow-y-auto tw-flex tw-flex-col tw-gap-2 tw-absolute tw-w-full tw-pb-2 tw-pt-[60px]">
-        {#await getLikesByPostId()}
+        {#if $query.isLoading}
           <div class="tw-flex tw-justify-center">
             <Loading width={70} height={70} />
           </div>
-        {:then data}
-          {#if data.length > 0}
-            {#each data as like }
+        {:else if $query.isError}
+          <p>Something went wrong :{"("}</p>
+        {:else if $query.isSuccess}
+          {#if $query.data.length === 0}
+            <div class="tw-flex tw-justify-center">
+              <span class="tw-text-[15px] tw-font-bold tw-text-center">No Likes Yet...</span>
+            </div>
+          {:else}
+            {#each $query.data as like }
               <div class="tw-flex tw-text-[15px] tw-font-bold tw-px-[8px] tw-items-center tw-gap-3">
                 <a href={`/${like.user.firstName}.${like.user.lastName}.${like.user.id}`}>
                   <img src={like.user.profilePicture ? like.user.profilePicture : placeholder} width={40} height={40} alt={`${like.user.firstName} ${like.user.lastName}`} 
                   class="tw-rounded-[1000px] tw-h-[40px] tw-w-[40px]" />
                 </a>
-                <div class="tw-flex tw-flex-1 tw-justify-between tw-h-full">
-                  <div class="tw-flex tw-items-center">
-                    <a href={`/${like.user.firstName}.${like.user.lastName}.${like.user.id}`} class="hover:tw-underline">
-                      {#if currentUser?.id == like.user.id}
-                        You
-                      {:else}
-                        {like.user.firstName} {like.user.lastName}
-                      {/if}
-                    </a>
-                  </div>
-                  {#if currentUser}
-                    {#if currentUser?.id != like.user.id}
-                      <div class="tw-rounded-md tw-bg-gray-200 tw-flex tw-px-[12px] tw-items-center tw-cursor-pointer hover:tw-brightness-95 tw-gap-1">
-                        <AddFriendIcon width={16} height={16} />
-                        <span>
-                          Add friend
-                        </span>
-                      </div>
+              <div class="tw-flex tw-flex-1 tw-justify-between tw-h-full">
+                <div class="tw-flex tw-items-center">
+                  <a href={`/${like.user.firstName}.${like.user.lastName}.${like.user.id}`} class="hover:tw-underline">
+                    {#if currentUser?.id == like.user.id}
+                      You
+                    {:else}
+                      {like.user.firstName} {like.user.lastName}
                     {/if}
+                  </a>
+                </div>
+                {#if currentUser}
+                  {#if currentUser?.id != like.user.id}
+                    <div class="tw-rounded-md tw-bg-gray-200 tw-flex tw-px-[12px] tw-items-center tw-cursor-pointer hover:tw-brightness-95 tw-gap-1">
+                      <AddFriendIcon width={16} height={16} />
+                      <span>
+                        Add friend
+                      </span>
+                    </div>
                   {/if}
+                {/if}
                 </div>
               </div>
             {/each}
-          {:else}
-            <div class="tw-flex tw-justify-center">
-              <span class="tw-text-[15px] tw-font-bold tw-text-center">No Likes Yet...</span>
-            </div>
           {/if}
-        {:catch error}
-          <p>Something went wrong :{"("}</p>
-        {/await}
+        {/if}
       </div>
     </div>
   </div>

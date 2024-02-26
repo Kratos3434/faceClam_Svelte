@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { UserProps } from "../types";
+	import type { CommentProps, UserProps } from "../types";
   import { viewPost } from "$lib";
   import Close from 'svelte-material-icons/Close.svelte';
   import placeholder from '$lib/assets/placeholder.png';
@@ -11,6 +11,10 @@
   import MenuDown from 'svelte-material-icons/MenuDown.svelte';
   import Forum from 'svelte-material-icons/Forum.svelte';
   import Send from 'svelte-material-icons/Send.svelte';
+  import { createQuery } from "@tanstack/svelte-query";
+  import Loading from "./Loading.svelte";
+	import Comment from "./Comment.svelte";
+	import { publicBaseURL } from "../env";
 
   export let token: string | undefined;
   export let currentUser: UserProps | null;
@@ -24,6 +28,17 @@
   }
 
   const post = $viewPost.post;
+
+  const getCommentByPostId = async (): Promise<CommentProps[]> => {
+    const res = await fetch(`${publicBaseURL}/comment/post/${post?.id}`);
+    const data = await res.json();
+    return data.data;
+  }
+
+  const query = createQuery({
+    queryKey: ['comments', post?.id],
+    queryFn: () => getCommentByPostId()
+  });
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -113,10 +128,24 @@ on:click={() => $viewPost.status = false}>
         </div>
         <!-- Array of comments -->
         <div class="tw-px-[16px] tw-flex tw-flex-col tw-py-[16px] tw-gap-3">
-          <div class="tw-text-center tw-p-[16px] tw-flex tw-flex-col tw-gap-1 tw-items-center tw-font-bold tw-text-[#65676B]">
-            <Forum width={50} height={50} />
-            <p>No comments yet, be the first person to comment :{")"}</p>
-          </div>
+          {#if $query.isLoading}
+            <div class="tw-flex tw-justify-center">
+              <Loading width={70} height={70} />
+            </div>
+          {:else if $query.isError}
+            <p>Something went wrong :{"("}</p>
+          {:else if $query.isSuccess}
+            {#if $query.data.length === 0}
+              <div class="tw-text-center tw-p-[16px] tw-flex tw-flex-col tw-gap-1 tw-items-center tw-font-bold tw-text-[#65676B]">
+                <Forum width={50} height={50} />
+                <p>No comments yet, be the first person to comment :{")"}</p>
+              </div>
+            {:else}
+              {#each $query.data as comment }
+                <Comment {comment} />
+              {/each}
+            {/if}
+          {/if}
         </div>
         <!-- Array of comments end -->
       </div>

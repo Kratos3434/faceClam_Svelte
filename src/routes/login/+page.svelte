@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { goto } from "$app/navigation";
   import EyeOutline from "svelte-material-icons/EyeOutline.svelte";
   import EyeOffOutline from "svelte-material-icons/EyeOffOutline.svelte";
   import Signup from "$lib/Signup.svelte";
   import { openSignup } from "$lib";
 	import Loading from "$lib/Loading.svelte";
 	import Modal from "$lib/Modal.svelte";
+	import { goto, invalidateAll } from "$app/navigation";
 
   let showPass = false;
   let email = "";
@@ -47,7 +47,8 @@
         error.error = data.error;
         loading = false;
       } else {
-        window.location.replace("/");
+        // goto("/").then(() => invalidateAll());
+        invalidateAll().then(() => goto("/"));
       }
     } catch (err) {
       error.status = true;

@@ -16,7 +16,7 @@
   import Close from 'svelte-material-icons/Close.svelte';
   import Logout from 'svelte-material-icons/Logout.svelte';
   import Login from 'svelte-material-icons/Login.svelte';
-	import { goto } from '$app/navigation';
+	import { goto, invalidateAll } from '$app/navigation';
 	import type { UserProps } from '../types';
 
   export let user: UserProps | null = null;
@@ -47,7 +47,8 @@
     const data = await res.json();
 
     if (data.status) {
-      goto("/login");
+      // invalidateAll().then(() => goto("/login"));
+      goto("/login").then(() => invalidateAll());
     }
   }
 </script>
@@ -93,7 +94,7 @@
       </button>
     </div>
   </div>
-  <button class={`tw-fixed  tw-left-0 tw-top-0 tw-w-full tw-h-full tw-overflow-auto tw-bg-[rgb(0,0,0)] tw-bg-[rgba(0,0,0,0.4)] ${openMenu ? 'tw-hidden nav-xxl:tw-block' : 'tw-hidden'} tw-cursor-default`} on:click={() => openMenu = false}>
+  <button class={`tw-fixed  tw-left-0 tw-top-0 tw-w-full tw-h-full tw-overflow-auto tw-bg-[rgb(0,0,0)] tw-bg-[rgba(0,0,0,0.4)] ${openMenu ? 'tw-hidden nav-xxl:tw-block ' : 'tw-hidden '} tw-cursor-default`} on:click={() => openMenu = false}>
     <button class="tw-bg-white tw-shadow-2xl tw-h-full tw-p-5 tw-pr-0 tw-flex tw-flex-col tw-ease-out tw-duration-[0.5s] tw-gap-10 tw-max-w-[300px] tw-w-full tw-cursor-default" on:click={(e) => e.stopPropagation()}>
       <div class="tw-flex tw-justify-end tw-p-5">
         <button on:click={() => openMenu = false}>
