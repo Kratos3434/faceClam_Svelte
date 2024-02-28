@@ -28,7 +28,7 @@
     </a>
     <button class="tw-text-start tw-rounded-[20px] tw-py-[8px] tw-px-[12px] tw-w-full tw-cursor-pointer tw-bg-[#F0F2F5] hover:tw-bg-gray-300" on:click={() => $openAddStatus = true}>
       <span class="tw-text-[17px] tw-text-[#65676B]">
-        What's on your mind, {user.firstName} {user.lastName}?
+        What's on your mind, {user.firstName}?
       </span>
     </button>
   </div>

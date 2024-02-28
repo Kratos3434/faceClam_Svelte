@@ -10,7 +10,9 @@ export interface UserProps {
   addressFrom?: string,
   createdAt: string,
   updatedAt?: string,
-  disabledAt?: string
+  disabledAt?: string,
+  friendRequests: FriendRequestProps[],
+  friendRequestSent: FriendRequestProps[]
 }
 
 export interface PostProps {
@@ -49,4 +51,16 @@ export interface CommentProps {
   replies: CommentProps[],
   createdAt: string,
   updatedAt?: string
+}
+
+export interface FriendRequestProps {
+  id: number,
+  user: UserProps,
+  userId: number,
+  requester: UserProps,
+  requesterId: number,
+  requester: UserProps,
+  status: string,
+  createdAt: string,
+  updatedAt: string
 }

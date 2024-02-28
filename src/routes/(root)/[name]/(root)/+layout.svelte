@@ -12,7 +12,7 @@
  {#if data.verified}
   <Profile user={data.user} token={data.token} />
  {:else}
-  <OtherProfile user={data.user} token={data.token} />
+  <OtherProfile user={data.user} token={data.token} currentUser={data.currentUser} />
  {/if}
  <slot />
 </main>
