@@ -1,15 +1,16 @@
 <script lang="ts">
   import HomeSideNav from "$lib/HomeSideNav.svelte";
-	import SigninPopUpModal from "$lib/SigninPopUpModal.svelte";
 	import { onMount } from "svelte";
   import type { LayoutData } from "./$types";
   import { openPopup } from "$lib";
 	import { publicBaseURL } from "../../env";
 	import PostCard from "$lib/PostCard.svelte";
-	import type { PostProps } from "../../types";
 	import Loading from "$lib/Loading.svelte";
   import { createQuery } from "@tanstack/svelte-query";
 	import WhatsOnYourMind from "$lib/WhatsOnYourMind.svelte";
+	import FriendRequests from "$lib/FriendRequests.svelte";
+
+  export let data: LayoutData;
 
   const getPosts = async () => {
     const res = await fetch(`${publicBaseURL}/post/list`);
@@ -21,7 +22,7 @@
     queryKey: ['posts'],
     queryFn: () => getPosts(),
     staleTime: 240000
-  })
+  });
 
   onMount(() => {
     const timeout = setTimeout(() => {
@@ -33,7 +34,7 @@
     return () => clearTimeout(timeout);
   })
 
-  export let data: LayoutData;
+
 </script>
 
 <svelte:head>
@@ -62,8 +63,19 @@
       {/each}
     {/if}
   </div>
-  <div class="home-xl:tw-flex tw-flex-col tw-hidden tw-w-[260px]">
-    <span class="tw-text-[17px] tw-text-[#65676B]">Friends</span>
+  <div class="home-xl:tw-flex tw-flex-col tw-hidden tw-w-[300px] tw-sticky tw-top-[70px] tw-h-full tw-z-0 tw-gap-3">
+    <!-- Sponsors -->
+    <span class="tw-text-[17px] tw-text-[#65676B] tw-font-bold tw-px-[16px]">Sponsored</span>
+    <div class="tw-w-full tw-px-[16px] tw-py-2 tw-flex tw-gap-2 tw-h-full hover:tw-bg-gray-300 tw-cursor-pointer tw-rounded-md">
+      <img src="https://d3d0lqu00lnqvz.cloudfront.net/media/Twitter_Cards/Raptors.jpg" width={99} height={99} alt="Wild Wings" class="tw-w-[99px] tw-h-[99px] tw-rounded-md"/>
+      <span class="tw-text-[15px] tw-font-bold">Proud sponsor of the Toronto Raptors</span>
+    </div>
+    <!-- Sponsors End -->
+    <!-- Friend Requests -->
+    {#if data.currentUser}
+      <FriendRequests token={data.token} />
+    {/if}
+    <!-- Friend Requests end -->
   </div>
 </div>
 

@@ -4,10 +4,17 @@
   import placeholder from '$lib/assets/placeholder.png';
   import AddFriendIcon from 'svelte-material-icons/AccountPlus.svelte';
   import FollowIcon from 'svelte-material-icons/PlusBoxMultiple.svelte';
+  import CancelAddFriendIcon from 'svelte-material-icons/AccountMinusOutline.svelte';
+	import Loading from "./Loading.svelte";
+	import { userBaseURL } from "../env";
+	import { invalidate } from "$app/navigation";
 
   export let user: UserProps;
   export let token: string | undefined;
+  export let currentUser: UserProps | undefined;
+
   const { name } = $page.params;
+  let loading = false;
 
   const links = [
     {
@@ -23,8 +30,44 @@
       name: "Friends"
     }
   ];
+
+  const sendFriendRequest = async () => {
+    loading = true;
+    const res = await fetch(`${userBaseURL}/send/request/${user.id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": 'application/json',
+        "Authorization": `Bearer ${token}`
+      }
+    });
+
+    const data = await res.json();
+
+    if (data.status) {
+      invalidate('app:name').then(() => loading = false);
+    }
+    loading = false;
+  }
+
+  const cancelRequest = async () => {
+    const res = await fetch(`${userBaseURL}/cancel/request/${user.id}`, {
+      method: 'DELETE',
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+
+    const data = await res.json();
+
+    if (data.status) {
+      invalidate('app:name');
+    }
+  }
 </script>
 
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y-no-static-element-interactions -->
 <div class="tw-w-full tw-h-full">
   <div class="tw-shadow-md tw-w-full tw-bg-white">
     <div class="tw-flex tw-justify-center tw-w-full">
@@ -50,10 +93,26 @@
             </div>
           </div>
           <div class="tw-flex tw-gap-2">
-            <div class="tw-rounded-md tw-text-white tw-flex tw-items-center tw-font-bold tw-bg-[#0866FF] tw-px-[12px] tw-py-[10px] tw-gap-2 hover:tw-brightness-95 tw-cursor-pointer">
-              <AddFriendIcon width={16} height={16} />
-              <span class="tw-text-[15px]">Add friend</span>
-            </div>
+            {#if currentUser}
+              {#if loading}
+                <div class="tw-rounded-md tw-text-white tw-flex tw-items-center tw-font-bold tw-bg-[#0866FF] tw-px-[12px] tw-py-[10px] tw-gap-2 hover:tw-brightness-95 tw-cursor-pointer">
+                  <Loading width={16} height={16} />
+                  <span class="tw-text-[15px]">Cancel request</span>
+                </div>
+              {:else}
+                {#if user.friendRequests.length === 0}
+                  <div class="tw-rounded-md tw-text-white tw-flex tw-items-center tw-font-bold tw-bg-[#0866FF] tw-px-[12px] tw-py-[10px] tw-gap-2 hover:tw-brightness-95 tw-cursor-pointer" on:click={sendFriendRequest}>
+                    <AddFriendIcon width={16} height={16} />
+                    <span class="tw-text-[15px]">Add friend</span>
+                  </div>
+                {:else}
+                  <div class="tw-rounded-md tw-text-white tw-flex tw-items-center tw-font-bold tw-bg-[#0866FF] tw-px-[12px] tw-py-[10px] tw-gap-2 hover:tw-brightness-95 tw-cursor-pointer" on:click={cancelRequest}>
+                  <CancelAddFriendIcon width={16} height={16} />
+                  <span class="tw-text-[15px]">Cancel request</span>
+                </div>
+                {/if}
+              {/if}
+            {/if}
             <div class="tw-rounded-md tw-text-white tw-flex tw-items-center tw-font-bold tw-bg-[#0866FF] tw-px-[12px] tw-py-[10px] tw-gap-2 hover:tw-brightness-95 tw-cursor-pointer">
               <FollowIcon width={16} height={16} />
               <span class="tw-text-[15px]">Follow</span>

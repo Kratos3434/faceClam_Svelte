@@ -15,11 +15,13 @@
   export let token: string | undefined;
   let isLiked = post.likes.some(e => e.userId === currentUser?.id);
   let likes = post.likes.length;
+  let handlingLike = false;
   const openThePopup = () => {
     $openPopup = true;
   }
 
   const likePost = async () => {
+    handlingLike = true;
     await fetch(`${userBaseURL}/like/post/${post.id}`, {
       method: 'PUT',
       headers: {
@@ -30,18 +32,21 @@
   }
 
   const handleLike = async () => {
-    switch (isLiked) {
-      case true:
-        likes--;
-        isLiked = false;
-        break;
-      case false:
-        likes++;
-        isLiked = true;
-        break;
-    }
+    if (!handlingLike) {
+      switch (isLiked) {
+        case true:
+          likes--;
+          isLiked = false;
+          break;
+        case false:
+          likes++;
+          isLiked = true;
+          break;
+      }
 
-    await likePost();
+      await likePost();
+      handlingLike = false;
+    }
   }
 </script>
 

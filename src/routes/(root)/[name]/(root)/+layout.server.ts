@@ -1,11 +1,19 @@
 import { error } from "@sveltejs/kit";
-import { publicBaseURL, userBaseURL } from "../../../../env";
+import { userBaseURL, publicBaseURL } from "../../../../env";
 import type { LayoutServerLoad } from "./$types";
 
-export const load = (async ({cookies, params, fetch}) => {
+export const load = (async ({cookies, params, fetch, depends}) => {
   const token = cookies.get('token');
 
-  const res = await fetch(`${publicBaseURL}/user/${params.name}`);
+  // ${publicBaseURL}/user/${params.name}
+  const res = await fetch(`${publicBaseURL}/user/${params.name}`, {
+    method: 'GET',
+    headers: {
+      "Content-Type": 'application/json',
+      "Authorization": `Bearer ${token}`
+    }
+  });
+
   const data = await res.json();
 
   if (!data.status) {
@@ -22,6 +30,8 @@ export const load = (async ({cookies, params, fetch}) => {
     }
   });
   const verifyData = await verify.json();
+
+  depends('app:name');
 
   return {
     token: token,
