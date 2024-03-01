@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { changeProfilePic } from "$lib";
+	import ChangeProfilePhoto from "$lib/ChangeProfilePhoto.svelte";
   import NavBar from "$lib/NavBar.svelte";
 	import OtherProfile from "$lib/OtherProfile.svelte";
 	import Profile from "$lib/Profile.svelte";
@@ -20,4 +22,7 @@
   <OtherProfile user={data.user} token={data.token} currentUser={data.currentUser} />
  {/if}
  <slot />
+ {#if $changeProfilePic}
+  <ChangeProfilePhoto token={data.token} />
+ {/if}
 </main>
