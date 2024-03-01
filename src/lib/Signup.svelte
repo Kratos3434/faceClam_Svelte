@@ -3,6 +3,8 @@
   import { openSignup } from "$lib";
 	import Loading from "./Loading.svelte";
 	import Modal from "./Modal.svelte";
+	import { publicBaseURL } from "../env";
+	import { goto } from "$app/navigation";
 
   interface UserSignup {
     firstName: string,
@@ -62,13 +64,41 @@
     return true;
   }
 
-  const handleSignup = (e: any) => {
+  const handleSignup = async (e: any) => {
     e.preventDefault();
 
     if (!validateUser(user)) return false;
 
+    submitting = true;
+    try {
+      const res = await fetch(`/api/v1/public/send/otp`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          "Content-Type": 'application/json'
+        },
+        body: JSON.stringify({
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          password: user.password,
+          password2: user.password2,
+          gender: user.gender
+        })
+      });
 
-    console.log("User: ", user);
+      const data = await res.json();
+      console.log(data)
+      if (!data.status) {
+        setError(data.error);
+        submitting = false;
+      } else {
+        goto("/verifyemail");
+      }
+    } catch (err) {
+      setError("Something went wrong :(");
+      submitting = false;
+    }
   }
 </script>
 
@@ -118,7 +148,7 @@
           {/if}
           <div class="tw-flex tw-justify-center tw-gap-2 tw-items-center">
             {#if !submitting}
-              <button class="tw-text-white tw-bg-[#00A400] tw-rounded tw-py-1 tw-px-10 tw-cursor-pointer">
+              <button class="tw-text-white tw-bg-[#00A400] tw-rounded tw-py-1 tw-px-10 tw-cursor-pointer hover:tw-brightness-95">
                 <span class="tw-text-[20px] tw-font-bold">Sign Up</span>
               </button>
             {:else}

@@ -6,6 +6,7 @@
 	import { invalidate } from "$app/navigation";
 	import { onMount } from "svelte";
 	import { socket } from "../socket";
+  import placeholder from '$lib/assets/placeholder.png';
 
   export let token: string | undefined;
   const queryClient = useQueryClient();
@@ -94,7 +95,7 @@
       {#each $query.data as e }
         <div class="tw-flex tw-gap-2 tw-text-[15px] tw-rounded-md hover:tw-bg-gray-200 tw-p-3 tw-flex-wrap">
           <a href={`/${e.friend.firstName}.${e.friend.lastName}.${e.friend.id}`} class="tw-shrink-0">
-            <img src={e.friend.profilePicture ? e.friend.profilePicture : ""} width={46} height={46} alt={`${e.friend.firstName} ${e.friend.lastName}`} class="tw-rounded-[1000px] tw-w-[46px] tw-h-[46px]" />
+            <img src={e.friend.profilePicture ? e.friend.profilePicture : placeholder} width={46} height={46} alt={`${e.friend.firstName} ${e.friend.lastName}`} class="tw-rounded-[1000px] tw-w-[46px] tw-h-[46px]" />
           </a>
           <div class="tw-flex tw-flex-col">
             <a class="tw-font-bold hover:tw-underline" href={`/${e.friend.firstName}.${e.friend.lastName}.${e.friend.id}`}>{e.friend.firstName} {e.friend.lastName}</a>

@@ -6,6 +6,7 @@
   import Add from 'svelte-material-icons/Plus.svelte';
   import Edit from 'svelte-material-icons/Pencil.svelte';
   import MenuDown from 'svelte-material-icons/MenuDown.svelte';
+	import { changeProfilePic } from "$lib";
 
   const { name } = $page.params;
 
@@ -45,7 +46,7 @@
         <div class="tw-absolute tw-top-[390px] tw-pl-5">
           <div class="tw-relative">
             <img src={user.profilePicture ? user.profilePicture : placeholder} width="168" height="168" class="tw-rounded-[1000px] tw-border-white tw-border-[5px] tw-w-[168px] tw-h-[168px] hover:tw-brightness-9" alt={`${user.firstName} ${user.lastName}`} />
-            <button class="tw-flex tw-items-center tw-justify-center tw-absolute tw-right-[5px] tw-bottom-[15px] tw-rounded-[1000px] tw-bg-gray-200 tw-p-2 tw-cursor-pointer hover:tw-brightness-95">
+            <button class="tw-flex tw-items-center tw-justify-center tw-absolute tw-right-[5px] tw-bottom-[15px] tw-rounded-[1000px] tw-bg-gray-200 tw-p-2 tw-cursor-pointer hover:tw-brightness-95" on:click={() => $changeProfilePic = true}>
               <Camera width={20} height={20} />
             </button>
           </div>
