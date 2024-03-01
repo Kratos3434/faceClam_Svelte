@@ -11,8 +11,10 @@ export interface UserProps {
   createdAt: string,
   updatedAt?: string,
   disabledAt?: string,
-  friendRequests: FriendRequestProps[],
-  friendRequestSent: FriendRequestProps[]
+  friends: FriendProps[],
+  friendRequestSent: FriendProps[],
+  friendRequest: FriendProps,
+  areFriends?: boolean
 }
 
 export interface PostProps {
@@ -53,14 +55,13 @@ export interface CommentProps {
   updatedAt?: string
 }
 
-export interface FriendRequestProps {
+export interface FriendProps {
   id: number,
   user: UserProps,
   userId: number,
-  requester: UserProps,
-  requesterId: number,
-  requester: UserProps,
+  friend: UserProps,
+  friendId: number,
   status: string,
   createdAt: string,
-  updatedAt: string
+  updatedAt?: string
 }

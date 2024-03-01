@@ -60,7 +60,7 @@
                 {user.firstName} {user.lastName}
               </span>
               <span class="tw-text-[15px] tw-text-[#65676B] tw-font-bold">
-                0 friends
+                {user.friends.length} friends
               </span>
             </div>
           </div>
