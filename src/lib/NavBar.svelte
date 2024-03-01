@@ -18,6 +18,7 @@
   import Login from 'svelte-material-icons/Login.svelte';
 	import { goto, invalidateAll } from '$app/navigation';
 	import type { UserProps } from '../types';
+	import { socket } from '../socket';
 
   export let user: UserProps | null = null;
   let openMenu = false;
@@ -48,7 +49,10 @@
 
     if (data.status) {
       // invalidateAll().then(() => goto("/login"));
-      goto("/login").then(() => invalidateAll());
+      goto("/login").then(() => {
+        socket.disconnect();
+        invalidateAll();
+      });
     }
   }
 </script>

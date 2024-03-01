@@ -39,6 +39,7 @@
 
 <svelte:head>
   <title>faceClam</title>
+  <meta name="description" content="Connect with friends and the world around you on faceClam" />
 </svelte:head>
 
 <div class="tw-flex tw-justify-center tw-gap-[32px] tw-pt-[70px]">

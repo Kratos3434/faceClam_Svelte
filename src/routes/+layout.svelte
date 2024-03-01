@@ -9,6 +9,8 @@
 	import AddStatus from "$lib/AddStatus.svelte";
 	import AddPost from "$lib/AddPost.svelte";
 	import SigninPopUpModal from "$lib/SigninPopUpModal.svelte";
+	import { onMount } from "svelte";
+	import { socket } from "../socket";
 
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -18,6 +20,19 @@
     }
   });
 
+  onMount(() => {
+    console.log('reconnect event')
+    const reconnect = () => {
+      socket.connect();
+      socket.emit('join', {
+        email: data.currentUser.email
+      })
+    }
+
+    socket.on('reconnect', reconnect);
+
+    return () => socket.off('reconnect', reconnect);
+  })
   export let data: LayoutData;
 </script>
 

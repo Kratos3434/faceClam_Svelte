@@ -8,13 +8,19 @@
 	import Loading from "./Loading.svelte";
 	import { userBaseURL } from "../env";
 	import { invalidate } from "$app/navigation";
+  import Check from 'svelte-material-icons/Check.svelte';
+  import Decline from 'svelte-material-icons/Cancel.svelte';
+  import { useQueryClient } from "@tanstack/svelte-query";
+  import { socket } from "../socket";
 
   export let user: UserProps;
   export let token: string | undefined;
   export let currentUser: UserProps | undefined;
 
   const { name } = $page.params;
+  const queryClient = useQueryClient();
   let loading = false;
+  let loadingRequest = false;
 
   const links = [
     {
@@ -30,7 +36,7 @@
       name: "Friends"
     }
   ];
-
+  // `${userBaseURL}/send/request/${user.id}`
   const sendFriendRequest = async () => {
     loading = true;
     const res = await fetch(`${userBaseURL}/send/request/${user.id}`, {
@@ -44,9 +50,17 @@
     const data = await res.json();
 
     if (data.status) {
-      invalidate('app:name').then(() => loading = false);
+      invalidate('app:name').then(() => {
+        socket.emit("friendRequest", {
+          from: currentUser?.email,
+          to: user.email
+        });
+        
+        loading = false;
+      });
+    } else {
+      loading = false;
     }
-    loading = false;
   }
 
   const cancelRequest = async () => {
@@ -64,6 +78,48 @@
       invalidate('app:name');
     }
   }
+
+  const acceptFriendRequest = async (id: number) => {
+    loadingRequest = true;
+    const res = await fetch(`${userBaseURL}/friend/accept/${id}`, {
+      method: 'PUT',
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    const data = await res.json();
+    if (data.status) {
+      queryClient.invalidateQueries({
+        queryKey: ['friendRequests'],
+        refetchType: 'active'
+      })
+      invalidate('app:name').then(() => loadingRequest = false);
+    } else {
+      loadingRequest = false;
+    }
+  }
+
+  const declineFriendRequest = async (id: number) => {
+    loadingRequest = true;
+    const res = await fetch(`${userBaseURL}/friend/decline/${id}`, {
+      method: 'DELETE',
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    const data = await res.json();
+    if (data.status) {
+      queryClient.invalidateQueries({
+        queryKey: ['friendRequests'],
+        refetchType: 'active'
+      })
+      invalidate('app:name').then(() => loadingRequest = false);
+    } else {
+      loadingRequest = false;
+    }
+  }
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -75,7 +131,7 @@
         <img src={user.coverPicture ? user.coverPicture : placeholder} width={1250} height={462.95} alt="Cover" class="tw-h-[462.95px]  tw-rounded-t-[0px] tw-rounded-b-md" />
         <div class="tw-absolute tw-top-[390px] tw-pl-5">
           <div class="tw-relative">
-            <img src={user.profilePicture ? user.profilePicture : placeholder} width="168" height="168" class="tw-rounded-[1000px] tw-border-white tw-border-[5px] tw-w-[168px] tw-h-[168px] hover:tw-brightness-9" alt={`${user.firstName} ${user.lastName}`} />
+            <img src={user.profilePicture ? user.profilePicture : placeholder} width={168} height={168} class="tw-rounded-[1000px] tw-border-white tw-border-[5px] tw-w-[168px] tw-h-[168px] hover:tw-brightness-9" alt={`${user.firstName} ${user.lastName}`} />
           </div>
         </div>
         <div class="tw-flex tw-justify-between tw-items-center tw-pb-[16px] tw-flex-wrap tw-px-5 tw-gap-5">
@@ -88,7 +144,7 @@
                 {user.firstName} {user.lastName}
               </span>
               <span class="tw-text-[15px] tw-text-[#65676B] tw-font-bold">
-                0 friends
+                {user.friends.length} friends
               </span>
             </div>
           </div>
@@ -100,16 +156,37 @@
                   <span class="tw-text-[15px]">Cancel request</span>
                 </div>
               {:else}
-                {#if user.friendRequests.length === 0}
-                  <div class="tw-rounded-md tw-text-white tw-flex tw-items-center tw-font-bold tw-bg-[#0866FF] tw-px-[12px] tw-py-[10px] tw-gap-2 hover:tw-brightness-95 tw-cursor-pointer" on:click={sendFriendRequest}>
-                    <AddFriendIcon width={16} height={16} />
-                    <span class="tw-text-[15px]">Add friend</span>
+                {#if user.friendRequest && user.friendRequest.friendId !== currentUser.id}
+                  <div class="tw-flex tw-gap-1">
+                    <div class={`tw-rounded-md tw-text-white tw-flex tw-items-center tw-font-bold tw-bg-[#00A400] tw-px-[12px] tw-py-[10px] tw-gap-2 ${loadingRequest ? "tw-brightness-75" : "hover:tw-brightness-95"} tw-cursor-pointer`} on:click={() => !loadingRequest && acceptFriendRequest(user.id)}>
+                      <Check width={16} height={16} />
+                      <span class="tw-text-[15px]">Accept</span>
+                    </div>
+
+                    <div class={`tw-rounded-md tw-text-white tw-flex tw-items-center tw-font-bold tw-bg-rose-500 tw-px-[12px] tw-py-[10px] tw-gap-2 ${loadingRequest ? "tw-brightness-75" : "hover:tw-brightness-95"} tw-cursor-pointer`} on:click={() => !loadingRequest && declineFriendRequest(user.id)}>
+                      <Decline width={16} height={16} />
+                      <span class="tw-text-[15px]">Decline</span>
+                    </div>
                   </div>
                 {:else}
-                  <div class="tw-rounded-md tw-text-white tw-flex tw-items-center tw-font-bold tw-bg-[#0866FF] tw-px-[12px] tw-py-[10px] tw-gap-2 hover:tw-brightness-95 tw-cursor-pointer" on:click={cancelRequest}>
-                  <CancelAddFriendIcon width={16} height={16} />
-                  <span class="tw-text-[15px]">Cancel request</span>
-                </div>
+                  {#if user.areFriends}
+                    <div class="tw-rounded-md tw-text-white tw-flex tw-items-center tw-font-bold tw-bg-[#0866FF] tw-px-[12px] tw-py-[10px] tw-gap-2 hover:tw-brightness-95 tw-cursor-pointer">
+                      <Check width={16} height={16} />
+                      <span class="tw-text-[15px]">Friends</span>
+                    </div>
+                  {:else}
+                    {#if !user.friendRequest}
+                      <div class="tw-rounded-md tw-text-white tw-flex tw-items-center tw-font-bold tw-bg-[#0866FF] tw-px-[12px] tw-py-[10px] tw-gap-2 hover:tw-brightness-95 tw-cursor-pointer" on:click={sendFriendRequest}>
+                        <AddFriendIcon width={16} height={16} />
+                        <span class="tw-text-[15px]">Add friend</span>
+                      </div>
+                    {:else}
+                      <div class="tw-rounded-md tw-text-white tw-flex tw-items-center tw-font-bold tw-bg-[#0866FF] tw-px-[12px] tw-py-[10px] tw-gap-2 hover:tw-brightness-95 tw-cursor-pointer" on:click={cancelRequest}>
+                        <CancelAddFriendIcon width={16} height={16} />
+                        <span class="tw-text-[15px]">Cancel request</span>
+                      </div>
+                    {/if}
+                  {/if}
                 {/if}
               {/if}
             {/if}

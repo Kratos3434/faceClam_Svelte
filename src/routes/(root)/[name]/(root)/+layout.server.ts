@@ -1,5 +1,5 @@
 import { error } from "@sveltejs/kit";
-import { userBaseURL, publicBaseURL } from "../../../../env";
+import { publicBaseURL, userBaseURL } from "../../../../env";
 import type { LayoutServerLoad } from "./$types";
 
 export const load = (async ({cookies, params, fetch, depends}) => {

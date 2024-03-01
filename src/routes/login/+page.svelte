@@ -6,6 +6,7 @@
 	import Loading from "$lib/Loading.svelte";
 	import Modal from "$lib/Modal.svelte";
 	import { goto, invalidateAll } from "$app/navigation";
+  import { socket } from "../../socket";
 
   let showPass = false;
   let email = "";
@@ -48,7 +49,13 @@
         loading = false;
       } else {
         // goto("/").then(() => invalidateAll());
-        invalidateAll().then(() => goto("/"));
+        invalidateAll().then(() => {
+          socket.connect();
+          socket.emit("join", {
+            email: data.data.email
+          });
+          goto("/");
+        });
       }
     } catch (err) {
       error.status = true;

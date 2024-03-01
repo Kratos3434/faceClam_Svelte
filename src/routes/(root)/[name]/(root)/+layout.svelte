@@ -7,6 +7,11 @@
   export let data: LayoutData;
 </script>
 
+<svelte:head>
+  <title>{data.user.firstName} {data.user.lastName}</title>
+  <meta name="description" content={data.user.bio} />
+</svelte:head>
+
 <!-- <NavBar token={data.token} user={data.currentUser} /> -->
 <main class="tw-pt-[52px]">
  {#if data.verified}

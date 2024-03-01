@@ -63,7 +63,7 @@
         {:else}
           <a class="tw-flex tw-items-center tw-gap-2 tw-rounded-md hover:tw-bg-gray-200 tw-px-[8px] tw-py-3" href={e.path}>
             {#if e.image}
-              <img src={e.image.source} width={e.image.width} height={e.image.height} alt={e.name} class="tw-rounded-[50%]" />
+              <img src={e.image.source} width={e.image.width} height={e.image.height} alt={e.name} class="tw-rounded-[50%] tw-shrink-0 tw-w-[36px] tw-h-[36px]" />
             {:else}
               <svelte:component this={e.icon} width={36} height={36} color={e.color} />
             {/if}
