@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { extendSchemaImpl } from "graphql/utilities/extendSchema";
 	import Loading from "./Loading.svelte";
 	import Modal from "./Modal.svelte";
   import Close from 'svelte-material-icons/Close.svelte';

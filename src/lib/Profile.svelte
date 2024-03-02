@@ -11,7 +11,7 @@
   const { name } = $page.params;
 
   export let user: UserProps;
-  export let token: string | undefined;
+  // export let token: string | undefined;
 
   const links = [
     {
