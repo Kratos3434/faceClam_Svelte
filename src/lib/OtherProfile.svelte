@@ -52,7 +52,6 @@
     if (data.status) {
       invalidate('app:name').then(() => {
         socket.emit("friendRequest", {
-          from: currentUser?.email,
           to: user.email
         });
         
@@ -75,7 +74,11 @@
     const data = await res.json();
 
     if (data.status) {
-      invalidate('app:name');
+      invalidate('app:name').then(() => {
+        socket.emit('friendRequest', {
+          to: user.email
+        })
+      })
     }
   }
 
@@ -94,7 +97,12 @@
         queryKey: ['friendRequests'],
         refetchType: 'active'
       })
-      invalidate('app:name').then(() => loadingRequest = false);
+      invalidate('app:name').then(() => {
+        socket.emit('friendRequest', {
+          to: user.email
+        });
+        loadingRequest = false;
+      });
     } else {
       loadingRequest = false;
     }
@@ -115,7 +123,12 @@
         queryKey: ['friendRequests'],
         refetchType: 'active'
       })
-      invalidate('app:name').then(() => loadingRequest = false);
+      invalidate('app:name').then(() => {
+        socket.emit('friendRequest', {
+          to: user.email
+        });
+        loadingRequest = false;
+      });
     } else {
       loadingRequest = false;
     }
