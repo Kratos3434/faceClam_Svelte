@@ -64,20 +64,6 @@
       invalidate('app:name');
     }
   }
-
-  onMount(() => {
-    const friendRequestHandler = () => {
-      queryClient.invalidateQueries({
-        queryKey: ['friendRequests'],
-        refetchType: 'active'
-      });
-      invalidate('app:name');
-    }
-
-    socket.on('friendRequestEmmision', friendRequestHandler);
-
-    return () => socket.off('friendRequestEmmision', friendRequestHandler);
-  })
 </script>
 
 <span class="tw-text-[17px] tw-text-[#65676B] tw-font-bold tw-px-[16px]">Friend requests</span>

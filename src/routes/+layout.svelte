@@ -11,7 +11,8 @@
 	import SigninPopUpModal from "$lib/SigninPopUpModal.svelte";
 	import { onMount } from "svelte";
 	import { socket } from "../socket";
-
+  import { invalidate } from "$app/navigation";
+  
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
@@ -21,17 +22,25 @@
   });
 
   onMount(() => {
-    console.log('reconnect event')
-    const reconnect = () => {
+    if (socket.disconnected && data.currentUser) {
       socket.connect();
+
       socket.emit('join', {
         email: data.currentUser.email
-      })
+      });
     }
 
-    socket.on('reconnect', reconnect);
+    const friendRequestHandler = () => {
+      queryClient.invalidateQueries({
+        queryKey: ['friendRequests'],
+        refetchType: 'active'
+      });
+      invalidate('app:name');
+    }
 
-    return () => socket.off('reconnect', reconnect);
+    socket.on('friendRequestEmmision', friendRequestHandler);
+
+    return () => socket.off('friendRequestEmmision', friendRequestHandler);
   })
   export let data: LayoutData;
 </script>
