@@ -1,5 +1,5 @@
 <script lang="ts">
-  export let token: string | undefined;
+  // export let token: string | undefined;
 
   import { page } from '$app/stores';
   import logo from '$lib/assets/clam.png';
