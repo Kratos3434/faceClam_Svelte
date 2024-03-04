@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { changeProfilePic } from "$lib";
+	import { changeCoverPic, changeProfilePic } from "$lib";
+	import ChangeCoverPhoto from "$lib/ChangeCoverPhoto.svelte";
 	import ChangeProfilePhoto from "$lib/ChangeProfilePhoto.svelte";
   import NavBar from "$lib/NavBar.svelte";
 	import OtherProfile from "$lib/OtherProfile.svelte";
@@ -17,12 +18,15 @@
 <!-- <NavBar token={data.token} user={data.currentUser} /> -->
 <main class="tw-pt-[52px]">
  {#if data.verified}
-  <Profile user={data.user} token={data.token} />
+  <Profile user={data.user} />
  {:else}
   <OtherProfile user={data.user} token={data.token} currentUser={data.currentUser} />
  {/if}
  <slot />
  {#if $changeProfilePic}
   <ChangeProfilePhoto token={data.token} />
+ {/if}
+ {#if $changeCoverPic}
+  <ChangeCoverPhoto token={data.token} />
  {/if}
 </main>

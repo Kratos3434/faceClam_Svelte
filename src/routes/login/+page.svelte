@@ -20,7 +20,6 @@
 
   const handleLogin = async (e: any) => {
     e.preventDefault();
-    loading = true;
     if (!email) {
       error.status = true;
       error.error = "Email is required"
@@ -32,6 +31,7 @@
       return false;
     }
 
+    loading = true;
     try {
       const res = await fetch("/api/v1/public/signin", {
         method: 'POST',
@@ -70,6 +70,8 @@
   <meta name="description" content="Connect with friends and the world around you on faceClam" />
 </svelte:head>
 
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y-no-static-element-interactions -->
 <main class="tw-flex tw-justify-center tw-flex-col tw-items-center tw-w-full tw-h-[100vh] tw-py-5 tw-px-[16px]">
   <div class="tw-flex tw-gap-10 login-xl:tw-gap-24 login-xl:tw-flex-nowrap tw-flex-wrap tw-justify-center">
 
@@ -86,17 +88,17 @@
 
       <form on:submit={handleLogin}>
         <div class="tw-flex tw-flex-col tw-gap-3">
-          <input type="email" placeholder="Email" class="tw-w-full tw-px-[16px] tw-py-[14px] tw-rounded tw-border-2 tw-border-[#DDDFE2] tw-outline-none focus:tw-border-[#0866FF]" bind:value={email} />
+          <input type="email" placeholder="Email" class="tw-w-full tw-px-[16px] tw-py-[14px] tw-rounded tw-border-2 tw-border-[#DDDFE2] tw-outline-none focus:tw-border-[#0866FF]" bind:value={email} autocomplete="email" />
           <div class="tw-flex tw-justify-between tw-w-full tw-px-[16px] tw-py-[14px] tw-rounded tw-border-2 tw-border-[#DDDFE2] tw-items-center focus:tw-border-[#0866FF]">
             <input type={showPass ? "text" : "password"} placeholder="Password" class="tw-w-full tw-outline-none" on:input={handlePassword} />
             {#if showPass}
-              <button on:click={() => showPass = false}>
+              <span on:click={() => showPass = false}>
                 <EyeOutline width={16} height={16} />
-              </button>
+              </span>
             {:else}
-              <button on:click={() => showPass = true}>
+              <span on:click={() => showPass = true}>
                 <EyeOffOutline width={16} height={16} />
-              </button>
+              </span>
             {/if}
           </div>
           {#if error.status}

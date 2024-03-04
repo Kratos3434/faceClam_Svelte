@@ -15,7 +15,7 @@ export const load = (async ({cookies, params, fetch, depends}) => {
   });
 
   const data = await res.json();
-  console.log(data)
+
   if (!data.status) {
     error(404, {
       message: 'Not found'

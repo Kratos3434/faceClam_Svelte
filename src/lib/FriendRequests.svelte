@@ -29,7 +29,7 @@
     staleTime: Infinity
   });
 
-  const acceptFriendRequest = async (id: number) => {
+  const acceptFriendRequest = async (id: number, email: string) => {
     const res = await fetch(`${userBaseURL}/friend/accept/${id}`, {
       method: 'PUT',
       headers: {
@@ -43,11 +43,15 @@
         queryKey: ['friendRequests'],
         refetchType: 'active'
       })
-      invalidate('app:name');
+      invalidate('app:name').then(() => {
+        socket.emit('friendRequest', {
+          to: email
+        });
+      })
     }
   }
 
-  const declineFriendRequest = async (id: number) => {
+  const declineFriendRequest = async (id: number, email: string) => {
     const res = await fetch(`${userBaseURL}/friend/decline/${id}`, {
       method: 'DELETE',
       headers: {
@@ -61,7 +65,11 @@
         queryKey: ['friendRequests'],
         refetchType: 'active'
       })
-      invalidate('app:name');
+      invalidate('app:name').then(() => {
+        socket.emit('friendRequest', {
+          to: email
+        });
+      })
     }
   }
 </script>
@@ -87,11 +95,11 @@
             <a class="tw-font-bold hover:tw-underline" href={`/${e.friend.firstName}.${e.friend.lastName}.${e.friend.id}`}>{e.friend.firstName} {e.friend.lastName}</a>
             <div class="tw-flex tw-justify-end tw-gap-2">
               <button class="tw-text-white tw-font-bold tw-rounded-md tw-bg-[#0866FF] tw-px-[15px] tw-py-2 hover:tw-brightness-95" 
-              on:click={() => acceptFriendRequest(e.friend.id)}>
+              on:click={() => acceptFriendRequest(e.friend.id, e.friend.email)}>
                 Confirm
               </button>
               <button class="tw-text-black tw-font-bold tw-rounded-md tw-bg-gray-300 tw-px-[15px] tw-py-2 hover:tw-bg-gray-400" 
-              on:click={() => declineFriendRequest(e.friend.id)}>
+              on:click={() => declineFriendRequest(e.friend.id, e.friend.email)}>
                 Decline
               </button>
             </div>
