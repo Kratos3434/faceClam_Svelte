@@ -18,3 +18,5 @@ export const viewLikes = writable({ status: false, postId: 0 });
 export const viewPost = writable<{status: boolean, post?: PostProps}>({ status: false, post: undefined });
 
 export const changeProfilePic = writable(false);
+
+export const changeCoverPic = writable(false);

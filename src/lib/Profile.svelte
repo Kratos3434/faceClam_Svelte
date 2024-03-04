@@ -6,7 +6,7 @@
   import Add from 'svelte-material-icons/Plus.svelte';
   import Edit from 'svelte-material-icons/Pencil.svelte';
   import MenuDown from 'svelte-material-icons/MenuDown.svelte';
-	import { changeProfilePic } from "$lib";
+	import { changeCoverPic, changeProfilePic } from "$lib";
 
   const { name } = $page.params;
 
@@ -27,7 +27,7 @@
       name: "Friends"
     }
   ];
-    console.log($page.url.pathname)
+
 </script>
 
 <div class="tw-w-full tw-h-full">
@@ -36,7 +36,7 @@
       <div class="tw-relative tw-flex tw-flex-col tw-h-full">
         <img src={user.coverPicture ? user.coverPicture : placeholder} width={1250} height={462.95} alt="Cover" class="tw-h-[462.95px]  tw-rounded-t-[0px] tw-rounded-b-md" />
         <div class="tw-absolute tw-flex tw-justify-end tw-top-[400px] tw-w-full tw-px-[20px] tw-pb-5">
-          <button class="tw-flex tw-rounded-md tw-h-full tw-items-center tw-text-white tw-bg-[rgba(0,0,0,0.5)] tw-px-[12px] tw-gap-1 tw-py-2 tw-cursor-pointer hover:tw-brightness-95">
+          <button class="tw-flex tw-rounded-md tw-h-full tw-items-center tw-text-white tw-bg-[rgba(0,0,0,0.5)] tw-px-[12px] tw-gap-1 tw-py-2 tw-cursor-pointer hover:tw-brightness-95" on:click={() => $changeCoverPic = true}>
             <Camera width={16} height={16} />
             <span class="tw-text-[15px] tw-font-bold">
               Edit cover photo
