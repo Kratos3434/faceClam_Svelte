@@ -16,7 +16,7 @@
     <p class="tw-py-[8px] tw-font-bold tw-text-[18px]">Login or signup to interact, post, and like pictures on faceClam</p>
     <p>Click the button below to login or signup</p>
     <hr />
-    <a class="tw-px-[16px] tw-py-[12px] tw-rounded-md tw-text-white tw-font-bold tw-text-[20px] tw-bg-[#00A400] hover:tw-brightness-95" href="/login">
+    <a class="tw-px-[16px] tw-py-[12px] tw-rounded-md tw-text-white tw-font-bold tw-text-[20px] tw-bg-[#00A400] hover:tw-brightness-95" href="/login" on:click={() => $openPopup = false}>
       Log in
     </a>
   </div>
