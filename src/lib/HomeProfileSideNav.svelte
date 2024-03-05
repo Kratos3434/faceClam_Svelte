@@ -5,7 +5,6 @@
   import { monthToString } from "../helpers";
 	import { userBaseURL } from "../env";
 	import { invalidate } from "$app/navigation";
-	import { breadcrumbsClasses } from "@mui/material";
 
   let editBio = false;
   let bioCharacters = 101;
