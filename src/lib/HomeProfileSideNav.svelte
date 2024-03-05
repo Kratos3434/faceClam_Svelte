@@ -144,15 +144,6 @@
     </div>
     <!-- 149.98 img w*h-->
     <div class="tw-grid tw-grid-cols-3 tw-gap-1">
-      <!-- <div class="tw-w-[149.98px] tw-h-[149.98px]">01</div>
-      <div class="tw-w-[149.98px] tw-h-[149.98px]">02</div>
-      <div class="tw-w-[149.98px] tw-h-[149.98px]">03</div>
-      <div class="tw-w-[149.98px] tw-h-[149.98px]">04</div>
-      <div class="tw-w-[149.98px] tw-h-[149.98px]">05</div>
-      <div class="tw-w-[149.98px] tw-h-[149.98px]">06</div>
-      <div class="tw-w-[149.98px] tw-h-[149.98px]">07</div>
-      <div class="tw-w-[149.98px] tw-h-[149.98px]">08</div>
-      <div class="tw-w-[149.98px] tw-h-[149.98px]">09</div> -->
       {#each posts as post }
         <img src={post.featureImage} width={149} height={149} alt={post.description} class="tw-w-[149px] tw-h-[149px] tw-rounded-md"/>
       {/each}

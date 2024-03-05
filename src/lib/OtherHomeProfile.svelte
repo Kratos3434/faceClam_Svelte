@@ -7,6 +7,7 @@
   import PostCard from "./PostCard.svelte";
 	import { publicBaseURL } from "../env";
 	import HomeProfileSideNav from "./HomeProfileSideNav.svelte";
+	import OtherHomeProfileSideNav from "./OtherHomeProfileSideNav.svelte";
 
   export let user: UserProps;
   export let token: string | undefined;
@@ -28,7 +29,7 @@
 <div class="tw-flex tw-flex-col tw-items-center tw-mt-5 tw-w-full">
   <div class="tw-flex tw-gap-7 homeprof-md:tw-items-start tw-w-full tw-px-[16px] homeprof-md:tw-flex-row tw-flex-col tw-items-center tw-justify-center">
     <!-- Left side -->
-    <HomeProfileSideNav {token} {user} {posts} />
+    <OtherHomeProfileSideNav {user} {posts} />
     <!-- Left side end-->
     <!-- Right side-->
     <div class="tw-flex tw-flex-col tw-gap-4 tw-max-w-[680px] tw-w-full">
