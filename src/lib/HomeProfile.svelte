@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { UserProps } from "../types";
+	import type { PostProps, UserProps } from "../types";
   import Edit from 'svelte-material-icons/Pencil.svelte';
   import Clock from 'svelte-material-icons/Clock.svelte';
 	import { monthToString } from "../helpers";
@@ -11,17 +11,11 @@
 	import Loading from "./Loading.svelte";
 	import PostCard from "./PostCard.svelte";
 	import { publicBaseURL } from "../env";
+	import HomeProfileSideNav from "./HomeProfileSideNav.svelte";
 
   export let user: UserProps;
   export let token: string | undefined;
-
-  let editBio = false;
-  let bio = "";
-  let bioCharacters = 101;
-
-  const handleBio = (e: any) => {
-    bio = e.target.value;
-  }
+  export let posts: PostProps[];
 
   const getPostsByUserId = async () => {
     const res = await fetch(`${publicBaseURL}/post/user/${user.id}`);
@@ -39,7 +33,7 @@
 <div class="tw-flex tw-flex-col tw-items-center tw-mt-5 tw-w-full">
   <div class="tw-flex tw-gap-7 homeprof-md:tw-items-start tw-w-full tw-px-[16px] homeprof-md:tw-flex-row tw-flex-col tw-items-center tw-justify-center">
     <!-- Left side -->
-    <div class="tw-flex tw-flex-col tw-px-[16px] tw-py-[20px] tw-rounded-md tw-bg-white tw-shadow-md tw-gap-5 homeprof-md:tw-max-w-[490px] tw-max-w-[680px] tw-w-full">
+    <!-- <div class="tw-flex tw-flex-col tw-px-[16px] tw-py-[20px] tw-rounded-md tw-bg-white tw-shadow-md tw-gap-5 homeprof-md:tw-max-w-[490px] tw-max-w-[680px] tw-w-full">
       <span class="tw-text-[20px] tw-font-bold">
         Intro
       </span>
@@ -125,7 +119,8 @@
           Joined {monthToString(new Date(user.createdAt).getMonth())} {new Date(user.createdAt).getFullYear()}
         </span>
       </div>
-    </div>
+    </div> -->
+    <HomeProfileSideNav {user} {token} {posts} />
     <!-- Left side end-->
 
     <!-- Right side -->
