@@ -69,10 +69,10 @@
             Change Password
           </button>
         {:else}
-          <span class="tw-bg-gray-500 tw-px-[16px] tw-py-[14px] tw-rounded-md tw-text-white tw-font-bold tw-text-center tw-cursor-not-allowed">
+          <span class="tw-bg-gray-500 tw-px-[16px] tw-py-[14px] tw-rounded-md tw-text-white tw-font-bold tw-text-center tw-cursor-not-allowed tw-flex tw-justify-center tw-items-center tw-gap-3">
             Change Password
             {#if loading}
-              <Loading width={15} height={15} />
+              <Loading width={17} height={17} />
             {/if}
           </span>
         {/if}
