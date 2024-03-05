@@ -8,7 +8,7 @@
 </script>
 
 {#if data.verified}
-  <HomeProfile user={data.user} token={data.token} />
+  <HomeProfile user={data.user} token={data.token} posts={data.posts} />
 {:else}
-  <OtherHomeProfile user={data.user} token={data.token} currentUser={$page.data.currentUser} />
+  <OtherHomeProfile user={data.user} token={data.token} currentUser={$page.data.currentUser} posts={data.posts} />
 {/if}

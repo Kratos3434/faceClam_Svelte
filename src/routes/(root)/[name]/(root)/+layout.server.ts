@@ -31,12 +31,17 @@ export const load = (async ({cookies, params, fetch, depends}) => {
   });
   const verifyData = await verify.json();
 
+  const getTop9Posts = await fetch(`http://localhost:8085/v1/public/limit/post?id=${data.data.id}&limit=9`);
+
+  const posts = await getTop9Posts.json();
+
   depends('app:name');
 
   return {
     token: token,
     param: params.name,
     verified: verifyData.status,
-    user: data.data
+    user: data.data,
+    posts: posts.data
   }
 }) satisfies LayoutServerLoad;
