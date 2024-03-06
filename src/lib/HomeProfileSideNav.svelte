@@ -39,7 +39,7 @@
   }
 </script>
 
-<div class="tw-flex tw-flex-col tw-gap-5 homeprof-md:tw-max-w-[490px] tw-max-w-[680px] tw-w-full tw-sticky tw-top-[70px]">
+<div class="tw-flex tw-flex-col tw-gap-5 homeprof-md:tw-max-w-[490px] tw-max-w-[680px] tw-w-full homeprof-md:tw-sticky homeprof-md:tw-top-[70px]">
   <!-- Intro -->
   <div class="tw-flex tw-flex-col tw-px-[16px] tw-py-[20px] tw-rounded-md tw-bg-white tw-shadow-md tw-gap-5 homeprof-md:tw-max-w-[490px] tw-max-w-[680px] tw-w-full">
     <span class="tw-text-[20px] tw-font-bold">
