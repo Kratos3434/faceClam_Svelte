@@ -18,17 +18,21 @@
 
   export let token: string | undefined;
   export let currentUser: UserProps | null;
-
+  
   let divEl: any;
   let comment = "";
   let loading = false;
   const queryClient = useQueryClient();
-
+  
   const handleComment = () => {
     comment = divEl.innerText;
   }
-
+  
   let post = $viewPost.post;
+  
+  let isLiked = post?.likes.some(e => e.userId === currentUser?.id);
+  let likes = post?.likes.length;
+  let handlingLike = false;
 
   const getCommentByPostId = async (): Promise<CommentProps[]> => {
     const res = await fetch(`${publicBaseURL}/comment/post/${post?.id}`);
@@ -79,6 +83,37 @@
       });
       post = data.data.post;
       loading = false;
+    }
+  }
+
+  const likePost = async () => {
+    handlingLike = true;
+    await fetch(`${userBaseURL}/like/post/${post?.id}`, {
+      method: 'PUT',
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+  }
+
+  const handleLike = async () => {
+    if (likes) {
+      if (!handlingLike) {
+      switch (isLiked) {
+        case true:
+          likes--;
+          isLiked = false;
+          break;
+        case false:
+          likes++;
+          isLiked = true;
+          break;
+      }
+
+      await likePost();
+      handlingLike = false;
+    }
     }
   }
 </script> 
@@ -135,7 +170,7 @@ on:click={() => $viewPost.status = false}>
         {/if}
         <div class="tw-px-[16px] tw-flex tw-justify-between tw-text-[#65676B] tw-text-[15px] tw-items-center">
           <span>
-            {post?.likes.length} likes
+            {likes} likes
           </span>
           <div class="tw-flex">
             <span class="tw-p-[6px]">
@@ -149,7 +184,7 @@ on:click={() => $viewPost.status = false}>
         <div class="tw-px-[16px] tw-flex tw-flex-col tw-gap-2">
           <hr />
           <div class="tw-flex tw-justify-evenly tw-text-[#65676B] tw-text-[15px] tw-items-center">
-            <div class={`tw-flex tw-gap-2 tw-py-[6px] hover:tw-rounded-md tw-w-full tw-justify-center tw-items-center hover:tw-bg-gray-200 tw-cursor-pointer ${post?.likes.some(e => e.userId === currentUser?.id) && " tw-text-blue-600"}`}>
+            <div class={`tw-flex tw-gap-2 tw-py-[6px] hover:tw-rounded-md tw-w-full tw-justify-center tw-items-center hover:tw-bg-gray-200 tw-cursor-pointer ${isLiked && " tw-text-blue-600"}`} on:click={handleLike}>
               <Like width={20} height={20} />
               <span>Like</span>
             </div>
