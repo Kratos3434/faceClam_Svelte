@@ -27,7 +27,7 @@
 </script>
 
 <div class="tw-flex tw-flex-col tw-items-center tw-mt-5 tw-w-full">
-  <div class="tw-flex tw-gap-7 homeprof-md:tw-items-start tw-w-full tw-px-[16px] homeprof-md:tw-flex-row tw-flex-col tw-items-center tw-justify-center">
+  <div class="tw-flex homeprof-md:tw-gap-7 tw-gap-4 homeprof-md:tw-items-start tw-w-full tw-px-[16px] homeprof-md:tw-flex-row tw-flex-col tw-items-center tw-justify-center">
     <!-- Left side -->
     <OtherHomeProfileSideNav {user} {posts} />
     <!-- Left side end-->
@@ -49,8 +49,10 @@
           <PostCard {post} {currentUser} {token} />
         {/each}
         <hr />
-        <div class="tw-py-2 tw-text-center tw-font-bold">
-          <p>You are updated :{")"}</p>
+        <div class="tw-py-2 tw-text-center">
+          <small>
+            &copy; faceClam &#8226; Copyright 2024 &#8226; All rights reserved
+          </small>
         </div>
       {/if}
     </div>
