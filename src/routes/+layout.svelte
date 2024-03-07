@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { browser } from "$app/environment";
-	import { openAddPost, openAddStatus, openPopup, viewLikes, viewPost } from "$lib";
+	import { openAddPost, openAddStatus, openMenu, openPopup, viewLikes, viewPost } from "$lib";
 	import ViewLikes from "$lib/ViewLikes.svelte";
   import "../app.css";
   import { QueryClient, QueryClientProvider } from '@tanstack/svelte-query';
@@ -67,3 +67,11 @@
     <SigninPopUpModal />
   {/if}
 </QueryClientProvider>
+
+{#if $viewLikes.status || $openPopup || $viewPost.status || $openAddPost || $openAddStatus || $openMenu}
+  <style>
+    body {
+      overflow: hidden;
+    }
+  </style>
+{/if}

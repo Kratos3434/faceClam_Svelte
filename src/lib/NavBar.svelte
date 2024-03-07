@@ -19,9 +19,9 @@
 	import { goto, invalidateAll } from '$app/navigation';
 	import type { UserProps } from '../types';
 	import { socket } from '../socket';
-
+  import { openMenu } from '$lib';
+  
   export let user: UserProps | null = null;
-  let openMenu = false;
   let showModal = false;
 
   const links = [
@@ -57,6 +57,8 @@
   }
 </script>
 
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y-no-static-element-interactions -->
 <nav class="tw-fixed tw-top-0 tw-w-full tw-px-[16px] tw-bg-white tw-pt-[6px] tw-shadow-md tw-z-[1000]">
   <div class="tw-flex tw-justify-between tw-relative tw-h-[52px]">
     <div class="tw-flex tw-gap-[8px] tw-items-center tw-absolute tw-left-0">
@@ -69,7 +71,7 @@
           <input type="text" placeholder="Search faceClam" class="tw-max-w-[212px] tw-w-full tw-px-[8px] tw-pt-[7px] tw-pb-[9px] tw-bg-[#F0F2F5] tw-rounded-[1000px] tw-outline-none nav-ssm:tw-block tw-hidden" />
         </div>
       </form>
-      <button class="tw-flex tw-flex-col tw-justify-center nav-xl:tw-hidden tw-cursor-pointer" on:click={() => openMenu = true}>
+      <button class="tw-flex tw-flex-col tw-justify-center nav-xl:tw-hidden tw-cursor-pointer" on:click={() => $openMenu = true}>
         <Menu width={24} height={24} />
       </button>
     </div>
@@ -98,10 +100,10 @@
       </button>
     </div>
   </div>
-  <button class={`tw-fixed  tw-left-0 tw-top-0 tw-w-full tw-h-full tw-overflow-auto tw-bg-[rgb(0,0,0)] tw-bg-[rgba(0,0,0,0.4)] ${openMenu ? 'tw-hidden nav-xxl:tw-block ' : 'tw-hidden '} tw-cursor-default`} on:click={() => openMenu = false}>
-    <button class="tw-bg-white tw-shadow-2xl tw-h-full tw-p-5 tw-pr-0 tw-flex tw-flex-col tw-ease-out tw-duration-[0.5s] tw-gap-10 tw-max-w-[300px] tw-w-full tw-cursor-default" on:click={(e) => e.stopPropagation()}>
+  <div class={`tw-fixed  tw-left-0 tw-top-0 tw-w-full tw-h-full tw-overflow-auto tw-bg-[rgb(0,0,0)] tw-bg-[rgba(0,0,0,0.4)] ${$openMenu ? 'tw-hidden nav-xxl:tw-block ' : 'tw-hidden '} tw-cursor-default`} on:click={() => $openMenu = false}>
+    <div class="tw-bg-white tw-shadow-2xl tw-h-full tw-p-5 tw-pr-0 tw-flex tw-flex-col tw-ease-out tw-duration-[0.5s] tw-gap-10 tw-max-w-[300px] tw-w-full tw-cursor-default" on:click={(e) => e.stopPropagation()}>
       <div class="tw-flex tw-justify-end tw-p-5">
-        <button on:click={() => openMenu = false}>
+        <button on:click={() => $openMenu = false}>
           <Close width={30} height={30} class="tw-cursor-pointer" />
         </button>
       </div>
@@ -110,8 +112,8 @@
           {link.name}
         </a>
       {/each}
-    </button>
-  </button>
+    </div>
+  </div>
   {#if showModal}
     <button class="tw-fixed  tw-left-0 tw-top-[58px] tw-w-full tw-h-full tw-overflow-auto tw-px-3 tw-cursor-default" on:click={() => showModal = false}>
       <div class="tw-absolute tw-right-0 tw-top-[5px] tw-pr-2">
@@ -126,12 +128,12 @@
               </a>
             </div>
 
-            <button class="tw-px-[8px] tw-flex tw-py-[12px] tw-items-center tw-gap-2 hover:tw-rounded-md hover:tw-bg-gray-200 tw-cursor-pointer" on:click={logout}>
+            <div class="tw-px-[8px] tw-flex tw-py-[12px] tw-items-center tw-gap-2 hover:tw-rounded-md hover:tw-bg-gray-200 tw-cursor-pointer" on:click={logout}>
               <div class="tw-rounded-[1000px] tw-bg-[#F0F2F5] tw-p-1">
                 <Logout width={20} height={20} />
               </div>
               <span>Log Out</span>
-            </button>
+            </div>
           {:else}
             <a href="/login" class="tw-px-[8px] tw-flex tw-py-[12px] tw-items-center tw-gap-2 hover:tw-rounded-md hover:tw-bg-gray-200 tw-cursor-pointer">
               <div class="tw-rounded-[1000px] tw-bg-[#F0F2F5] tw-p-1">

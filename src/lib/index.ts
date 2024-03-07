@@ -20,3 +20,5 @@ export const viewPost = writable<{status: boolean, post?: PostProps}>({ status: 
 export const changeProfilePic = writable(false);
 
 export const changeCoverPic = writable(false);
+
+export const openMenu = writable(false);
