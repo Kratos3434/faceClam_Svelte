@@ -115,8 +115,17 @@
   {#if showModal}
     <button class="tw-fixed  tw-left-0 tw-top-[58px] tw-w-full tw-h-full tw-overflow-auto tw-px-3 tw-cursor-default" on:click={() => showModal = false}>
       <div class="tw-absolute tw-right-0 tw-top-[5px] tw-pr-2">
-        <div class="tw-rounded-md tw-bg-white tw-w-[360px] tw-shadow-md tw-flex tw-flex-col tw-text-[15px] tw-text-black tw-font-bold">
+        <div class="tw-rounded-md tw-bg-white tw-w-[360px] tw-shadow-md tw-flex tw-flex-col tw-text-[15px] tw-text-black tw-font-bold tw-px-[8px] tw-py-[12px] tw-gap-3">
           {#if user}
+            <div class="tw-rounded-md tw-shadow-xl tw-p-1">
+              <a class="tw-flex tw-gap-2 tw-py-[12px] tw-px-[8px] tw-items-center hover:tw-bg-gray-200 tw-rounded-md" href={`/${user.firstName}.${user.lastName}.${user.id}`}>
+                <img src={user.profilePicture ? user.profilePicture : placeholder} width={36} height={36} alt={`${user.firstName} ${user.lastName}`} class="tw-rounded-[1000px] tw-w-[36px] tw-h-[36px]" />
+                <span class="tw-text-[17px] tw-font-bold">
+                  {user.firstName} {user.lastName}
+                </span>
+              </a>
+            </div>
+
             <button class="tw-px-[8px] tw-flex tw-py-[12px] tw-items-center tw-gap-2 hover:tw-rounded-md hover:tw-bg-gray-200 tw-cursor-pointer" on:click={logout}>
               <div class="tw-rounded-[1000px] tw-bg-[#F0F2F5] tw-p-1">
                 <Logout width={20} height={20} />

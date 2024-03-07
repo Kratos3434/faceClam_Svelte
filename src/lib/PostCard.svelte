@@ -16,6 +16,7 @@
   let isLiked = post.likes.some(e => e.userId === currentUser?.id);
   let likes = post.likes.length;
   let handlingLike = false;
+
   const openThePopup = () => {
     $openPopup = true;
   }
@@ -50,6 +51,8 @@
   }
 </script>
 
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y-no-static-element-interactions -->
 <div class="tw-rounded-md tw-shadow-md tw-max-w-[680px] tw-w-full tw-bg-white tw-flex tw-flex-col">
   <div class={`tw-flex tw-flex-col tw-px-[16px] tw-pt-[12px] ${post.featureImage && "tw-pb-[16px]"}`}>
     <div class="tw-flex tw-gap-2 tw-items-center">
@@ -65,8 +68,10 @@
             {generateDate(post.createdAt)}
           </span>
         </div>
-        <div class="tw-flex tw-gap-4">
-          <More width={20} height={20} class="tw-cursor-pointer" />
+        <div class="tw-flex tw-gap-4 tw-relative">
+          <span>
+            <More width={20} height={20} class="tw-cursor-pointer" />
+          </span>
           <Close width={20} height={20} class="tw-cursor-pointer" />
         </div>
       </div>

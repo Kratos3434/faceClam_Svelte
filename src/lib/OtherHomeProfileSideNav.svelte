@@ -8,7 +8,8 @@
   export let posts: PostProps[];
 </script>
 
-<div class="tw-flex tw-flex-col tw-gap-5 homeprof-md:tw-max-w-[490px] tw-max-w-[680px] tw-w-full homeprof-md:tw-sticky homeprof-md:tw-top-[70px]">
+<div class="tw-flex tw-flex-col tw-gap-5 homeprof-md:tw-max-w-[490px] tw-max-w-[680px] tw-w-full homeprof-md:tw-sticky homeprof-md:tw-top-[-70px]">
+  <!-- Intro -->
   <div class="tw-flex tw-flex-col tw-px-[16px] tw-py-[20px] tw-rounded-md tw-bg-white tw-shadow-md tw-gap-5 homeprof-md:tw-max-w-[490px] tw-max-w-[680px] tw-w-full">
     <span class="tw-text-[20px] tw-font-bold">
       Intro
@@ -38,7 +39,9 @@
       </span>
     </div>
   </div>
+  <!-- !Intro -->
 
+  <!-- Photos (top 9) -->
   <div class="tw-flex tw-flex-col tw-px-[16px] tw-py-[20px] tw-rounded-md tw-bg-white tw-shadow-md tw-gap-5 homeprof-md:tw-max-w-[490px] tw-max-w-[680px] tw-w-full">
     <div class="tw-flex tw-justify-between tw-items-center">
       <span class="tw-text-[20px] tw-font-bold">
@@ -51,18 +54,14 @@
 
     <!-- 149.98 img w*h-->
     <div class="tw-grid tw-grid-cols-3 tw-gap-1">
-      <!-- <div class="tw-w-[149.98px] tw-h-[149.98px]">01</div>
-      <div class="tw-w-[149.98px] tw-h-[149.98px]">02</div>
-      <div class="tw-w-[149.98px] tw-h-[149.98px]">03</div>
-      <div class="tw-w-[149.98px] tw-h-[149.98px]">04</div>
-      <div class="tw-w-[149.98px] tw-h-[149.98px]">05</div>
-      <div class="tw-w-[149.98px] tw-h-[149.98px]">06</div>
-      <div class="tw-w-[149.98px] tw-h-[149.98px]">07</div>
-      <div class="tw-w-[149.98px] tw-h-[149.98px]">08</div>
-      <div class="tw-w-[149.98px] tw-h-[149.98px]">09</div> -->
       {#each posts as post }
-        <img src={post.featureImage} width={149} height={149} alt={post.description} class="tw-w-[149px] tw-h-[149px] tw-rounded-md"/>
+        <img src={post.featureImage} width={149} height={149} alt={post.description} class="homeprof-md:tw-w-[149px] homeprof-md:tw-h-[149px] tw-rounded-md tw-w-[213px] tw-h-[213px]"/>
       {/each}
     </div>
   </div>
+  <!-- !Photos (top 9) -->
+
+  <small class="homeprof-md:tw-block tw-hidden">
+    &copy; faceClam &#8226; Copyright 2024 &#8226; All rights reserved
+  </small>
 </div>
