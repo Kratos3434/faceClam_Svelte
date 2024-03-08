@@ -21,6 +21,7 @@ export default {
         'home-xxl': {max: '768px'},
         'home-lg': '1100px',
         'homeprof-md': '908px',
+        'chat-nav': '470px'
       }
     },
   },

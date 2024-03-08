@@ -1,6 +1,6 @@
 <script lang="ts">
 	import ProfileCard from "$lib/ProfileCard.svelte";
-import type { PageData } from "./$types";
+  import type { PageData } from "./$types";
 
 
   export let data: PageData;
@@ -31,5 +31,5 @@ import type { PageData } from "./$types";
     </div>
     <!-- All Friends end-->
   </div>
-  
+
 </div>
