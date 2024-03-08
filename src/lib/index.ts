@@ -22,3 +22,5 @@ export const changeProfilePic = writable(false);
 export const changeCoverPic = writable(false);
 
 export const openMenu = writable(false);
+
+export const openChatMenu = writable(false);

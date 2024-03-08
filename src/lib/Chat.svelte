@@ -1,5 +1,6 @@
+<script>
+	import ChatNavBar from "./ChatNavBar.svelte";
 
+</script>
 
-<div>
-  <h1>Chat</h1>
-</div>
+<ChatNavBar />
