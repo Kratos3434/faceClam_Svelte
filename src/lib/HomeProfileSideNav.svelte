@@ -5,6 +5,9 @@
   import { monthToString } from "../helpers";
 	import { userBaseURL } from "../env";
 	import { invalidate } from "$app/navigation";
+  import { page } from '$app/stores';
+
+  const name = $page.url.pathname.substring(1);
 
   let editBio = false;
   let bioCharacters = 101;
@@ -138,14 +141,16 @@
       <span class="tw-text-[20px] tw-font-bold">
         Photos
       </span>
-      <span class="tw-text-[17px] tw-cursor-pointer tw-text-[rgb(0,100,209)] tw-rounded-md hover:tw-bg-gray-200 tw-px-2">
+      <a class="tw-text-[17px] tw-cursor-pointer tw-text-[rgb(0,100,209)] tw-rounded-md hover:tw-bg-gray-200 tw-px-2" href={`${name}/photos`}>
         See all photos
-      </span>
+      </a>
     </div>
     <!-- 149.98 img w*h vertical 213-->
     <div class="tw-grid tw-grid-cols-3 tw-gap-1">
       {#each posts as post }
-        <img src={post.featureImage} width={149} height={149} alt={post.description} class="homeprof-md:tw-w-[149px] homeprof-md:tw-h-[149px] tw-rounded-md tw-w-[213px] tw-h-[213px]"/>
+        <a href={`/${name}/posts/${post.id}`}>
+          <img src={post.featureImage} width={149} height={149} alt={post.description} class="homeprof-md:tw-w-[149px] homeprof-md:tw-h-[149px] tw-rounded-md tw-w-[213px] tw-h-[213px]"/>
+        </a>
       {/each}
     </div>
   </div>

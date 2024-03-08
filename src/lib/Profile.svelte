@@ -19,12 +19,16 @@
       name: "Posts"
     },
     {
-      path: `/${name}/about`,
+      path: `/${encodeURI(name)}/about`,
       name: "About"
     },
     {
-      path: `/${name}/friends`,
+      path: `/${encodeURI(name)}/friends`,
       name: "Friends"
+    },
+    {
+      path: `/${encodeURI(name)}/photos`,
+      name: 'Photos'
     }
   ];
 
