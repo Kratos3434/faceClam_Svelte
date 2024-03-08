@@ -9,8 +9,8 @@
 </script>
 
 <div class="tw-px-[16px] tw-py-[12px] tw-w-full tw-flex tw-justify-center">
-  <div class="tw-bg-white tw-shadow-md tw-px-[16px] tw-py-[8px] tw-rounded-md tw-max-w-[1186px] tw-w-full">
-    <span class="tw-text-[20px] tw-font-bold tw-mb-3">Photos</span>
+  <div class="tw-bg-white tw-shadow-md tw-py-[8px] tw-rounded-md tw-max-w-[1186px] tw-w-full">
+    <div class="tw-text-[20px] tw-font-bold tw-mb-3 tw-p-2">Photos</div>
     <!-- All photos -->
     <div class="tw-flex tw-flex-wrap  tw-gap-2 tw-items-center tw-justify-center">
       <!-- 185*185 -->

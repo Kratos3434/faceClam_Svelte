@@ -38,7 +38,7 @@
     {
       path: `/${encodeURI(name)}/photos`,
       name: 'Photos'
-    }
+    },
   ];
   // `${userBaseURL}/send/request/${user.id}`
   const sendFriendRequest = async () => {
