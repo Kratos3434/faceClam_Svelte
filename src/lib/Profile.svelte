@@ -29,7 +29,7 @@
     {
       path: `/${encodeURI(name)}/photos`,
       name: 'Photos'
-    }
+    },
   ];
 
 </script>
