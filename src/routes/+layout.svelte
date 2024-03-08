@@ -70,7 +70,7 @@
 
 {#if $viewLikes.status || $openPopup || $viewPost.status || $openAddPost || $openAddStatus || $openMenu}
   <style>
-    body {
+    html, body {
       overflow: hidden;
     }
   </style>
