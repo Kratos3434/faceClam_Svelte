@@ -153,7 +153,7 @@
       </div>
     </button>
   {/if}
-  {#if $openNotifModal}
-    <Notifications {token} />
+  {#if $openNotifModal && user}
+    <Notifications {token} currentUser={user} />
   {/if}
 </nav>
