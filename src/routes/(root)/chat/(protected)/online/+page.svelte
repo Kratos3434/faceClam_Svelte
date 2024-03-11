@@ -1,14 +1,14 @@
 <script lang="ts">
-	import type { LayoutData } from "../$types";
+	import type { LayoutData } from "../../$types";
 	import ChatStatus from "$lib/ChatStatus.svelte";
   import { onlineUsers } from "$lib";
-	import type { FriendProps } from "../../../../types";
+	import type { FriendProps } from "../../../../../types";
 
   console.log("Online users: ", $onlineUsers);
 
   $: onlineFriends = () => {
     const result: FriendProps[] = [];
-    data.friends.map(e => {
+    data.friends?.map((e: FriendProps) => {
       if (e.user.id === data.currentUser.id) {
         if ($onlineUsers.get(e.friend.email)) {
           result.push(e);
@@ -32,7 +32,7 @@
   <div class="tw-flex tw-flex-col tw-gap-2 tw-py-2">
     {#if onlineFriends().length === 0}
       <p>No online friends</p>
-    {:else}
+    {:else if data.friends}
       {#each data.friends as friend }
         {#if friend.user.id === data.currentUser.id}
           {#if $onlineUsers.get(friend.friend.email)}
