@@ -65,3 +65,22 @@ export interface FriendProps {
   createdAt: string,
   updatedAt?: string
 }
+
+export enum Notification {
+  LIKE = "LIKE",
+  COMMENT = "COMMENT",
+  FRIENDREQUEST = "FRIENDREQUEST"
+}
+
+export interface NotificationProps {
+  id: number,
+  recipient: UserProps,
+  recipientId: number,
+  sender: UserProps,
+  senderId: number,
+  type: Notification,
+  post: PostProps,
+  postId: number,
+  createdAt: string,
+  updatedAt?: string
+}

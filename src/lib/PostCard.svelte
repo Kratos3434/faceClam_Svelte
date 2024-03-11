@@ -9,6 +9,7 @@
   import Reply from 'svelte-material-icons/ReplyOutline.svelte';
   import { openPopup, viewLikes, viewPost } from "$lib";
 	import { userBaseURL } from "../env";
+	import { socket } from "../socket";
 
   export let post: PostProps;
   export let currentUser: UserProps | null = null;
@@ -23,13 +24,37 @@
 
   const likePost = async () => {
     handlingLike = true;
-    await fetch(`${userBaseURL}/like/post/${post.id}`, {
+    const res = await fetch(`${userBaseURL}/like/post/${post.id}`, {
       method: 'PUT',
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`
       }
     });
+
+    const data = await res.json();
+    if (data.status) {
+      //create a notification
+      const notif =  await fetch('http://localhost:8080/v1/user/notification/create', {
+        method: 'POST',
+        headers: {
+          "Content-Type": 'application/json',
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          recipientId: post.author.id,
+          postId: post.id,
+          type: "LIKE"
+        })
+      })
+
+      if (notif.status === 200) {
+        socket.emit("notification", {
+          to: post.author.email
+        })
+      }
+
+    }
   }
 
   const handleLike = async () => {
