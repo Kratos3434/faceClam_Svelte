@@ -1,5 +1,5 @@
 <script lang="ts">
-  // export let token: string | undefined;
+  export let token: string | undefined;
 
   import { page } from '$app/stores';
   import logo from '$lib/assets/clam.png';
@@ -20,7 +20,8 @@
   import ChatIcon from 'svelte-material-icons/MessageOutline.svelte';
 	import type { UserProps } from '../types';
 	import { socket } from '../socket';
-  import { openMenu } from '$lib';
+  import { openMenu, openNotifModal } from '$lib';
+	import Notifications from './Notifications.svelte';
   
   export let user: UserProps | null = null;
   let showModal = false;
@@ -97,7 +98,7 @@
       <div class="tw-rounded-[1000px] tw-bg-[#F0F2F5] tw-p-2 tw-cursor-pointer hover:tw-bg-gray-200 active:tw-scale-[.9] tw-overflow-hidden tw-transition-all nav-sm:tw-block tw-hidden">
         <Chat width={20} height={20} />
       </div>
-      <div class="tw-rounded-[1000px] tw-bg-[#F0F2F5] tw-p-2 tw-cursor-pointer hover:tw-bg-gray-200 active:tw-scale-[.9] tw-overflow-hidden tw-transition-all nav-sm:tw-block tw-hidden">
+      <div class="tw-rounded-[1000px] tw-bg-[#F0F2F5] tw-p-2 tw-cursor-pointer hover:tw-bg-gray-200 active:tw-scale-[.9] tw-overflow-hidden tw-transition-all nav-sm:tw-block tw-hidden" on:click={() => $openNotifModal = !$openNotifModal}>
         <Bell width={20} height={20} />
       </div>
       <button class="tw-relative" on:click={() => showModal = !showModal}>
@@ -151,5 +152,8 @@
         </div>
       </div>
     </button>
+  {/if}
+  {#if $openNotifModal}
+    <Notifications {token} />
   {/if}
 </nav>
