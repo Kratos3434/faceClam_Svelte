@@ -12,7 +12,8 @@
 	import { onMount } from "svelte";
 	import { socket } from "../socket";
   import { invalidate } from "$app/navigation";
-  
+  import { onlineUsers } from "$lib";
+
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
@@ -30,7 +31,7 @@
         email: data.currentUser.email
       });
     }
-
+    //////////////////////////////////////////
     //All friend request listeners
     const friendRequestHandler = () => {
       queryClient.invalidateQueries({
@@ -41,6 +42,14 @@
     }
 
     socket.on('friendRequestEmmision', friendRequestHandler);
+    //Get all online users
+    const getOnlineUsers = (data: {email: string}[]) => {
+        $onlineUsers = new Map<string, string>();
+        data.forEach((e) => {
+          $onlineUsers.set(e.email, e.email);
+        })
+      }
+    socket.on('onlineUsers', getOnlineUsers);
     //////////////////////////////////////////////////////////
     //Notifications handler
     const notificationsHandler = () => {

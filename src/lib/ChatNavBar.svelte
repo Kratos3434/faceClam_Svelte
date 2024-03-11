@@ -4,23 +4,25 @@
   import Menu from 'svelte-material-icons/Menu.svelte';
   import Close from 'svelte-material-icons/Close.svelte';
 
+  export let currentPath: string;
+  console.log(currentPath)
   const navOptions = [
     {
       name: "Online",
-      path: '/online'
+      path: '/chat/online'
     },
     {
       name: "All",
-      path: '/all'
+      path: '/chat/all'
     },
-    {
-      name: "Pending",
-      path: '/pending'
-    },
-    {
-      name: "Blocked",
-      path: '/blocked'
-    }
+    // {
+    //   name: "Pending",
+    //   path: '/chat/pending'
+    // },
+    // {
+    //   name: "Blocked",
+    //   path: '/chat/blocked'
+    // }
   ]
 </script>
 
@@ -34,7 +36,7 @@
   </div>
   <div class="tw-hidden tw-gap-2 tw-px-[8px] chat-nav:tw-flex">
     {#each navOptions as opt }
-      <a href={opt.path} class="tw-text-[18px] tw-text-gray-300 tw-font-bold tw-px-3 tw-rounded-md hover:tw-bg-gray-400">
+      <a href={opt.path} class={`tw-text-[18px] tw-text-gray-300 tw-font-bold tw-px-3 tw-rounded-md ${opt.path == currentPath ? "tw-bg-gray-400" : "hover:tw-bg-gray-400"}`}>
         {opt.name}
       </a>
     {/each}
