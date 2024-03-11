@@ -22,6 +22,7 @@
   });
 
   onMount(() => {
+    //This triggers if client disconnects (i.e. reload)
     if (socket.disconnected && data.currentUser) {
       socket.connect();
 
@@ -30,6 +31,7 @@
       });
     }
 
+    //All friend request listeners
     const friendRequestHandler = () => {
       queryClient.invalidateQueries({
         queryKey: ['friendRequests'],
@@ -39,8 +41,21 @@
     }
 
     socket.on('friendRequestEmmision', friendRequestHandler);
+    //////////////////////////////////////////////////////////
+    //Notifications handler
+    const notificationsHandler = () => {
+      queryClient.invalidateQueries({
+        queryKey: ['likeNotif'],
+        refetchType: 'active'
+      });
+    }
 
-    return () => socket.off('friendRequestEmmision', friendRequestHandler);
+    socket.on('notificationEmission', notificationsHandler);
+    ////////////////////////////////////////////////////////
+    return () => {
+      socket.off('friendRequestEmmision', friendRequestHandler);
+      socket.off('notificationEmission', notificationsHandler);
+    }
   })
   export let data: LayoutData;
 </script>
