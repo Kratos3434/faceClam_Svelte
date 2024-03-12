@@ -52,7 +52,12 @@
         queryKey: ['posts'],
         refetchType: 'active'
       });
-
+      
+      queryClient.invalidateQueries({
+        queryKey: ['userPosts', user.id],
+        refetchType: 'active',
+        exact: true
+      })
       $openAddStatus = false;
     }
   }

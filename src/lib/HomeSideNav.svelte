@@ -5,9 +5,9 @@
   import Saved from 'svelte-material-icons/Bookmark.svelte';
   import Memory from 'svelte-material-icons/History.svelte';
   import Groups from 'svelte-material-icons/AccountGroup.svelte';
-  import Video from 'svelte-material-icons/YoutubeTv.svelte';
   import { openPopup } from "$lib";
-
+  import { page } from "$app/stores";
+  
   export let user: UserProps | null = null;
 
   const sideBar = [

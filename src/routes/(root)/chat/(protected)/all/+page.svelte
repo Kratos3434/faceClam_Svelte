@@ -3,8 +3,6 @@
 	import ChatStatus from "$lib/ChatStatus.svelte";
   import { onlineUsers } from "$lib";
 
-  console.log("Online users: ", $onlineUsers);
-
   export let data: LayoutData;
 </script>
 

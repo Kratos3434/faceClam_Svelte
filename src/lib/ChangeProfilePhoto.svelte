@@ -43,8 +43,8 @@
     const data = await res.json();
 
     if (data.status) {
-      invalidate('app:name');
-      invalidate('app:root').then(() => $changeProfilePic = false);
+      invalidate('app:root');
+      invalidate('app:name').then(() => $changeProfilePic = false);
     } else {
       console.log("Something went wrong :(");
     }

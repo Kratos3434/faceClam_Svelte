@@ -52,7 +52,7 @@
       body: formdata
     });
     const data = await res.json();
-
+    
     if (!data.status) {
       error = data.error;
       loading = false;
@@ -60,6 +60,11 @@
       queryClient.invalidateQueries({
         queryKey: ['posts'],
         refetchType: 'active'
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['userPosts', user.id],
+        refetchType: 'active',
+        exact: true
       })
       $openAddPost = false;
     }

@@ -77,8 +77,14 @@
         queryKey: ['posts'],
         refetchType: 'active'
       });
+
       queryClient.invalidateQueries({
         queryKey: ['comments', post?.id],
+        refetchType: 'active'
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ['userPosts', post?.author.id],
         refetchType: 'active'
       });
       post = data.data.post;

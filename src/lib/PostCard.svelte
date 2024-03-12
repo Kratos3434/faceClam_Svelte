@@ -35,7 +35,8 @@
     const data = await res.json();
     if (data.status) {
       //create a notification
-      const notif =  await fetch('http://localhost:8080/v1/user/notification/create', {
+      if (post.author.email != currentUser?.email) {
+        const notif =  await fetch(`${userBaseURL}/notification/create`, {
         method: 'POST',
         headers: {
           "Content-Type": 'application/json',
@@ -52,6 +53,7 @@
         socket.emit("notification", {
           to: post.author.email
         })
+      }
       }
 
     }

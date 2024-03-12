@@ -2,6 +2,7 @@ import { userBaseURL } from "../env";
 import type { LayoutServerLoad } from "./$types";
 
 export const load = (async ({ cookies, fetch, depends }) => {
+  depends('app:root');
   const token = cookies.get('token');
   let userData = null;
   const res = await fetch(`${userBaseURL}/authenticate`, {
@@ -29,8 +30,6 @@ export const load = (async ({ cookies, fetch, depends }) => {
     }
   }
 
-  depends('app:root');
-  
   return {
     token: token,
     loggedIn: data.status,
