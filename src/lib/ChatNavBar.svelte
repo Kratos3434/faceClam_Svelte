@@ -5,7 +5,7 @@
   import Close from 'svelte-material-icons/Close.svelte';
 
   export let currentPath: string;
-  console.log(currentPath)
+
   const navOptions = [
     {
       name: "Online",

@@ -45,8 +45,6 @@
       color: "#24B2FE"
     }
   ]
-
-  console.log('User:', user)
 </script>
 
 <div class="tw-sticky tw-top-[70px] tw-h-full tw-z-0 tw-overflow-x-hidden tw-overflow-y-hidden tw-hidden home-lg:tw-block tw-w-[344px]">

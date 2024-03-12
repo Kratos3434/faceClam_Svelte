@@ -4,8 +4,6 @@
   import { onlineUsers } from "$lib";
 	import type { FriendProps } from "../../../../../types";
 
-  console.log("Online users: ", $onlineUsers);
-
   $: onlineFriends = () => {
     const result: FriendProps[] = [];
     data.friends?.map((e: FriendProps) => {
