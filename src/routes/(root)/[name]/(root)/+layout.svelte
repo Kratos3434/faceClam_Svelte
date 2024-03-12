@@ -2,7 +2,6 @@
 	import { changeCoverPic, changeProfilePic } from "$lib";
 	import ChangeCoverPhoto from "$lib/ChangeCoverPhoto.svelte";
 	import ChangeProfilePhoto from "$lib/ChangeProfilePhoto.svelte";
-  import NavBar from "$lib/NavBar.svelte";
 	import OtherProfile from "$lib/OtherProfile.svelte";
 	import Profile from "$lib/Profile.svelte";
   import type { LayoutData } from "./$types";

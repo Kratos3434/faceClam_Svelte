@@ -1,6 +1,10 @@
-<script>
-	import ChatNavBar from "./ChatNavBar.svelte";
+<script lang="ts">
+	import type { UserProps } from "../types";
 
+
+	export let otherUser: UserProps;
 </script>
 
-<ChatNavBar />
+<div class="tw-bg-black">
+
+</div>

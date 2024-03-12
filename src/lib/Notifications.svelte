@@ -2,13 +2,13 @@
 	import { openNotifModal } from "$lib";
 	import { createQuery } from "@tanstack/svelte-query";
 	import Loading from "./Loading.svelte";
-	import type { NotificationProps } from "../types";
+	import type { PostProps, UserProps } from "../types";
 	import { userBaseURL } from "../env";
 
     export let token: string | undefined;
-
-    const getNotificationByType = async (type: string): Promise<NotificationProps[]> => {
-        const res = await fetch(`${userBaseURL}/notification/list/${type}`, {
+    export let currentUser: UserProps;
+    const getNotificationByType = async (type: string): Promise<PostProps[]> => {
+        const res = await fetch(`${userBaseURL}/post/notifications/${type}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -47,11 +47,21 @@
                 {:else if $likeNotifications.isError}
                     <p>Something went wrong :{"("}</p>
                 {:else if $likeNotifications.isSuccess}
-                    {#if $likeNotifications.data?.length === 0}
+                    {#if $likeNotifications.data.length === 0}
                         <p>Nothing to show here</p>
                     {:else}
                         {#each $likeNotifications.data as e }
-                            <span class="tw-text-[15px]"><b>{e.sender.firstName} {e.sender.lastName}</b> has liked your post</span>
+                            {#if e.notifications.length === 0}
+                                <p>Nothing to show here</p>
+                            {:else if e.notifications.length === 1}
+                                <a class="tw-text-[15px] hover:tw-rounded-md hover:tw-bg-gray-200 tw-p-1" href={`/${currentUser.firstName}.${currentUser.lastName}.${currentUser.id}/posts/${e.id}`}>
+                                    <b>{e.notifications[0].sender.firstName} {e.notifications[0].sender.lastName}</b> has liked your post
+                                </a>
+                            {:else if e.notifications.length > 1}
+                                <a class="tw-text-[15px] hover:tw-rounded-md hover:tw-bg-gray-200 tw-p-1" href={`/${currentUser.firstName}.${currentUser.lastName}.${currentUser.id}/posts/${e.id}`}>
+                                    <b>{e.notifications[0].sender.firstName} {e.notifications[0].sender.lastName}</b> and <b>{e.notifications.length-1}</b> others liked your post
+                                </a>
+                            {/if}
                         {/each}
                     {/if}
                 {/if}
@@ -60,3 +70,5 @@
         </div>
     </div>
 </div>
+
+<!-- <span class="tw-text-[15px]"><b>{""} {""}</b> has liked your post</span> -->

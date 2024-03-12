@@ -25,6 +25,7 @@ export interface PostProps {
   author: UserProps,
   likes: LikeProps[],
   comments: CommentProps[],
+  notifications: NotificationProps[],
   _count: CountProps,
   createdAt: string,
   updatedAt?: string
