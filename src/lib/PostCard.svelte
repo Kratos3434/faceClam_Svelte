@@ -14,8 +14,8 @@
   export let post: PostProps;
   export let currentUser: UserProps | null = null;
   export let token: string | undefined;
-  let isLiked = post.likes.some(e => e.userId === currentUser?.id);
-  let likes = post.likes.length;
+  $: isLiked = post.likes.some(e => e.userId === currentUser?.id);
+  $: likes = post.likes.length;
   let handlingLike = false;
 
   const openThePopup = () => {
