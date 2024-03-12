@@ -35,7 +35,7 @@
     const data = await res.json();
     if (data.status) {
       //create a notification
-      const notif =  await fetch('http://localhost:8080/v1/user/notification/create', {
+      const notif =  await fetch(`${userBaseURL}/notification/create`, {
         method: 'POST',
         headers: {
           "Content-Type": 'application/json',

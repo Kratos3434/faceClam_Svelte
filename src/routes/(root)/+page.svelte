@@ -9,7 +9,6 @@
   import { createQuery } from "@tanstack/svelte-query";
 	import WhatsOnYourMind from "$lib/WhatsOnYourMind.svelte";
 	import FriendRequests from "$lib/FriendRequests.svelte";
-
   export let data: LayoutData;
 
   const getPosts = async () => {
@@ -34,7 +33,6 @@
     return () => clearTimeout(timeout);
   })
 
-
 </script>
 
 <svelte:head>
@@ -44,7 +42,7 @@
 
 <div class="tw-flex tw-justify-center tw-gap-[32px] tw-pt-[70px]">
   {#if data.currentUser}
-    <HomeSideNav user={data.currentUser} />
+    <HomeSideNav bind:user={data.currentUser} />
   {:else}
     <HomeSideNav />
   {/if}
@@ -57,7 +55,7 @@
       <p>Something went wrong :{"("}</p>
     {:else if $query.isSuccess}
       {#if data.currentUser}
-        <WhatsOnYourMind user={data.currentUser} />
+        <WhatsOnYourMind bind:user={data.currentUser} />
       {/if}
       {#each $query.data as post }
         <PostCard post={post} currentUser={data.currentUser} token={data.token} />
