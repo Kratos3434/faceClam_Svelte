@@ -39,7 +39,7 @@
     </div>
   {:else}
     {#if data.otherUser}
-      <Chat otherUser={data.otherUser} />
+      <Chat otherUser={data.otherUser} currentUser={data.currentUser} />
     {/if}
   {/if}
 </div>
