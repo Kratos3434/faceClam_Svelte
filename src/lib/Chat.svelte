@@ -65,10 +65,10 @@
 			<div class="tw-overflow-y-auto tw-flex tw-flex-col tw-flex-1 tw-h-full viewpost goblin" bind:this={divEl}>
 				<div class="tw-flex tw-flex-col tw-items-center tw-relative">
 					<a href={`/${otherUser.firstName}.${otherUser.lastName}.${otherUser.id}`}>
-						<img src={otherUser.profilePicture ? otherUser.profilePicture : placeholder} width={150} height={150} alt={`${otherUser.firstName} ${otherUser.lastName}`} class="tw-rounded-[1000px] tw-w-[150px] tw-h-[150px]" />
+						<img src={otherUser.profilePicture ? otherUser.profilePicture : placeholder} width={150} height={150} alt={`${otherUser.firstName} ${otherUser.lastName}`} class="tw-rounded-[1000px] sm:tw-w-[150px] sm:tw-h-[150px] tw-w-[100px] tw-h-[100px]" />
 					</a>
 					<a href={`/${otherUser.firstName}.${otherUser.lastName}.${otherUser.id}`}>
-						<span class="tw-text-[40px] tw-font-bold">{otherUser.firstName} {otherUser.lastName}</span>
+						<span class="sm:tw-text-[40px] tw-text-[20px] tw-font-bold">{otherUser.firstName} {otherUser.lastName}</span>
 					</a>
 					<div class="tw-flex tw-gap-1 tw-items-center">
 						<Dot class={`${isOnline ? "tw-text-green-600" : "tw-text-red-600"}`} />
@@ -82,13 +82,13 @@
 						<span class="tw-absolute tw-right-[10px] tw-font-bold tw-cursor-pointer" on:click={() => closeNotice = true}>
 							<Close width={18} height={18} />
 						</span>
-						<p class="tw-text-[15px]"><b>NOTICE:</b> This is the <b>BETA</b> version and all chat history will not be saved. Thank you for your understanding.<br /><br /> If you found any bugs <Spider class="tw-inline"/>, please report to the boss (joke).</p>
+						<p class="sm:tw-text-[15px] tw-text-[12px]"><b>NOTICE:</b> This is the <b>BETA</b> version and all chat history will not be saved. Thank you for your understanding.<br /><br /> If you found any bugs <Spider class="tw-inline"/>, please report to the boss (joke).</p>
 					</div>
 				</div>
 				<!-- Array of messages -->
 				{#if messages.length === 0}
 					<div class="tw-flex tw-flex-col tw-justify-center tw-items-center tw-h-full">
-						<p class="tw-text-[18px] tw-font-bold">No messages yet, start a conversation</p>
+						<p class="sm:tw-text-[18px] tw-text-[15px] tw-font-bold">No messages yet, start a conversation</p>
 						<MessageQuestion width={60} height={60} class="tw-text-[#0866FF]"/>
 					</div>
 				{:else}
@@ -111,7 +111,7 @@
 			<!-- Main content area -->
 			<div class="tw-flex tw-justify-center">
 				<form class="tw-max-w-[800px] tw-w-full tw-p-3 tw-border-[1px] tw-border-black tw-rounded-lg tw-bg-white" on:submit={handleMessageSubmit}>
-					<textarea class="tw-w-full tw-outline-none tw-resize-none tw-h-[100px] viewpost tw-bg-transparent" rows="1" bind:value={message}></textarea>
+					<textarea class="tw-w-full tw-outline-none tw-resize-none sm:tw-h-[100px] tw-h-[50px] viewpost tw-bg-transparent" rows="1" bind:value={message}></textarea>
 					<div class="tw-flex tw-justify-end">
 						{#if message}
 							<button class="tw-cursor-pointer">
