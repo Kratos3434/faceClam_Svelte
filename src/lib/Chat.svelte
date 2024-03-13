@@ -44,9 +44,9 @@
 		if (message) {
 			//Listen for typing event
 			socket.emit('typing', {
-				to: otherUser.email,
-				typing: true
-			});
+					to: otherUser.email,
+					typing: true
+				});
 		} else {
 			//Listen for stop typing event
 			socket.emit('typing', {
@@ -128,7 +128,7 @@
 				{:else}
 					<div class="tw-flex tw-flex-col tw-py-3 tw-gap-3 tw-pt-5 tw-px-[16px]">
 						{#each messages as e }
-							<div class={`tw-flex tw-gap-2 ${e.sender.id == currentUser.id ? "tw-flex-row-reverse" : "tw-justify-start"}`}>
+							<div class={`tw-flex tw-gap-2 ${e.sender.id == currentUser.id ? "tw-flex-row-reverse" : "tw-justify-start"} tw-items-end`}>
 								<a href={`${e.sender.firstName}.${e.sender.lastName}.${e.sender.id}`}>
 									<img src={e.sender.profilePicture ? e.sender.profilePicture : placeholder} width={30} height={30} alt={`${e.sender.firstName} ${e.sender.lastName}`} 
 								  class="tw-rounded-[1000px] tw-w-[30px] tw-h-[30px]" />
@@ -156,7 +156,12 @@
 			<!-- Main content area -->
 			<div class="tw-flex tw-justify-center">
 				<form class="tw-max-w-[800px] tw-w-full tw-p-3 tw-flex tw-border-0 tw-gap-2 tw-items-center" on:submit={handleMessageSubmit}>
-					<textarea class="tw-p-3 tw-w-full tw-outline-none tw-resize-none viewpost tw-bg-transparent tw-max-h-[25dvh] tw-h-[52px] tw-rounded-lg tw-border-[1px] tw-border-black" rows="1" bind:value={message} on:input={typeListener}></textarea>
+					<textarea class="tw-p-3 tw-w-full tw-outline-none tw-resize-none viewpost tw-bg-transparent tw-max-h-[25dvh] tw-h-[52px] tw-rounded-lg tw-border-[1px] tw-border-black" placeholder="Hit Enter to send" rows="1" bind:value={message} on:input={typeListener} on:keypress={(e) => {
+						switch (e.key) {
+							case 'Enter':
+								handleMessageSubmit(e);
+						}
+					}}></textarea>
 					<div class="tw-flex tw-justify-end">
 						{#if message}
 							<button class="tw-cursor-pointer">
