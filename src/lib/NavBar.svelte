@@ -43,7 +43,7 @@
       name: 'Marketplace'
     },
     {
-      path: '/chat',
+      path: '/chat/all',
       icon: Chat,
       name: 'Chat'
     }
