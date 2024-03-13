@@ -46,7 +46,7 @@
   {:else}
     <HomeSideNav />
   {/if}
-  <div class="tw-flex tw-flex-col tw-w-[680px] tw-gap-4 home-lg:tw-pl-0 tw-pl-5 home-xxl:tw-pl-0">
+  <div class="tw-flex tw-flex-col tw-w-[680px] tw-gap-2 home-lg:tw-pl-0 tw-pl-5 home-xxl:tw-pl-0">
     {#if $query.isLoading}
       <div class="tw-w-full tw-flex tw-justify-center">
         <Loading width={25} height={25} />
