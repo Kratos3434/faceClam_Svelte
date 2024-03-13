@@ -10,10 +10,13 @@
   import { openPopup, viewLikes, viewPost } from "$lib";
 	import { userBaseURL } from "../env";
 	import { socket } from "../socket";
+  import { openMore } from "$lib";
 
   export let post: PostProps;
   export let currentUser: UserProps | null = null;
   export let token: string | undefined;
+  let isHidden = false;
+
   $: isLiked = post.likes.some(e => e.userId === currentUser?.id);
   $: likes = post.likes.length;
   let handlingLike = false;
@@ -80,7 +83,7 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
-<div class="tw-rounded-md tw-shadow-md tw-max-w-[680px] tw-w-full tw-bg-white tw-flex tw-flex-col">
+<div class={`tw-rounded-md tw-shadow-md tw-max-w-[680px] tw-w-full tw-bg-white ${isHidden ? "tw-hidden" : "tw-flex"} tw-flex-col`}>
   <div class={`tw-flex tw-flex-col tw-px-[16px] tw-pt-[12px] ${post.featureImage && "tw-pb-[16px]"}`}>
     <div class="tw-flex tw-gap-2 tw-items-center">
       <a href={`${post.author.firstName}.${post.author.lastName}.${post.author.id}`} class="tw-max-w-[40px] tw-max-h-[40px] tw-w-full tw-h-full tw-rounded-[1000px]">
@@ -96,10 +99,15 @@
           </span>
         </div>
         <div class="tw-flex tw-gap-4 tw-relative">
-          <span>
+          <span on:click={() => {
+            $openMore.status = true;
+            $openMore.post = post;
+          }}>
             <More width={20} height={20} class="tw-cursor-pointer" />
           </span>
-          <Close width={20} height={20} class="tw-cursor-pointer" />
+          <span on:click={() => isHidden = true}>
+            <Close width={20} height={20} class="tw-cursor-pointer" />
+          </span>
         </div>
       </div>
     </div>

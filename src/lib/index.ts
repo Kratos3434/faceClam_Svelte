@@ -28,3 +28,5 @@ export const openChatMenu = writable(false);
 export const openNotifModal = writable(false);
 
 export const onlineUsers = writable<Map<string, string>>(new Map<string, string>());
+
+export const openMore = writable<{status: boolean, post?: PostProps}>({ status: false })

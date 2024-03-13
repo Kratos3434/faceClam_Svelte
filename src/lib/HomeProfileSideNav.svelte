@@ -37,7 +37,7 @@
       editBio = false;
       bioCharacters = 101;
       bio = "";
-      invalidate('app:name');
+      await invalidate('app:name');
     }
   }
 </script>
