@@ -24,6 +24,8 @@
 	let closeNotice = false;
 	let message = "";
 	let messageEl: any;
+	let isTyping = false;
+
 	const handleMessageSubmit = (e: any) => {
 		e.preventDefault();
 		console.log(`Message: ${message}`);
@@ -38,6 +40,22 @@
 		message = "";
 	}
 
+	const typeListener = () => {
+		if (message) {
+			//Listen for typing event
+			socket.emit('typing', {
+				to: otherUser.email,
+				typing: true
+			});
+		} else {
+			//Listen for stop typing event
+			socket.emit('typing', {
+				to: otherUser.email,
+				typing: false
+			})
+		}
+	}
+
 	onMount(() => {
 		if (messageEl) {
 			messageEl.addEventListener('DOMNodeInserted', (event: any) => {
@@ -48,22 +66,33 @@
 	});
 
 	onMount(() => {
+		//Handle type listener
+		const handleTypeListener = (data: any) => {
+			isTyping = data.typing;
+		}
+
+		socket.on('typingEmission', handleTypeListener);
+		////////////////////////
+		//Handle Messages
 		const handleMessageReceive = (data: MessageProps) => {
-			console.log("Message data:", data);
 			messages.push(data);
+			isTyping = false;
 			messages = messages;
 		}
+
 		socket.on('messageReceive', handleMessageReceive);
+		////////////////////////////////
 
 		return () => {
 			socket.off('messageReceive', handleMessageReceive);
+			socket.off('typingEmission', handleTypeListener);
 		}
 	});
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
-<div class="tw-fixed tw-top-0 tw-left-0 tw-h-[100vh] tw-w-full tw-z-[-1]">
+<div class="tw-fixed tw-top-0 tw-left-0 tw-h-[100dvh] tw-w-full tw-z-[-1]">
 	<div class="tw-h-full tw-w-full tw-pt-[110px]">
 		<div class="tw-h-full tw-w-full tw-flex tw-flex-col tw-justify-between tw-px-[16px] tw-py-5 tw-overflow-hidden">
 			<!-- Main content area-->
@@ -111,12 +140,23 @@
 						{/each}
 					</div>
 				{/if}
+				{#if isTyping}
+					<div class={`tw-flex tw-gap-2 ${otherUser.id == currentUser.id ? "tw-flex-row-reverse" : "tw-justify-start"} tw-pt-5 tw-py-3`}>
+						<a href={`${otherUser.firstName}.${otherUser.lastName}.${otherUser.id}`}>
+							<img src={otherUser.profilePicture ? otherUser.profilePicture : placeholder} width={30} height={30} alt={`${otherUser.firstName} ${otherUser.lastName}`} 
+									class="tw-rounded-[1000px] tw-w-[30px] tw-h-[30px]" />
+						</a>
+						<div class="tw-rounded-xl tw-bg-[#0866FF] tw-max-w-[300px] tw-w-full tw-p-2 tw-text-white tw-break-all tw-whitespace-normal">
+							typing...
+						</div>
+					</div>
+				{/if}
 				<!-- Array of messages END -->
 			</div>
 			<!-- Main content area -->
 			<div class="tw-flex tw-justify-center">
 				<form class="tw-max-w-[800px] tw-w-full tw-p-3 tw-flex tw-border-0 tw-gap-2 tw-items-center" on:submit={handleMessageSubmit}>
-					<textarea class="tw-p-3 tw-w-full tw-outline-none tw-resize-none viewpost tw-bg-transparent tw-max-h-[25dvh] tw-h-[52px] tw-rounded-lg tw-border-[1px] tw-border-black" rows="1" bind:value={message}></textarea>
+					<textarea class="tw-p-3 tw-w-full tw-outline-none tw-resize-none viewpost tw-bg-transparent tw-max-h-[25dvh] tw-h-[52px] tw-rounded-lg tw-border-[1px] tw-border-black" rows="1" bind:value={message} on:input={typeListener}></textarea>
 					<div class="tw-flex tw-justify-end">
 						{#if message}
 							<button class="tw-cursor-pointer">
