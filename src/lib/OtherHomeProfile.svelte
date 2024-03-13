@@ -1,12 +1,9 @@
 <script lang="ts">
-	import { monthToString } from "../helpers";
-	import type { PostProps, UserProps } from "../types";
-  import Clock from 'svelte-material-icons/Clock.svelte';
+  import type { PostProps, UserProps } from "../types";
   import { createQuery } from "@tanstack/svelte-query";
   import Loading from "./Loading.svelte";
   import PostCard from "./PostCard.svelte";
 	import { publicBaseURL } from "../env";
-	import HomeProfileSideNav from "./HomeProfileSideNav.svelte";
 	import OtherHomeProfileSideNav from "./OtherHomeProfileSideNav.svelte";
 
   export let user: UserProps;

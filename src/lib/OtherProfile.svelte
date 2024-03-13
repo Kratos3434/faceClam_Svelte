@@ -12,6 +12,7 @@
   import Decline from 'svelte-material-icons/Cancel.svelte';
   import { useQueryClient } from "@tanstack/svelte-query";
   import { socket } from "../socket";
+  import ChatIcon from 'svelte-material-icons/ChatOutline.svelte';
 
   export let user: UserProps;
   export let token: string | undefined;
@@ -191,6 +192,10 @@
                       <Check width={16} height={16} />
                       <span class="tw-text-[15px]">Friends</span>
                     </div>
+                    <a class="tw-rounded-md tw-text-white tw-flex tw-items-center tw-font-bold tw-bg-[#0866FF] tw-px-[12px] tw-py-[10px] tw-gap-2 hover:tw-brightness-95 tw-cursor-pointer" href={`/chat?userId=${user.id}`}>
+                      <ChatIcon width={16} height={16} />
+                      <span class="tw-text-[15px]">Message</span>
+                    </a>
                   {:else}
                     {#if !user.friendRequest}
                       <div class="tw-rounded-md tw-text-white tw-flex tw-items-center tw-font-bold tw-bg-[#0866FF] tw-px-[12px] tw-py-[10px] tw-gap-2 hover:tw-brightness-95 tw-cursor-pointer" on:click={sendFriendRequest}>
