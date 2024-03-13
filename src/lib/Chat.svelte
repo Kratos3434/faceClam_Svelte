@@ -140,7 +140,7 @@
 						{/each}
 					</div>
 				{/if}
-				{#if isTyping}
+				{#if isTyping && isOnline }
 					<div class={`tw-flex tw-gap-2 ${otherUser.id == currentUser.id ? "tw-flex-row-reverse" : "tw-justify-start"} tw-pt-5 tw-py-3`}>
 						<a href={`${otherUser.firstName}.${otherUser.lastName}.${otherUser.id}`}>
 							<img src={otherUser.profilePicture ? otherUser.profilePicture : placeholder} width={30} height={30} alt={`${otherUser.firstName} ${otherUser.lastName}`} 
