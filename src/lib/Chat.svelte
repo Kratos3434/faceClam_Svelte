@@ -23,7 +23,8 @@
 	let messages: MessageProps[] = [];
 	let closeNotice = false;
 	let message = "";
-
+	let divEl: any;
+	$: goblin = divEl;
 	const handleMessageSubmit = (e: any) => {
 		e.preventDefault();
 		console.log(`Message: ${message}`);
@@ -36,6 +37,9 @@
 		messages = messages;
 		console.log("Messages: ", messages);
 		message = "";
+		if (goblin) {
+			goblin.scrollTop = goblin.scrollHeight;
+		}
 	}
 
 	onMount(() => {
@@ -56,9 +60,9 @@
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div class="tw-fixed tw-top-0 tw-left-0 tw-h-[100vh] tw-w-full tw-z-[-1]">
 	<div class="tw-h-full tw-w-full tw-pt-[110px]">
-		<div class="tw-h-full tw-w-full tw-flex tw-flex-col tw-justify-between tw-px-[16px] tw-py-5 tw-overflow-hidden">
+		<div class="tw-h-full tw-w-full tw-flex tw-flex-col tw-justify-between tw-px-[16px] tw-py-5">
 			<!-- Main content area-->
-			<div class="tw-overflow-y-auto tw-flex tw-flex-col tw-flex-1 tw-h-full viewpost">
+			<div class="tw-overflow-y-auto tw-flex tw-flex-col tw-flex-1 tw-h-full viewpost goblin" bind:this={divEl}>
 				<div class="tw-flex tw-flex-col tw-items-center tw-relative">
 					<a href={`/${otherUser.firstName}.${otherUser.lastName}.${otherUser.id}`}>
 						<img src={otherUser.profilePicture ? otherUser.profilePicture : placeholder} width={150} height={150} alt={`${otherUser.firstName} ${otherUser.lastName}`} class="tw-rounded-[1000px] tw-w-[150px] tw-h-[150px]" />
