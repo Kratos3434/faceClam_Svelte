@@ -146,8 +146,8 @@
   <div class="tw-shadow-md tw-w-full tw-bg-white">
     <div class="tw-flex tw-justify-center tw-w-full">
       <div class="tw-relative tw-flex tw-flex-col tw-h-full">
-        <img src={user.coverPicture ? user.coverPicture : placeholder} width={1250} height={462.95} alt="Cover" class="tw-h-[462.95px]  tw-rounded-t-[0px] tw-rounded-b-md" />
-        <div class="tw-absolute tw-top-[390px] tw-pl-5">
+        <img src={user.coverPicture ? user.coverPicture : placeholder} width={1250} height={462.95} alt="Cover" class="sm:tw-h-[462.95px] tw-h-[300px]  tw-rounded-t-[0px] tw-rounded-b-md" />
+        <div class="tw-absolute sm:tw-top-[390px] tw-top-[220px] tw-pl-5">
           <div class="tw-relative">
             <img src={user.profilePicture ? user.profilePicture : placeholder} width={168} height={168} class="tw-rounded-[1000px] tw-border-white tw-border-[5px] tw-w-[168px] tw-h-[168px] hover:tw-brightness-9" alt={`${user.firstName} ${user.lastName}`} />
           </div>

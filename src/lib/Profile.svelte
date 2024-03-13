@@ -38,8 +38,8 @@
   <div class="tw-shadow-md tw-w-full tw-bg-white">
     <div class="tw-flex tw-justify-center tw-w-full">
       <div class="tw-relative tw-flex tw-flex-col tw-h-full">
-        <img src={user.coverPicture ? user.coverPicture : placeholder} width={1250} height={462.95} alt="Cover" class="tw-h-[462.95px]  tw-rounded-t-[0px] tw-rounded-b-md" />
-        <div class="tw-absolute tw-flex tw-justify-end tw-top-[400px] tw-w-full tw-px-[20px] tw-pb-5">
+        <img src={user.coverPicture ? user.coverPicture : placeholder} width={1250} height={462.95} alt="Cover" class="sm:tw-h-[462.95px] tw-h-[300px]  tw-rounded-t-[0px] tw-rounded-b-md" />
+        <div class="tw-absolute tw-flex tw-justify-end sm:tw-top-[400px] tw-top-[250px] tw-w-full tw-px-[20px] tw-pb-5">
           <button class="tw-flex tw-rounded-md tw-h-full tw-items-center tw-text-white tw-bg-[rgba(0,0,0,0.5)] tw-px-[12px] tw-gap-1 tw-py-2 tw-cursor-pointer hover:tw-brightness-95" on:click={() => $changeCoverPic = true}>
             <Camera width={16} height={16} />
             <span class="tw-text-[15px] tw-font-bold">
@@ -47,7 +47,7 @@
             </span>
           </button>
         </div>
-        <div class="tw-absolute tw-top-[390px] tw-pl-5">
+        <div class="tw-absolute sm:tw-top-[390px] tw-top-[220px] tw-pl-5">
           <div class="tw-relative">
             <img src={user.profilePicture ? user.profilePicture : placeholder} width="168" height="168" class="tw-rounded-[1000px] tw-border-white tw-border-[5px] tw-w-[168px] tw-h-[168px] hover:tw-brightness-9" alt={`${user.firstName} ${user.lastName}`} />
             <button class="tw-flex tw-items-center tw-justify-center tw-absolute tw-right-[5px] tw-bottom-[15px] tw-rounded-[1000px] tw-bg-gray-200 tw-p-2 tw-cursor-pointer hover:tw-brightness-95" on:click={() => $changeProfilePic = true}>
