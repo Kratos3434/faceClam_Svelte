@@ -23,7 +23,7 @@
 	let messages: MessageProps[] = [];
 	let closeNotice = false;
 	let message = "";
-
+	let messageEl: any;
 	const handleMessageSubmit = (e: any) => {
 		e.preventDefault();
 		console.log(`Message: ${message}`);
@@ -39,6 +39,15 @@
 	}
 
 	onMount(() => {
+		if (messageEl) {
+			messageEl.addEventListener('DOMNodeInserted', (event: any) => {
+				const { currentTarget: target } = event;
+				target.scroll({ top: target.scrollHeight, behavior: 'smooth' });
+			})
+		}
+	});
+
+	onMount(() => {
 		const handleMessageReceive = (data: MessageProps) => {
 			console.log("Message data:", data);
 			messages.push(data);
@@ -49,7 +58,7 @@
 		return () => {
 			socket.off('messageReceive', handleMessageReceive);
 		}
-	})
+	});
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -58,7 +67,7 @@
 	<div class="tw-h-full tw-w-full tw-pt-[110px]">
 		<div class="tw-h-full tw-w-full tw-flex tw-flex-col tw-justify-between tw-px-[16px] tw-py-5 tw-overflow-hidden">
 			<!-- Main content area-->
-			<div class="tw-overflow-y-auto tw-flex tw-flex-col tw-flex-1 tw-h-full viewpost">
+			<div class="tw-overflow-y-auto tw-flex tw-flex-col tw-flex-1 tw-h-full viewpost goblin" bind:this={messageEl}>
 				<div class="tw-flex tw-flex-col tw-items-center tw-relative">
 					<a href={`/${otherUser.firstName}.${otherUser.lastName}.${otherUser.id}`}>
 						<img src={otherUser.profilePicture ? otherUser.profilePicture : placeholder} width={150} height={150} alt={`${otherUser.firstName} ${otherUser.lastName}`} class="tw-rounded-[1000px] tw-w-[150px] tw-h-[150px]" />
@@ -88,14 +97,14 @@
 						<MessageQuestion width={60} height={60} class="tw-text-[#0866FF]"/>
 					</div>
 				{:else}
-					<div class="tw-flex tw-flex-col tw-py-3 tw-gap-3 tw-pt-5 tw-px-[16px] goblin">
+					<div class="tw-flex tw-flex-col tw-py-3 tw-gap-3 tw-pt-5 tw-px-[16px]">
 						{#each messages as e }
 							<div class={`tw-flex tw-gap-2 ${e.sender.id == currentUser.id ? "tw-flex-row-reverse" : "tw-justify-start"}`}>
 								<a href={`${e.sender.firstName}.${e.sender.lastName}.${e.sender.id}`}>
 									<img src={e.sender.profilePicture ? e.sender.profilePicture : placeholder} width={30} height={30} alt={`${e.sender.firstName} ${e.sender.lastName}`} 
 								  class="tw-rounded-[1000px] tw-w-[30px] tw-h-[30px]" />
 								</a>
-								<div class="tw-rounded-xl tw-bg-[#0866FF] tw-max-w-[300px] tw-w-full tw-p-2 tw-text-white">
+								<div class="tw-rounded-xl tw-bg-[#0866FF] tw-max-w-[300px] tw-w-full tw-p-2 tw-text-white tw-break-all tw-whitespace-normal">
 									{e.message}
 								</div>
 							</div>
@@ -106,8 +115,8 @@
 			</div>
 			<!-- Main content area -->
 			<div class="tw-flex tw-justify-center">
-				<form class="tw-max-w-[800px] tw-w-full tw-p-3 tw-border-[1px] tw-border-black tw-rounded-lg tw-bg-white" on:submit={handleMessageSubmit}>
-					<textarea class="tw-w-full tw-outline-none tw-resize-none tw-h-[100px] viewpost tw-bg-transparent" rows="1" bind:value={message}></textarea>
+				<form class="tw-max-w-[800px] tw-w-full tw-p-3 tw-flex tw-border-0 tw-gap-2 tw-items-center" on:submit={handleMessageSubmit}>
+					<textarea class="tw-p-3 tw-w-full tw-outline-none tw-resize-none viewpost tw-bg-transparent tw-max-h-[25dvh] tw-h-[52px] tw-rounded-lg tw-border-[1px] tw-border-black" rows="1" bind:value={message}></textarea>
 					<div class="tw-flex tw-justify-end">
 						{#if message}
 							<button class="tw-cursor-pointer">

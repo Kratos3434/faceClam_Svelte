@@ -17,7 +17,7 @@
   import Logout from 'svelte-material-icons/Logout.svelte';
   import Login from 'svelte-material-icons/Login.svelte';
 	import { goto, invalidateAll } from '$app/navigation';
-  import ChatIcon from 'svelte-material-icons/MessageOutline.svelte';
+  // import ChatIcon from 'svelte-material-icons/MessageOutline.svelte';
 	import type { UserProps } from '../types';
 	import { socket } from '../socket';
   import { openMenu, openNotifModal } from '$lib';
@@ -44,7 +44,7 @@
     },
     {
       path: '/chat',
-      icon: ChatIcon,
+      icon: Chat,
       name: 'Chat'
     }
   ]
