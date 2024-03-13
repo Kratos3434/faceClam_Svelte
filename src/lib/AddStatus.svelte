@@ -48,12 +48,12 @@
       error = data.error;
       loading = false;
     } else {
-      queryClient.invalidateQueries({
+      await queryClient.invalidateQueries({
         queryKey: ['posts'],
         refetchType: 'active'
       });
       
-      queryClient.invalidateQueries({
+      await queryClient.invalidateQueries({
         queryKey: ['userPosts', user.id],
         refetchType: 'active',
         exact: true

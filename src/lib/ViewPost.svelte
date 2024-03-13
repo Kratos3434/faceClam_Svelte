@@ -73,19 +73,21 @@
     if (data.status) {
       comment = "";
       divEl.innerText = "";
-      queryClient.invalidateQueries({
+      await queryClient.invalidateQueries({
         queryKey: ['posts'],
         refetchType: 'active'
       });
 
-      queryClient.invalidateQueries({
+      await queryClient.invalidateQueries({
         queryKey: ['comments', post?.id],
-        refetchType: 'active'
+        refetchType: 'active',
+        exact: true
       });
 
-      queryClient.invalidateQueries({
+      await queryClient.invalidateQueries({
         queryKey: ['userPosts', post?.author.id],
-        refetchType: 'active'
+        refetchType: 'active',
+        exact: true
       });
       post = data.data.post;
       loading = false;

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { browser } from "$app/environment";
-	import { openAddPost, openAddStatus, openMenu, openPopup, viewLikes, viewPost } from "$lib";
+	import { openAddPost, openAddStatus, openMenu, openMore, openPopup, viewLikes, viewPost } from "$lib";
 	import ViewLikes from "$lib/ViewLikes.svelte";
   import "../app.css";
   import { QueryClient, QueryClientProvider } from '@tanstack/svelte-query';
@@ -13,6 +13,7 @@
 	import { socket } from "../socket";
   import { invalidate } from "$app/navigation";
   import { onlineUsers } from "$lib";
+	import MoreModal from "$lib/MoreModal.svelte";
 
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -33,7 +34,7 @@
     }
     //////////////////////////////////////////
     //All friend request listeners
-    const friendRequestHandler = () => {
+    const friendRequestHandler = async () => {
       queryClient.invalidateQueries({
         queryKey: ['friendRequests'],
         refetchType: 'active'
@@ -52,7 +53,7 @@
     socket.on('onlineUsers', getOnlineUsers);
     //////////////////////////////////////////////////////////
     //Notifications handler
-    const notificationsHandler = () => {
+    const notificationsHandler = async () => {
       queryClient.invalidateQueries({
         queryKey: ['likeNotif'],
         refetchType: 'active'
@@ -90,11 +91,15 @@
   {#if !data.loggedIn && $openPopup}
     <SigninPopUpModal />
   {/if}
+
+  {#if $openMore.status}
+    <MoreModal currentUser={data.currentUser} token={data.token} />
+  {/if}
 </QueryClientProvider>
 
-{#if $viewLikes.status || $openPopup || $viewPost.status || $openAddPost || $openAddStatus || $openMenu}
+{#if $viewLikes.status || $openPopup || $viewPost.status || $openAddPost || $openAddStatus || $openMenu || $openMore.status}
   <style>
-    html, body {
+    body {
       overflow: hidden;
     }
   </style>

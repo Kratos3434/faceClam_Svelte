@@ -6,7 +6,6 @@
   import Memory from 'svelte-material-icons/History.svelte';
   import Groups from 'svelte-material-icons/AccountGroup.svelte';
   import { openPopup } from "$lib";
-  import { page } from "$app/stores";
   
   export let user: UserProps | null = null;
 

@@ -98,7 +98,7 @@
     });
     const data = await res.json();
     if (data.status) {
-      queryClient.invalidateQueries({
+      await queryClient.invalidateQueries({
         queryKey: ['friendRequests'],
         refetchType: 'active'
       })
@@ -124,7 +124,7 @@
     });
     const data = await res.json();
     if (data.status) {
-      queryClient.invalidateQueries({
+      await queryClient.invalidateQueries({
         queryKey: ['friendRequests'],
         refetchType: 'active'
       })
