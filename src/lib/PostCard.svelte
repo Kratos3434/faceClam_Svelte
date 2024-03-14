@@ -100,8 +100,12 @@
         </div>
         <div class="tw-flex tw-gap-4 tw-relative">
           <span on:click={() => {
-            $openMore.status = true;
-            $openMore.post = post;
+            if (currentUser) {
+              $openMore.status = true;
+              $openMore.post = post;
+            } else {
+              $openPopup = true;
+            }
           }}>
             <More width={20} height={20} class="tw-cursor-pointer" />
           </span>
