@@ -15,6 +15,7 @@
   import Loading from "./Loading.svelte";
 	import Comment from "./Comment.svelte";
 	import { publicBaseURL, userBaseURL } from "../env";
+	import { onMount } from "svelte";
 
   export let token: string | undefined;
   export let currentUser: UserProps | null;
@@ -33,6 +34,7 @@
   let isLiked = post?.likes.some(e => e.userId === currentUser?.id);
   let likes = post?.likes.length;
   let handlingLike = false;
+  let commentBoxEl: any;
 
   const getCommentByPostId = async (): Promise<CommentProps[]> => {
     const res = await fetch(`${publicBaseURL}/comment/post/${post?.id}`);
@@ -124,6 +126,15 @@
     }
     }
   }
+
+  onMount(() => {
+    if (commentBoxEl) {
+			commentBoxEl.addEventListener('DOMNodeInserted', (event: any) => {
+				const { currentTarget: target } = event;
+				target.scroll({ top: target.scrollHeight, behavior: 'smooth' });
+			})
+		}
+  })
 </script> 
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -143,7 +154,7 @@ on:click={() => $viewPost.status = false}>
         </div>
       </div>
     </div>
-    <div class="tw-rounded-md tw-shadow-2xl tw-bg-white tw-max-w-[700px] tw-w-full tw-h-full tw-overflow-auto viewpost" on:click={(e) => e.stopPropagation()}>
+    <div class="tw-rounded-md tw-shadow-2xl tw-bg-white tw-max-w-[700px] tw-w-full tw-h-full tw-overflow-auto viewpost" on:click={(e) => e.stopPropagation()} bind:this={commentBoxEl}>
       <div class="tw-rounded-md tw-mb-[82px] tw-mt-[48px]">
         <div class="tw-px-[16px] tw-flex tw-flex-col tw-py-2 tw-gap-2">
           <div class="tw-flex tw-justify-between tw-items-center">
