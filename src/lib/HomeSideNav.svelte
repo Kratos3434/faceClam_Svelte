@@ -21,7 +21,7 @@
     },
     {
       icon: Friend,
-      path: "/friends",
+      path: user ? `/${user.firstName}.${user.lastName}.${user.id}/friends` : "/",
       name: "Friends",
       color: "#1C89F6"
     },

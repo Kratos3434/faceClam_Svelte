@@ -7,7 +7,7 @@
 	import Modal from "./Modal.svelte";
 	import { userBaseURL } from "../env";
 	import { invalidate } from "$app/navigation";
-  import { useQueryClient } from "@tanstack/svelte-query";
+  import { createQuery, useQueryClient } from "@tanstack/svelte-query";
 	import Loading from "./Loading.svelte";
 
   export let currentUser: UserProps;
@@ -15,20 +15,27 @@
 
   const queryClient = useQueryClient();
 
+  const checkIfSaved = async () => {
+    const res = await fetch(`${userBaseURL}/saved/${$openMore.post?.id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    const data = await res.json();
+    return data.data;
+  }
+
+  const query = createQuery({
+    queryKey: ['saved', $openMore.post?.id],
+    queryFn: checkIfSaved,
+    staleTime: Infinity
+  });
+
   let openConfModal = false;
   let isLoading = false;
-  const options = [
-    {
-      name: "Save",
-      icon: Saved,
-      color: "#BE45C5"
-    },
-    {
-      name: "Delete",
-      icon: Trash,
-      color: "#FF0000"
-    }
-  ];
+  let saveLoader = false;
   
   const handleDelete = async () => {
     isLoading = true;
@@ -55,6 +62,50 @@
       isLoading = false;
     }
   }
+
+  const handleSave = async () => {
+    saveLoader = true;
+    const res = await fetch(`${userBaseURL}/saved/${$openMore.post?.id}`, {
+      method: 'POST',
+      headers: {
+        "Content-Type": `application/json`,
+        "Authorization": `Bearer ${token}`
+      }
+    });
+
+    const data = await res.json();
+
+    if (data.status) {
+      await queryClient.invalidateQueries({
+        queryKey: ['saved', $openMore.post?.id], exact: true
+      })
+      saveLoader = false;
+    } else {
+      saveLoader = false;
+    }
+  }
+
+  const handleUnsave = async () => {
+    saveLoader = true;
+    const res = await fetch(`${userBaseURL}/saved/${$query.data.id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": `Bearer ${token}`
+      }
+    });
+
+    const data = await res.json();
+
+    if (data.status) {
+      await queryClient.invalidateQueries({
+        queryKey: ['saved', $openMore.post?.id], exact: true
+      })
+      saveLoader = false;
+    } else {
+      saveLoader = false;
+    }
+  }
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -70,22 +121,33 @@
       <span class="tw-text-[20px] tw-border-b-[1px] tw-border-black tw-w-full tw-p-2 tw-text-center">
         More Options
       </span>
-      {#each options as opt }
-        {#if opt.name === "Delete"}
-          {#if $openMore.post?.author.id === currentUser.id}
-            <div class="tw-flex tw-gap-3 tw-justify-center tw-w-full tw-items-center tw-text-[20px] tw-rounded-md hover:tw-bg-gray-200 tw-cursor-pointer tw-p-2" 
-            on:click={() => openConfModal = true}>
-              <svelte:component this={opt.icon} color={opt.color} />
-              <span>{opt.name}</span>
-            </div>
-          {/if}
+      <!--Saved-->
+      {#if $query.status === 'success'}
+        {#if !$query.data}
+          <div class={`tw-flex tw-gap-3 tw-justify-center tw-w-full tw-items-center tw-text-[20px] tw-rounded-md tw-cursor-pointer tw-p-2 ${saveLoader ? "tw-bg-gray-500 tw-animate-pulse" : "hover:tw-bg-gray-200"}`} 
+          on:click={() => !saveLoader && handleSave()}>
+            <svelte:component this={Saved} color={"#BE45C5"} />
+            <span>Save</span>
+          </div>
         {:else}
-          <div class="tw-flex tw-gap-3 tw-justify-center tw-w-full tw-items-center tw-text-[20px] tw-rounded-md hover:tw-bg-gray-200 tw-cursor-pointer tw-p-2">
-            <svelte:component this={opt.icon} color={opt.color} />
-            <span>{opt.name}</span>
+          <div class={`tw-flex tw-gap-3 tw-justify-center tw-w-full tw-items-center tw-text-[20px] tw-rounded-md tw-cursor-pointer tw-p-2 ${saveLoader ? "tw-bg-gray-500 tw-animate-pulse" : "hover:tw-bg-gray-200"}`} 
+          on:click={() => !saveLoader && handleUnsave()}>
+            <svelte:component this={Saved} color={"#BE45C5"} />
+            <span>Unsave</span>
           </div>
         {/if}
-      {/each}
+      {/if}
+      <!--Saved END-->
+      <!----------------------------------------------------------------------------------------------------------------------------------------------------->
+      <!--Delete-->
+      {#if $openMore.post?.author.id === currentUser.id}
+        <div class="tw-flex tw-gap-3 tw-justify-center tw-w-full tw-items-center tw-text-[20px] tw-rounded-md hover:tw-bg-gray-200 tw-cursor-pointer tw-p-2" 
+        on:click={() => openConfModal = true}>
+          <svelte:component this={Trash} color={"#FF0000"} />
+          <span>Delete</span>
+        </div>
+      {/if}
+      <!--Delete end-->
       {#if openConfModal}
         <Modal>
           <div class="tw-max-w-[400px] tw-w-full tw-p-3 tw-rounded-md tw-shadow-md tw-bg-white">
