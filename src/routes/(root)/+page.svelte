@@ -1,6 +1,6 @@
 <script lang="ts">
   import HomeSideNav from "$lib/HomeSideNav.svelte";
-	import { onMount, tick } from "svelte";
+	import { onDestroy, onMount, tick } from "svelte";
   import type { LayoutData } from "./$types";
   import { openPopup, scrollPosition } from "$lib";
 	import { publicBaseURL } from "../../env";
@@ -79,6 +79,10 @@
     }
   })
 
+  onDestroy(() => {
+    $scrollPosition = scrollY;
+  })
+  
   onMount(async () => {
     await tick();
     scrollTo(0, $scrollPosition)
