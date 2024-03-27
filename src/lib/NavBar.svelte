@@ -20,7 +20,7 @@
   // import ChatIcon from 'svelte-material-icons/MessageOutline.svelte';
 	import type { UserProps } from '../types';
 	import { socket } from '../socket';
-  import { openMenu, openNotifModal } from '$lib';
+  import { openMenu, openNotifModal, scrollPosition } from '$lib';
 	import Notifications from './Notifications.svelte';
   
   export let user: UserProps | null = null;
@@ -62,6 +62,13 @@
       });
     }
   }
+
+  const setScrollPosition = () => {
+    if ($page.url.pathname === '/') {
+      $scrollPosition = scrollY;
+    }
+    console.log($scrollPosition)
+  }
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -85,7 +92,7 @@
     <div class="tw-flex tw-justify-center tw-w-full tw-hh-[52px]">
       <div class="nav-xl:tw-flex tw-items-center tw-hidden tw-h-full tw-gap-2">
         {#each links as link}
-          <a href={link.path} class={`tw-flex tw-justify-center tw-w-[111.59px] tw-h-full tw-items-center hover:tw-rounded-md hover:tw-bg-gray-200 tw-transition-all tw-border-b-[4px] ${$page.url.pathname === link.path ? "tw-border-[#0866FF]" : "tw-border-white"}`} title={link.name}>
+          <a href={link.path} class={`tw-flex tw-justify-center tw-w-[111.59px] tw-h-full tw-items-center hover:tw-rounded-md hover:tw-bg-gray-200 tw-transition-all tw-border-b-[4px] ${$page.url.pathname === link.path ? "tw-border-[#0866FF]" : "tw-border-white"}`} title={link.name} on:click={setScrollPosition}>
             <svelte:component this={link.icon} class={`tw-w-[22px] tw-h-[22px] ${$page.url.pathname === link.path ? "tw-text-[#0866FF]" : "tw-text-[#65676B]"}`} />
           </a>
         {/each}
