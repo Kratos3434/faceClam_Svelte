@@ -11,12 +11,13 @@
 	import { userBaseURL } from "../env";
 	import { socket } from "../socket";
   import { openMore } from "$lib";
+	import { useQueryClient } from "@tanstack/svelte-query";
 
   export let post: PostProps;
   export let currentUser: UserProps | null = null;
   export let token: string | undefined;
   let isHidden = false;
-
+  const queryClient = useQueryClient();
   $: isLiked = post.likes.some(e => e.userId === currentUser?.id);
   $: likes = post.likes.length;
   let handlingLike = false;
@@ -57,6 +58,10 @@
           to: post.author.email
         })
       }
+      await queryClient.invalidateQueries({
+          queryKey: ['posts'],
+          refetchType: 'active'
+        })
       }
 
     }

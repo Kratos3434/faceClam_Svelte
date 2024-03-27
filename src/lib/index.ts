@@ -29,4 +29,8 @@ export const openNotifModal = writable(false);
 
 export const onlineUsers = writable<Map<string, string>>(new Map<string, string>());
 
-export const openMore = writable<{status: boolean, post?: PostProps}>({ status: false })
+export const openMore = writable<{status: boolean, post?: PostProps}>({ status: false });
+
+export const lastCreated = writable<string | null>("");
+
+export const scrollPosition = writable<number>(0);
