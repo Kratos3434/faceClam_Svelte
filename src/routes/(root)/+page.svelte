@@ -11,10 +11,11 @@
 	import FriendRequests from "$lib/FriendRequests.svelte";
   import { lastCreated } from "$lib";
 	import type { PostProps } from "../../types";
+  import { navigating } from "$app/stores";
 
   export let data: LayoutData;
 
-  let limit = 8;
+  let limit = 4;
   let total = 0;
   let max = 0;
   
@@ -78,15 +79,11 @@
       clearTimeout(timeout);
     }
   })
-
-  onDestroy(() => {
-    $scrollPosition = scrollY;
-  })
   
   onMount(async () => {
     await tick();
     scrollTo(0, $scrollPosition)
-  })
+  });
 </script>
 
 <svelte:head>
