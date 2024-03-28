@@ -1,6 +1,6 @@
 <script lang="ts">
   import HomeSideNav from "$lib/HomeSideNav.svelte";
-	import { onDestroy, onMount, tick } from "svelte";
+	import { onMount, tick } from "svelte";
   import type { LayoutData } from "./$types";
   import { openPopup, scrollPosition } from "$lib";
 	import { publicBaseURL } from "../../env";
@@ -11,7 +11,6 @@
 	import FriendRequests from "$lib/FriendRequests.svelte";
   import { lastCreated } from "$lib";
 	import type { PostProps } from "../../types";
-  import { navigating } from "$app/stores";
 
   export let data: LayoutData;
 

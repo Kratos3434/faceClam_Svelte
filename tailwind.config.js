@@ -22,7 +22,9 @@ export default {
         'home-lg': '1100px',
         'homeprof-md': '908px',
         'chat-nav': '470px',
-        'profile-sm': '426px'
+        'profile-sm': '426px',
+        'saved-lg': '805px',
+        'saved-sm': '505px'
       }
     },
   },
