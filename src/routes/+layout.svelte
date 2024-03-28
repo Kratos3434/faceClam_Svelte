@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { browser } from "$app/environment";
-	import { openAddPost, openAddStatus, openMenu, openMore, openPopup, viewLikes, viewPost } from "$lib";
+	import { openAddPost, openAddStatus, openMenu, openMore, openPopup, openShare, viewLikes, viewPost } from "$lib";
 	import ViewLikes from "$lib/ViewLikes.svelte";
   import "../app.css";
   import { QueryClient, QueryClientProvider } from '@tanstack/svelte-query';
@@ -14,6 +14,7 @@
   import { invalidate } from "$app/navigation";
   import { onlineUsers } from "$lib";
 	import MoreModal from "$lib/MoreModal.svelte";
+	import ShareModal from "$lib/ShareModal.svelte";
 
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -95,9 +96,13 @@
   {#if $openMore.status}
     <MoreModal currentUser={data.currentUser} token={data.token} />
   {/if}
+
+  <!-- {#if $openShare.status}
+    <ShareModal currentUser={data.currentUser} />
+  {/if} -->
 </QueryClientProvider>
 
-{#if $viewLikes.status || $openPopup || $viewPost.status || $openAddPost || $openAddStatus || $openMenu || $openMore.status}
+{#if $viewLikes.status || $openPopup || $viewPost.status || $openAddPost || $openAddStatus || $openMenu || $openMore.status || $openShare.status}
   <style>
     body {
       overflow: hidden;

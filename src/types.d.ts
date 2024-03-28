@@ -14,19 +14,22 @@ export interface UserProps {
   friends: FriendProps[],
   friendRequestSent: FriendProps[],
   friendRequest: FriendProps,
-  areFriends?: boolean
+  areFriends?: boolean,
+  sharedPosts: Share[]
 }
 
 export interface PostProps {
   id: number,
   featureImage?: string,
   description: string,
-  shares: number
+  shares: ShareProps[]
   author: UserProps,
   likes: LikeProps[],
   comments: CommentProps[],
   notifications: NotificationProps[],
-  _count: CountProps,
+  content?: PostProps,
+  contentId?: number,
+  type: string,
   createdAt: string,
   updatedAt?: string
 }
@@ -80,6 +83,16 @@ export interface NotificationProps {
   sender: UserProps,
   senderId: number,
   type: Notification,
+  post: PostProps,
+  postId: number,
+  createdAt: string,
+  updatedAt?: string
+}
+
+interface ShareProps {
+  id: number,
+  sharer: UserProps,
+  sharerId: number,
   post: PostProps,
   postId: number,
   createdAt: string,
