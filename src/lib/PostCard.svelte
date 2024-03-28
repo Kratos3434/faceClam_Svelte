@@ -7,7 +7,7 @@
   import Like from 'svelte-material-icons/ThumbUpOutline.svelte';
   import Chat from 'svelte-material-icons/ChatOutline.svelte';
   import Reply from 'svelte-material-icons/ReplyOutline.svelte';
-  import { openPopup, scrollPosition, viewLikes, viewPost } from "$lib";
+  import { openPopup, openShare, scrollPosition, viewLikes, viewPost } from "$lib";
 	import { userBaseURL } from "../env";
 	import { socket } from "../socket";
   import { openMore } from "$lib";
@@ -158,7 +158,7 @@
         {post.comments.length} comments
       </button>
       <span>
-        {post.shares} shares
+        {post.shares.length} shares
       </span>
     </div>
   </div>
@@ -184,6 +184,9 @@
     </button>
     <button class="tw-flex tw-gap-2 tw-items-center hover:tw-bg-gray-200 tw-cursor-pointer hover:tw-rounded-md tw-w-full tw-justify-center tw-py-3" on:click={() => {
       if (!currentUser) openThePopup();
+      else {
+        $openShare.status = true;
+      }
     }}>
       <Reply width={20} height={20} />
       Share

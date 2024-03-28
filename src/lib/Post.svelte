@@ -135,7 +135,7 @@
           {post.comments.length} comments
         </span>
         <span>
-          {post.shares} shares
+          {post.shares.length} shares
         </span>
       </div>
     </div>

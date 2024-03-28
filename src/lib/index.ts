@@ -34,3 +34,5 @@ export const openMore = writable<{status: boolean, post?: PostProps}>({ status: 
 export const lastCreated = writable<string | null>("");
 
 export const scrollPosition = writable<number>(0);
+
+export const openShare = writable({ status: false });

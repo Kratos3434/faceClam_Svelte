@@ -205,7 +205,7 @@ on:click={() => $viewPost.status = false}>
               {post?.comments.length} comments
             </span>
             <span class="tw-p-[6px]">
-              {0} shares
+              {post?.shares.length} shares
             </span>
           </div>
         </div>
