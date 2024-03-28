@@ -55,6 +55,11 @@
         refetchType: 'active'
       });
 
+      await queryClient.invalidateQueries({
+        queryKey: ['userPosts', currentUser.id],
+        exact: true
+      });
+      
       await invalidate('app:name');
 
       $openMore.status = false;
@@ -136,18 +141,20 @@
             <span>Unsave</span>
           </div>
         {/if}
+        <!----------------------------------------------------------------------------------------------------------------------------------------------------->
+        <!--Delete-->
+        {#if $openMore.post?.author.id === currentUser.id}
+          <div class="tw-flex tw-gap-3 tw-justify-center tw-w-full tw-items-center tw-text-[20px] tw-rounded-md hover:tw-bg-gray-200 tw-cursor-pointer tw-p-2" 
+          on:click={() => openConfModal = true}>
+            <svelte:component this={Trash} color={"#FF0000"} />
+            <span>Delete</span>
+          </div>
+        {/if}
+        <!--Delete end-->
+      {:else}
+          <Loading width={25} height={25} />
       {/if}
       <!--Saved END-->
-      <!----------------------------------------------------------------------------------------------------------------------------------------------------->
-      <!--Delete-->
-      {#if $openMore.post?.author.id === currentUser.id}
-        <div class="tw-flex tw-gap-3 tw-justify-center tw-w-full tw-items-center tw-text-[20px] tw-rounded-md hover:tw-bg-gray-200 tw-cursor-pointer tw-p-2" 
-        on:click={() => openConfModal = true}>
-          <svelte:component this={Trash} color={"#FF0000"} />
-          <span>Delete</span>
-        </div>
-      {/if}
-      <!--Delete end-->
       {#if openConfModal}
         <Modal>
           <div class="tw-max-w-[400px] tw-w-full tw-p-3 tw-rounded-md tw-shadow-md tw-bg-white">

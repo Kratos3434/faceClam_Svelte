@@ -149,7 +149,7 @@
     <div class="tw-grid tw-grid-cols-3 tw-gap-1">
       {#each posts as post }
         <a href={`/${name}/posts/${post.id}`}>
-          <img src={post.featureImage} width={149} height={149} alt={post.description} class="homeprof-md:tw-w-[149px] homeprof-md:tw-h-[149px] tw-rounded-md tw-w-[213px] profile-sm:tw-h-[213px] tw-h-[150px]"/>
+          <img src={post.featureImage} width={149} height={149} alt={post.description} class="homeprof-md:tw-w-[149px] homeprof-md:tw-h-[149px] tw-rounded-md tw-w-[213px] tw-h-[213px]"/>
         </a>
       {/each}
     </div>
