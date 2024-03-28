@@ -16,6 +16,7 @@
 	import Comment from "./Comment.svelte";
 	import { publicBaseURL, userBaseURL } from "../env";
 	import { onMount } from "svelte";
+  import { viewLikes } from "$lib";
 
   export let token: string | undefined;
   export let currentUser: UserProps | null;
@@ -127,13 +128,16 @@
     }
   }
 
+  const scrollToBottom = (event: any) => {
+    const { currentTarget: target } = event;
+		target.scroll({ top: target.scrollHeight, behavior: 'smooth' });
+  }
   onMount(() => {
     if (commentBoxEl) {
-			commentBoxEl.addEventListener('DOMNodeInserted', (event: any) => {
-				const { currentTarget: target } = event;
-				target.scroll({ top: target.scrollHeight, behavior: 'smooth' });
-			})
+			commentBoxEl.addEventListener('DOMNodeInserted', scrollToBottom)
 		}
+
+    return () => removeEventListener('DOMNodeInserted', scrollToBottom);
   })
 </script> 
 
@@ -188,7 +192,12 @@ on:click={() => $viewPost.status = false}>
           {/if}
         {/if}
         <div class="tw-px-[16px] tw-flex tw-justify-between tw-text-[#65676B] tw-text-[15px] tw-items-center">
-          <span>
+          <span class="hover:tw-underline tw-cursor-pointer" on:click={() => {
+            if (post) {
+              $viewLikes.postId = post.id;
+              $viewLikes.status = true
+            }
+          }}>
             {likes} likes
           </span>
           <div class="tw-flex">

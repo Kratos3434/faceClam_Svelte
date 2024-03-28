@@ -92,6 +92,7 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
+<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <div class={`tw-rounded-md sm:tw-shadow-md tw-max-w-[680px] tw-w-full tw-bg-white ${isHidden ? "tw-hidden" : "tw-flex"} tw-flex-col`}>
   <div class={`tw-flex tw-flex-col tw-px-[16px] tw-pt-[12px] ${post.featureImage && "tw-pb-[16px]"}`}>
     <div class="tw-flex tw-gap-2 tw-items-center">
@@ -128,12 +129,18 @@
   </div>
   {#if post.featureImage}
     {#if post.featureImage.substring(post.featureImage.lastIndexOf('.')) === '.mp4'}
-      <video width="680" height="680" controls loop>
+      <video width="680" height="680" controls loop on:click={() => {
+        $viewPost.post = post;
+        $viewPost.status = true;
+      }}>
         <source src={`https${post.featureImage.substring(post.featureImage.indexOf(':'))}`} type="video/mp4" />
         <track kind="captions" />
       </video>
       {:else}
-      <img src={post.featureImage} width="680" height="680" alt="Featured" />
+      <img src={post.featureImage} width="680" height="680" alt="Featured" on:click={() => {
+        $viewPost.post = post;
+        $viewPost.status = true;
+      }} class="tw-cursor-pointer" />
     {/if}
   {/if}
   <div class="tw-flex tw-justify-between tw-px-5 tw-text-[#65676B] tw-text-[15px] tw-py-2">
