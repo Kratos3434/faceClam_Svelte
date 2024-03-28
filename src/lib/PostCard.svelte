@@ -7,7 +7,7 @@
   import Like from 'svelte-material-icons/ThumbUpOutline.svelte';
   import Chat from 'svelte-material-icons/ChatOutline.svelte';
   import Reply from 'svelte-material-icons/ReplyOutline.svelte';
-  import { openPopup, viewLikes, viewPost } from "$lib";
+  import { openPopup, scrollPosition, viewLikes, viewPost } from "$lib";
 	import { userBaseURL } from "../env";
 	import { socket } from "../socket";
   import { openMore } from "$lib";
@@ -84,6 +84,10 @@
       handlingLike = false;
     }
   }
+
+  const setScroll = () => {
+    $scrollPosition = scrollY;
+  }
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -91,12 +95,12 @@
 <div class={`tw-rounded-md sm:tw-shadow-md tw-max-w-[680px] tw-w-full tw-bg-white ${isHidden ? "tw-hidden" : "tw-flex"} tw-flex-col`}>
   <div class={`tw-flex tw-flex-col tw-px-[16px] tw-pt-[12px] ${post.featureImage && "tw-pb-[16px]"}`}>
     <div class="tw-flex tw-gap-2 tw-items-center">
-      <a href={`${post.author.firstName}.${post.author.lastName}.${post.author.id}`} class="tw-max-w-[40px] tw-max-h-[40px] tw-w-full tw-h-full tw-rounded-[1000px]">
+      <a href={`${post.author.firstName}.${post.author.lastName}.${post.author.id}`} class="tw-max-w-[40px] tw-max-h-[40px] tw-w-full tw-h-full tw-rounded-[1000px]" on:click={setScroll}>
         <img src={`${post.author.profilePicture ? post.author.profilePicture : placeholder}`} width="40" height="40" alt={`${post.author.firstName} ${post.author.lastName}`} class="tw-rounded-[1000px] tw-w-[40px] tw-h-[40px]" />
       </a>
       <div class="tw-flex tw-justify-between tw-flex-1">
         <div class="tw-flex tw-flex-col">
-          <a href={`${post.author.firstName}.${post.author.lastName}.${post.author.id}`} class="tw-text-[15px] tw-font-bold tw-whitespace-nowrapp hover:tw-underline">
+          <a href={`${post.author.firstName}.${post.author.lastName}.${post.author.id}`} class="tw-text-[15px] tw-font-bold tw-whitespace-nowrapp hover:tw-underline" on:click={setScroll}>
             {`${post.author.firstName} ${post.author.lastName}`}
           </a>
           <span class="tw-text-[13px] tw-text-[#65676B]">
