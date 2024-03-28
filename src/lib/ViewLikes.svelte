@@ -29,7 +29,7 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
-<div class="tw-fixed tw-top-0 tw-left-0 tw-w-full tw-max-h-[100vh] tw-h-full tw-px-[16px] tw-py-5 tw-bg-[rgb(0,0,0)] tw-bg-[rgba(0,0,0,0.4)] tw-z-[1000] tw-overflow-hidden" on:click={closeModal}>
+<div class="tw-fixed tw-top-0 tw-left-0 tw-w-full tw-max-h-[100vh] tw-h-full tw-px-[16px] tw-py-5 tw-bg-[rgb(0,0,0)] tw-bg-[rgba(0,0,0,0.4)] tw-z-[2000] tw-overflow-hidden" on:click={closeModal}>
   <div class="tw-flex tw-flex-col tw-justify-center tw-items-center tw-h-full tw-overflow-hidden">
     <div class="tw-rounded-md tw-bg-white tw-shadow-md tw-flex tw-flex-col tw-gap-2 tw-max-w-[550px] tw-w-full tw-relative tw-h-[370px] tw-overflow-auto" on:click={(e) => e.stopPropagation()}>
       <div class="tw-flex tw-w-full tw-sticky tw-top-0 tw-h-[60px] tw-text-[#65676B] tw-font-bold tw-z-[100] tw-py-1 tw-bg-white">

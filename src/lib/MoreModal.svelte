@@ -105,7 +105,13 @@
     if (data.status) {
       await queryClient.invalidateQueries({
         queryKey: ['saved', $openMore.post?.id], exact: true
-      })
+      });
+      
+      await queryClient.invalidateQueries({
+        queryKey: ['saved'],
+        exact: true
+      });
+
       saveLoader = false;
     } else {
       saveLoader = false;

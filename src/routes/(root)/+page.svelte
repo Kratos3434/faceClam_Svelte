@@ -1,8 +1,8 @@
 <script lang="ts">
   import HomeSideNav from "$lib/HomeSideNav.svelte";
-	import { onMount, tick } from "svelte";
+	import { onMount } from "svelte";
   import type { LayoutData } from "./$types";
-  import { openPopup, scrollPosition } from "$lib";
+  import { openPopup } from "$lib";
 	import { publicBaseURL } from "../../env";
 	import PostCard from "$lib/PostCard.svelte";
 	import Loading from "$lib/Loading.svelte";
@@ -11,12 +11,11 @@
 	import FriendRequests from "$lib/FriendRequests.svelte";
   import { lastCreated } from "$lib";
 	import type { PostProps } from "../../types";
+  import { inview } from 'svelte-inview';
 
   export let data: LayoutData;
 
   let limit = 4;
-  let total = 0;
-  let max = 0;
   
   const getPosts = async ({ pageParam }: { pageParam: string }): Promise<{
     data: PostProps[];
@@ -60,29 +59,17 @@
         $openPopup = true;
       }
     }, 5000);
-    
-    const scrollToBottom = () => {
-      console.log('reached bottom')
-      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-        console.log(max)
-        console.log(total)
-        if ($query.hasNextPage && !$query.isFetchingNextPage) {
-          $query.fetchNextPage();
-        }
-      }
-    }
-    window.addEventListener('scroll', scrollToBottom);
 
     return () => {
-      removeEventListener('scroll', scrollToBottom);
       clearTimeout(timeout);
     }
   })
-  
-  onMount(async () => {
-    await tick();
-    scrollTo(0, $scrollPosition)
-  });
+
+  const loadMore = () => {
+    if ($query.hasNextPage && !$query.isFetchingNextPage) {
+      $query.fetchNextPage();
+    }
+  }
 </script>
 
 <svelte:head>
@@ -113,16 +100,18 @@
           <PostCard post={post} currentUser={data.currentUser} token={data.token} />
         {/each}
       {/each}
-      {#if $query.isFetchingNextPage}
-        <div class="tw-py-10 tw-flex tw-justify-center">
-          <Loading width={50} height={50} />
-        </div>
-      {:else if !$query.hasNextPage}
-        <hr />
-        <div class="tw-py-5 tw-flex tw-justify-center">
-          <span>You are updated :{")"}</span>
-        </div>
-      {/if}
+      <div class="tw-py-5" use:inview on:inview_enter={loadMore}>
+        {#if $query.isFetchingNextPage}
+          <div class="tw-flex tw-justify-center">
+            <Loading width={50} height={50} />
+          </div>
+        {:else if !$query.hasNextPage}
+          <hr />
+          <div class="tw-py-5 tw-flex tw-justify-center">
+            <span>You are updated :{")"}</span>
+          </div>
+        {/if}
+      </div>
     {/if}
   </div>
   <div class="home-xl:tw-flex tw-flex-col tw-hidden tw-w-[300px] tw-sticky tw-top-[70px] tw-h-full tw-z-0 tw-gap-3">
