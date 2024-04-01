@@ -12,6 +12,7 @@
   export let posts: PostProps[];
 
   const getPostsByUserId = async () => {
+    // ${publicBaseURL}/post/user/${user.id}
     const res = await fetch(`${publicBaseURL}/post/user/${user.id}`);
     const data = await res.json();
     return data.data;
