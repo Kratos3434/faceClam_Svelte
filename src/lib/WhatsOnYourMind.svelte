@@ -23,7 +23,7 @@
 
 <div class="tw-rounded-md tw-bg-white tw-shadow-md tw-flex tw-flex-col tw-px-[16px] tw-pt-[12px] tw-pb-[10px] tw-gap-3">
   <div class="tw-flex tw-gap-2 tw-items-center tw-shrink-0">
-    <a href={`/${user.firstName}.${user.lastName}.${user.id}`}>
+    <a href={`/${user.firstName}.${user.lastName}.${user.id}`} class="tw-shrink-0">
       <img src={user.profilePicture ? user.profilePicture : placeholder} width={40} height={40} alt={`${user.firstName} ${user.lastName}`} class="tw-rounded-[1000px] tw-w-[40px] tw-h-[40px]" />
     </a>
     <button class="tw-text-start tw-rounded-[20px] tw-py-[8px] tw-px-[12px] tw-w-full tw-cursor-pointer tw-bg-[#F0F2F5] hover:tw-bg-gray-300" on:click={() => $openAddStatus = true}>

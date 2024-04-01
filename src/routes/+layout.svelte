@@ -97,12 +97,12 @@
     <MoreModal currentUser={data.currentUser} token={data.token} />
   {/if}
 
-  <!-- {#if $openShare.status}
-    <ShareModal currentUser={data.currentUser} />
-  {/if} -->
+  {#if $openShare.status}
+    <ShareModal currentUser={data.currentUser} token={data.token} />
+  {/if}
 </QueryClientProvider>
 
-{#if $viewLikes.status || $openPopup || $viewPost.status || $openAddPost || $openAddStatus || $openMenu || $openMore.status || $openShare.status}
+{#if $viewLikes.status || $openPopup || $viewPost.status || $openAddPost || $openAddStatus || $openMenu || $openMore.status || $openShare.status} 
   <style>
     body {
       overflow: hidden;

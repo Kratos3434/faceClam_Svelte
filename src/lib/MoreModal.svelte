@@ -39,6 +39,7 @@
   
   const handleDelete = async () => {
     isLoading = true;
+    // `${userBaseURL}/delete/post/${$openMore.post?.id}`
     const res = await fetch(`${userBaseURL}/delete/post/${$openMore.post?.id}`, {
       method: 'DELETE',
       headers: {

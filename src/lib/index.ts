@@ -35,4 +35,4 @@ export const lastCreated = writable<string | null>("");
 
 export const scrollPosition = writable<number>(0);
 
-export const openShare = writable({ status: false });
+export const openShare = writable<{status: boolean, postId: number}>({ status: false, postId: -1 });
