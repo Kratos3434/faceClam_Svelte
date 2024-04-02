@@ -90,7 +90,7 @@ export interface NotificationProps {
   updatedAt?: string
 }
 
-interface ShareProps {
+export interface ShareProps {
   id: number,
   sharer: UserProps,
   sharerId: number,
@@ -98,6 +98,16 @@ interface ShareProps {
   originalPost: PostProps,
   originalPostId: number,
   postId: number,
+  createdAt: string,
+  updatedAt?: string
+}
+
+export interface SavedProps {
+  id: number,
+  savedBy: UserProps,
+  userId: number,
+  content: PostProps,
+  contentId: number,
   createdAt: string,
   updatedAt?: string
 }
