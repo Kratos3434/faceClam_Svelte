@@ -7,7 +7,7 @@
   import Like from 'svelte-material-icons/ThumbUpOutline.svelte';
   import Chat from 'svelte-material-icons/ChatOutline.svelte';
   import Reply from 'svelte-material-icons/ReplyOutline.svelte';
-  import { openPopup, openShare, scrollPosition, viewLikes, viewPost } from "$lib";
+  import { openPopup, openShare, scrollPosition, viewLikes, viewPost, viewShares } from "$lib";
 	import { userBaseURL } from "../env";
 	import { socket } from "../socket";
   import { openMore } from "$lib";
@@ -259,7 +259,10 @@
         {post.comments.length} comments
       </button>
       {#if !post.content}
-        <span>
+        <span class="tw-cursor-pointer hover:tw-underline" on:click={() => {
+          $viewShares.status = true;
+          $viewShares.postId = post.id;
+        }}>
           {post.shares.length} shares
         </span>
       {/if}

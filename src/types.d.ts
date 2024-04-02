@@ -29,6 +29,7 @@ export interface PostProps {
   notifications: NotificationProps[],
   content?: PostProps,
   contentId?: number,
+  share?: ShareProps,
   type: string,
   createdAt: string,
   updatedAt?: string
@@ -94,6 +95,8 @@ interface ShareProps {
   sharer: UserProps,
   sharerId: number,
   post: PostProps,
+  originalPost: PostProps,
+  originalPostId: number,
   postId: number,
   createdAt: string,
   updatedAt?: string
