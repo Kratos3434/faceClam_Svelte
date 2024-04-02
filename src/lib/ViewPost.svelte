@@ -143,6 +143,7 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
+<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <div class="tw-fixed tw-top-0 tw-w-full tw-left-0 tw-bg-[rgb(0,0,0)] tw-bg-[rgba(0,0,0,0.4)] tw-py-5 tw-px-[16px] tw-z-[1000] tw-h-full tw-overflow-hidden" 
 on:click={() => $viewPost.status = false}>
   <div class="tw-flex tw-flex-col tw-justify-center tw-items-center tw-max-h-[100vh] tw-h-full">
@@ -181,16 +182,6 @@ on:click={() => $viewPost.status = false}>
             {post?.description}
           </span>
         </div>
-        <!-- {#if post?.featureImage}
-          {#if post.featureImage.substring(post.featureImage.lastIndexOf('.')) === '.mp4'}
-            <video width={700} height={700} controls loop>
-              <source src={`https${post.featureImage.substring(post.featureImage.lastIndexOf(':'))}`} type="video/mp4" />
-              <track kind="captions" />
-            </video>
-          {:else}
-            <img src={post.featureImage} width={700} height={700} alt={`${post.author.firstName} ${post.author.lastName}`} />
-          {/if}
-        {/if} -->
         {#if post}
         {#if !post.content}
         {#if post.featureImage}
