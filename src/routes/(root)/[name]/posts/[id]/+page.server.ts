@@ -5,7 +5,7 @@ import type { PageServerLoad } from "./$types";
 export const load = (async ({ params, fetch, depends }) => {
   const userId = params.name.split('.')[2];
   const postId = params.id;
-
+  // `${publicBaseURL}/post?authorId=${userId}&postId=${postId}`
   const res = await fetch(`${publicBaseURL}/post?authorId=${userId}&postId=${postId}`);
   const data = await res.json();
 
