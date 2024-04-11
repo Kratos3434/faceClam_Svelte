@@ -35,7 +35,7 @@
     if (photo) {
       const fileType = photo.type;
       if (!checkValidFileType(fileType)) {
-        error = "Invalid image or video";
+        error = `Invalid image or video, the file type is: ${fileType}`;
         loading = false;
         return false;
       } 
