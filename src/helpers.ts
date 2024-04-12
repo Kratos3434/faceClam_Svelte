@@ -62,6 +62,7 @@ export const checkValidFileType = (ext: string) => {
         case "image/dcm":
         case "image/svg":
         case "video/mp4":
+        case "video/quicktime": 
             return true;
         default:
             return false;
