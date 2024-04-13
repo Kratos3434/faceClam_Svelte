@@ -119,7 +119,7 @@
             {:else}
               <div class="tw-w-full tw-rounded-md tw-border-[1px] tw-border-gray-400 tw-p-2 tw-relative tw-items-center">
                 {#if photo.type === "video/mp4"}
-                  <video width="450" height="450" controls loop>
+                  <video width="450" height="450" controls loop class="tw-w-[450px] tw-h-[450px]">
                     <source src={URL.createObjectURL(photo)} type="video/mp4" />
                     <track kind="captions" />
                   </video>
