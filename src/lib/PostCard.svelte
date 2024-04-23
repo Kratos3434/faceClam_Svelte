@@ -13,14 +13,17 @@
   import { openMore } from "$lib";
 	import { useQueryClient } from "@tanstack/svelte-query";
 	import SharableContent from "./SharableContent.svelte";
+  import { likes as like } from "$lib";
 
   export let post: PostProps;
   export let currentUser: UserProps | null = null;
   export let token: string | undefined;
   let isHidden = false;
   const queryClient = useQueryClient();
-  $: isLiked = post.likes.some(e => e.userId === currentUser?.id);
-  $: likes = post.likes.length;
+  // $: isLiked = post.likes.some(e => e.userId === currentUser?.id);
+  $: isLiked = $like.get(post.id)?.some(e => e.userId === currentUser?.id);
+  // $: likes = post.likes.length;
+  $: likes = $like.get(post.id)?.length;
   let handlingLike = false;
 
   const openThePopup = () => {
@@ -68,22 +71,52 @@
     }
   }
 
-  const handleLike = async () => {
-    if (!handlingLike) {
-      switch (isLiked) {
-        case true:
-          likes--;
-          isLiked = false;
-          break;
-        case false:
-          likes++;
-          isLiked = true;
-          break;
-      }
+  // const handleLike = async () => {
+  //   if (!handlingLike) {
+  //     switch (isLiked) {
+  //       case true:
+  //         likes--;
+  //         isLiked = false;
+  //         break;
+  //       case false:
+  //         likes++;
+  //         isLiked = true;
+  //         break;
+  //     }
 
-      await likePost();
-      handlingLike = false;
+  //     await likePost();
+  //     handlingLike = false;
+  //   }
+  // }
+
+  const handleLike = async () => {
+    if (likes !== undefined) {
+      let res = $like.get(post.id);
+      if (isLiked) {
+        res = res?.filter(e => e.userId != currentUser?.id);
+        if (res) {
+          $like.set(post.id, res);
+          $like = new Map($like);
+        }
+      } else {
+        if (currentUser) {
+          res?.push({
+            id: res.length > 0 ? res[res.length-1].id + 1 : 1,
+            post: post,
+            postId: post.id,
+            user: currentUser,
+            userId: currentUser.id,
+            createdAt: `${new Date()}`
+          });
+          if (res) {
+            $like.set(post.id, res);
+            $like = new Map($like);
+          }
+        }
+      }
     }
+
+    !handlingLike && await likePost();
   }
 
   const setScroll = () => {
