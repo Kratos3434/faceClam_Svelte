@@ -2,7 +2,7 @@
   import HomeSideNav from "$lib/HomeSideNav.svelte";
 	import { onMount } from "svelte";
   import type { LayoutData } from "./$types";
-  import { likes, openPopup, posts } from "$lib";
+  import { likes, openPopup, posts, postsArray } from "$lib";
 	import { publicBaseURL } from "../../env";
 	import PostCard from "$lib/PostCard.svelte";
 	import Loading from "$lib/Loading.svelte";
@@ -40,14 +40,15 @@
 
     data.data.map((e: PostProps) => {
       $likes.set(e.id, e.likes);
+      $posts.set(e.id, e);
       if (e.content) {
         $likes.set(e.content.id, e.content.likes);
       }
     });
-
-    $posts.push(data.data);
-    $posts = $posts;
     
+    $postsArray.push(data.data);
+    $postsArray = $postsArray;
+
     return {
       data: data.data,
       currentPage: pageParam,
@@ -106,14 +107,14 @@
       {#if data.currentUser}
         <WhatsOnYourMind bind:user={data.currentUser} />
       {/if}
-      <!-- {#each $query.data.pages as posts }
-        {#each posts.data as post }
-          <PostCard post={post} currentUser={data.currentUser} token={data.token} />
+      <!-- {#each $query.data.pages as pos }
+        {#each pos.data as post }
+          <PostCard post={$posts.get(post.id)} currentUser={data.currentUser} token={data.token} />
         {/each}
       {/each} -->
-      {#each $posts as pos }
+      {#each $postsArray as pos }
         {#each pos as post }
-          <PostCard {post} currentUser={data.currentUser} token={data.token} />
+          <PostCard post={$posts.get(post.id)} currentUser={data.currentUser} token={data.token} />
         {/each}
       {/each}
       <div class="tw-py-5" use:inview on:inview_enter={loadMore}>

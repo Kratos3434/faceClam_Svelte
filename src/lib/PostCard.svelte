@@ -15,7 +15,7 @@
 	import SharableContent from "./SharableContent.svelte";
   import { likes as like } from "$lib";
 
-  export let post: PostProps;
+  export let post: any;
   export let currentUser: UserProps | null = null;
   export let token: string | undefined;
   let isHidden = false;

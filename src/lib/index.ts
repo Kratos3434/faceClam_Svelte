@@ -41,4 +41,6 @@ export const viewShares = writable({ status: false, postId: -1 });
 
 export const likes = writable(new Map<number, LikeProps[]>());
 
-export const posts = writable<PostProps[][]>([]);
+export const posts = writable(new Map<number, PostProps>());
+
+export const postsArray = writable<PostProps[][]>([]);

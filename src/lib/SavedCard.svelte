@@ -4,6 +4,7 @@
   import Unsave from 'svelte-material-icons/BookmarkOffOutline.svelte';
 	import { useQueryClient } from "@tanstack/svelte-query";
   import { userBaseURL } from "../env";
+  import Play from 'svelte-material-icons/PlayCircleOutline.svelte';
 
   export let post: PostProps;
   export let token: string | undefined;
@@ -46,13 +47,11 @@
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div class="saved-sm:tw-max-h-[176px] tw-h-full tw-flex tw-p-[16px] tw-bg-white tw-rounded-md tw-shadow-md tw-gap-3 tw-w-full saved-sm:tw-flex-row tw-flex-col">
   <a href={postLink} class="tw-shrink-0">
-    <!-- <img src={post.featureImage ? post.featureImage : (post.author.profilePicture ? post.author.profilePicture : placeholder)} width="144" height="144" alt={post.description} class="tw-w-[144px] tw-h-[144px] tw-rounded-md" /> -->
     {#if post.featureImage}
       {#if post.featureImage.substring(post.featureImage.lastIndexOf('.')) === '.mp4'}
-        <video width={144} height={144} controls class="tw-w-[144px] tw-h-[144px] tw-rounded-md">
-          <source src={`https${post.featureImage.substring(post.featureImage.indexOf(':'))}`} type="video/mp4" />
-          <track kind="captions" />
-        </video>
+        <div class="tw-relative tw-bg-black tw-w-[144px] tw-h-[144px] tw-rounded-md tw-flex tw-justify-center tw-items-center">
+          <Play width={55} height={55} color="white" class="" />
+        </div>
       {:else}
         <img src={post.featureImage} width={144} height={144} alt={post.description} class="tw-w-[144px] tw-h-[144px] tw-rounded-md" />
       {/if}

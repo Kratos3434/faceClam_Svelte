@@ -5,7 +5,7 @@
   import placeholder from '$lib/assets/placeholder.png';
   import Public from 'svelte-material-icons/Earth.svelte';
 	import Loading from './Loading.svelte';
-	import { openAddStatus } from '$lib';
+	import { openAddStatus, postsArray, posts, likes } from '$lib';
 	import { userBaseURL } from '../env';
   import { useQueryClient } from '@tanstack/svelte-query';
 
@@ -48,11 +48,18 @@
       error = data.error;
       loading = false;
     } else {
-      await queryClient.invalidateQueries({
-        queryKey: ['posts'],
-        refetchType: 'active'
-      });
+      // await queryClient.invalidateQueries({
+      //   queryKey: ['posts'],
+      //   refetchType: 'active'
+      // });
       
+      $postsArray[0].unshift(data.data);
+      $likes.set(data.data.id, data.data.likes);
+      $postsArray = $postsArray;
+      
+      $posts.set(data.data.id, data.data);
+      $posts = $posts;
+
       await queryClient.invalidateQueries({
         queryKey: ['userPosts', user.id],
         refetchType: 'active',

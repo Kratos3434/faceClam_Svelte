@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { openShare } from '$lib';
+	import { openShare, postsArray, posts, likes } from '$lib';
   import Close from 'svelte-material-icons/Close.svelte';
 	import type { UserProps } from '../types';
   import placeholder from '$lib/assets/placeholder.png';
@@ -47,10 +47,18 @@
       const data = await res.json();
 
       if (data.status) {
-        await queryClient.invalidateQueries({
-          queryKey: ['posts'],
-          refetchType: 'active'
-        });
+        // await queryClient.invalidateQueries({
+        //   queryKey: ['posts'],
+        //   refetchType: 'active'
+        // });
+
+        $postsArray[0].unshift(data.data);
+        $likes.set(data.data.id, data.data.likes);
+        $postsArray = $postsArray;
+      
+        $posts.set(data.data.id, data.data);
+        $posts = $posts;
+
         $openShare.postId = -1;
         $openShare.status = false;
       } else {
