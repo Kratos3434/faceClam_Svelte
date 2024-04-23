@@ -1,6 +1,6 @@
 // place files you want to import through the `$lib` alias in this folder.
 import { writable } from "svelte/store";
-import type { PostProps } from "../types";
+import type { LikeProps, PostProps } from "../types";
 
 //testing
 export const counter = writable(0);
@@ -15,7 +15,7 @@ export const openAddStatus = writable(false);
 
 export const viewLikes = writable({ status: false, postId: 0 });
 
-export const viewPost = writable<{status: boolean, post?: PostProps}>({ status: false, post: undefined });
+export const viewPost = writable<{status: boolean, post?: PostProps}>({ status: false });
 
 export const changeProfilePic = writable(false);
 
@@ -38,3 +38,7 @@ export const scrollPosition = writable<number>(0);
 export const openShare = writable<{status: boolean, postId: number}>({ status: false, postId: -1 });
 
 export const viewShares = writable({ status: false, postId: -1 });
+
+export const likes = writable(new Map<number, LikeProps[]>());
+
+export const posts = writable<PostProps[][]>([]);

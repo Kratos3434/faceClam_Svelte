@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { CommentProps, UserProps } from "../types";
+	import type { CommentProps, PostProps, UserProps } from "../types";
   import { openPopup, viewPost } from "$lib";
   import Close from 'svelte-material-icons/Close.svelte';
   import placeholder from '$lib/assets/placeholder.png';
@@ -18,6 +18,7 @@
 	import { onMount } from "svelte";
   import { viewLikes } from "$lib";
 	import SharableContent from "./SharableContent.svelte";
+  import { likes as like } from "$lib";
 
   export let token: string | undefined;
   export let currentUser: UserProps | null;
@@ -30,11 +31,14 @@
   const handleComment = () => {
     comment = divEl.innerText;
   }
+  let dummy: any = $viewPost.post;
+
+  let post: PostProps = dummy;
   
-  let post = $viewPost.post;
-  
-  let isLiked = post?.likes.some(e => e.userId === currentUser?.id);
-  let likes = post?.likes.length;
+  // let isLiked = post?.likes.some(e => e.userId === currentUser?.id);
+  $: isLiked = $like.get(post.id)?.some(e => e.userId === currentUser?.id);
+  // let likes = post?.likes.length;
+  $: likes = $like.get(post.id)?.length;
   let handlingLike = false;
   let commentBoxEl: any;
 
@@ -88,11 +92,11 @@
         exact: true
       });
 
-      await queryClient.invalidateQueries({
-        queryKey: ['userPosts', post?.author.id],
-        refetchType: 'active',
-        exact: true
-      });
+      // await queryClient.invalidateQueries({
+      //   queryKey: ['userPosts', post?.author.id],
+      //   refetchType: 'active',
+      //   exact: true
+      // });
       post = data.data.post;
       loading = false;
     }
@@ -110,23 +114,33 @@
   }
 
   const handleLike = async () => {
-    if (likes) {
-      if (!handlingLike) {
-      switch (isLiked) {
-        case true:
-          likes--;
-          isLiked = false;
-          break;
-        case false:
-          likes++;
-          isLiked = true;
-          break;
+    if (likes !== undefined) {
+      let res = $like.get(post.id);
+      if (isLiked) {
+        res = res?.filter(e => e.userId != currentUser?.id);
+        if (res) {
+          $like.set(post.id, res);
+          $like = new Map($like);
+        }
+      } else {
+        if (currentUser) {
+          res?.push({
+            id: res.length > 0 ? res[res.length-1].id + 1 : 1,
+            post: post,
+            postId: post.id,
+            user: currentUser,
+            userId: currentUser.id,
+            createdAt: `${new Date()}`
+          });
+          if (res) {
+            $like.set(post.id, res);
+            $like = new Map($like);
+          }
+        }
       }
+    }
 
-      await likePost();
-      handlingLike = false;
-    }
-    }
+    !handlingLike && await likePost();
   }
 
   const scrollToBottom = (event: any) => {
@@ -149,7 +163,7 @@
 on:click={() => $viewPost.status = false}>
   <div class="tw-flex tw-flex-col tw-justify-center tw-items-center tw-max-h-[100vh] tw-h-full">
     <div class="tw-fixed tw-w-full tw-top-[20px] tw-flex tw-justify-center tw-px-[16px]" on:click={(e) => e.stopPropagation()}>
-      <div class="tw-text-center tw-p-2 tw-bg-white tw-max-w-[700px] tw-w-full tw-rounded-t-md tw-border-b-[1px] tw-relative tw-z-[1000]">
+      <div class="tw-text-center tw-p-2 tw-bg-white tw-max-w-[690px] tw-w-full tw-rounded-t-md tw-border-b-[1px] tw-relative tw-z-[1000]">
         <span class="tw-font-bold tw-text-[20px] tw-rounded-md">
           {post?.author.firstName} {post?.author.lastName}'s Post
         </span>
@@ -160,7 +174,7 @@ on:click={() => $viewPost.status = false}>
         </div>
       </div>
     </div>
-    <div class="tw-rounded-md tw-shadow-2xl tw-bg-white tw-max-w-[700px] tw-w-full tw-h-full tw-overflow-auto viewpost" on:click={(e) => e.stopPropagation()} bind:this={commentBoxEl}>
+    <div class="tw-rounded-md tw-shadow-2xl tw-bg-white tw-max-w-[690px] tw-w-full tw-h-full tw-overflow-auto viewpost" on:click={(e) => e.stopPropagation()} bind:this={commentBoxEl}>
       <div class="tw-rounded-md tw-mb-[82px] tw-mt-[48px]">
         <div class="tw-px-[16px] tw-flex tw-flex-col tw-py-2 tw-gap-2">
           <div class="tw-flex tw-justify-between tw-items-center">
@@ -251,7 +265,7 @@ on:click={() => $viewPost.status = false}>
       </div>
     </div>
     <div class="tw-fixed tw-w-full tw-bottom-[20px] tw-flex tw-justify-center tw-px-[16px]" on:click={(e) => e.stopPropagation()}>
-      <div class="tw-flex tw-px-[16px] tw-py-[9px] tw-max-w-[700px] tw-w-full tw-bg-white tw-rounded-b-md tw-gap-[4px] tw-shadow-2xl tw-border-t-[1px]">
+      <div class="tw-flex tw-px-[16px] tw-py-[9px] tw-max-w-[690px] tw-w-full tw-bg-white tw-rounded-b-md tw-gap-[4px] tw-shadow-2xl tw-border-t-[1px]">
         <img src={currentUser?.profilePicture ? currentUser.profilePicture : placeholder} width={32} height={32} alt={`${currentUser?.firstName} ${currentUser?.lastName}`} 
         class="tw-rounded-[1000px] tw-w-[32px] tw-h-[32px]" />
         <form class="tw-w-full tw-rounded-md tw-bg-gray-200 tw-break-words tw-flex tw-flex-col tw-px-[12px] tw-py-[8px]" on:submit={handleSubmit}>
