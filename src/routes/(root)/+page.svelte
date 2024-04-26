@@ -114,7 +114,9 @@
       {/each} -->
       {#each $postsArray as pos }
         {#each pos as post }
-          <PostCard post={$posts.get(post.id)} currentUser={data.currentUser} token={data.token} />
+          {#if $posts.get(post.id)}
+            <PostCard post={$posts.get(post.id)} currentUser={data.currentUser} token={data.token} />
+          {/if}
         {/each}
       {/each}
       <div class="tw-py-5" use:inview on:inview_enter={loadMore}>

@@ -21,9 +21,9 @@
   let isHidden = false;
   const queryClient = useQueryClient();
   // $: isLiked = post.likes.some(e => e.userId === currentUser?.id);
-  $: isLiked = $like.get(post.id)?.some(e => e.userId === currentUser?.id);
+  $: isLiked = $like.has(post.id) ? $like.get(post.id)?.some(e => e.userId === currentUser?.id) : post.likes.some((e:any) => e.userId === currentUser?.id)
   // $: likes = post.likes.length;
-  $: likes = $like.get(post.id)?.length;
+  $: likes = $like.has(post.id) ? $like.get(post.id)?.length : post.likes.length;
   let handlingLike = false;
 
   const openThePopup = () => {
@@ -93,25 +93,35 @@
     if (likes !== undefined) {
       let res = $like.get(post.id);
       if (isLiked) {
-        res = res?.filter(e => e.userId != currentUser?.id);
+        if ($like.has(post.id)) {
+          res = res?.filter(e => e.userId != currentUser?.id);
         if (res) {
           $like.set(post.id, res);
           $like = new Map($like);
         }
       } else {
-        if (currentUser) {
-          res?.push({
-            id: res.length > 0 ? res[res.length-1].id + 1 : 1,
-            post: post,
-            postId: post.id,
-            user: currentUser,
-            userId: currentUser.id,
-            createdAt: `${new Date()}`
-          });
-          if (res) {
-            $like.set(post.id, res);
-            $like = new Map($like);
+        likes--;
+        isLiked = false;
+      }
+      } else {
+        if ($like.has(post.id)) {
+          if (currentUser) {
+            res?.push({
+              id: res.length > 0 ? res[res.length-1].id + 1 : 1,
+              post: post,
+              postId: post.id,
+              user: currentUser,
+              userId: currentUser.id,
+              createdAt: `${new Date()}`
+            });
+            if (res) {
+              $like.set(post.id, res);
+              $like = new Map($like);
+            }
           }
+        } else {
+          likes++;
+          isLiked = true;
         }
       }
     }

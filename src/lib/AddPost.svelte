@@ -10,15 +10,27 @@
 	import { checkValidFileType } from "../helpers";
 	import { userBaseURL } from "../env";
   import { useQueryClient } from "@tanstack/svelte-query";
+  import emblaCarouselSvelte from 'embla-carousel-svelte';
+
+  interface ImagesProps {
+    img: string,
+    width: number,
+    height: number,
+    alt: string,
+    type: string
+  }
+
 
   export let token: string | undefined;
   export let user: UserProps;
 
   let description = "";
-  let photo: File | null;
+  const photos: File[] = [];
+  $: photo = photos;
   let error = "";
   let loading = false;
   let spanEl: any;
+  let displayedImages: ImagesProps[] = [];
   const queryClient = useQueryClient();
 
   const handleDescription = () => {
@@ -26,14 +38,24 @@
   }
 
   const handleFile = (e: any) => {
-    photo = e.target.files[0];
+    photo.push(e.target.files[0]);
+    photo = photo;
+    displayedImages.unshift({
+      img: URL.createObjectURL(e.target.files[0]),
+      width: 450,
+      height: 450,
+      alt: 'Chosen Photo',
+      type: e.target.files[0].type
+    });
+    displayedImages = displayedImages;
+    console.log(photo)
   }
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     loading = true;
     if (photo) {
-      const fileType = photo.type;
+      const fileType = photo[0].type;
       if (!checkValidFileType(fileType)) {
         error = `Invalid image or video, the file type is: ${fileType}`;
         loading = false;
@@ -111,10 +133,10 @@
           <span contenteditable={true} spellcheck={false} class="tw-w-full tw-outline-none tw-resize-none tw-relative statusBox tw-cursor-text" aria-label={`What's on your mind ${user.firstName}`} tabindex={0} role="textbox" placeholder={`What's on your mind, ${user.firstName}?`} on:input={handleDescription} bind:this={spanEl}>
 
           </span>
-          {#if !photo}
+          {#if photo.length === 0}
             <label class="tw-w-full tw-rounded-md tw-border-[1px] tw-border-gray-400 tw-p-2 tw-relative tw-items-center">
               <div class="tw-w-full tw-bg-gray-100 tw-rounded-md tw-h-[221px] tw-flex tw-flex-col tw-justify-center tw-text-center tw-cursor-pointer hover:tw-bg-gray-200 tw-transition-all">
-                <input type="file" class="tw-w-full tw-hidden" on:change={handleFile}/>
+                <input type="file" class="tw-w-full tw-hidden" on:change={handleFile} multiple/>
                 <div class="tw-flex tw-w-full tw-justify-center tw-items-center">
                   <div class="tw-rounded-[1000px] tw-bg-gray-300 tw-p-2">
                     <AddPhoto width={20} height={20} />
@@ -127,7 +149,7 @@
             </label>
             {:else}
               <div class="tw-w-full tw-rounded-md tw-border-[1px] tw-border-gray-400 tw-p-2 tw-relative tw-items-center">
-                {#if photo.type === "video/mp4"}
+                <!-- {#if photo.type === "video/mp4"}
                   <video width="450" height="450" controls loop class="tw-w-[450px] tw-h-[450px]">
                     <source src={URL.createObjectURL(photo)} type="video/mp4" />
                     <track kind="captions" />
@@ -139,6 +161,55 @@
                   <button class="tw-rounded-[1234px] tw-bg-gray-200 tw-p-1 tw-px-2 tw-cursor-pointer hover:tw-brightness-75" on:click={() => photo = null}>
                     <Close width={16} height={16} />
                   </button>
+                </div> -->
+                <!-- Swiping image -->
+                {#if displayedImages.length === 1}
+                  {#if photo[0].type === "video/mp4"}
+                    <video width="450" height="450" controls loop class="tw-w-[450px] tw-h-[450px]">
+                      <source src={displayedImages[0].img} type="video/mp4" />
+                      <track kind="captions" />
+                    </video>
+                  {:else}
+                    <img  src={displayedImages[0].img} width="450" height="450" alt="Chosen pic" class="tw-w-[450px] tw-h-[221px] tw-bg-gray-100 tw-rounded" />
+                  {/if}
+                {:else}
+                  <div class="embla" use:emblaCarouselSvelte>
+                    <div class="embla__container">
+                      {#each displayedImages as image }
+                        <div class="embla__slide">
+                          {#if image.type === 'video/mp4'}
+                            <video width={image.width} height={image.height} controls style={`width: ${image.width}px;height: ${image.height}px;object-fit: fill;`}>
+                              <source src={image.img} type="video/mp4" />
+                              <track kind="captions" />
+                            </video>
+                          {:else}
+                            <img src={image.img} width={image.width} height={image.height} alt={image.alt} style={`width: ${image.width}px;height: ${image.height}px`} />
+                          {/if}
+                        </div>
+                      {/each}
+                    </div>
+                  </div>
+                {/if}
+                <!-- Swiping Image end -->
+                <div class="tw-absolute tw-top-0 tw-right-0  tw-flex tw-justify-center tw-items-center tw-p-3">
+                  <button class="tw-rounded-[1234px] tw-bg-gray-200 tw-p-1 tw-px-2 tw-cursor-pointer hover:tw-brightness-75" on:click={() => photo = []}>
+                    <Close width={16} height={16} />
+                  </button>
+                </div> 
+                <div class="tw-absolute tw-top-0 tw-left-0 tw-p-3">
+                  <label class="tw-w-full tw-rounded-md tw-relative tw-items-center">
+                    <div class="tw-w-full tw-bg-gray-100 tw-rounded-md tw-flex tw-flex-col tw-justify-center tw-text-center tw-cursor-pointer hover:tw-bg-gray-200 tw-transition-all">
+                      <input type="file" class="tw-w-full tw-hidden" on:change={handleFile} multiple/>
+                      <!-- <div class="tw-flex tw-w-full tw-justify-center tw-items-center">
+                        <div class="tw-rounded-[1000px] tw-bg-gray-300 tw-p-2">
+                          <AddPhoto width={20} height={20} />
+                        </div>
+                      </div> -->
+                      <span class="tw-text-[17px] tw-text-black tw-font-semibold tw-p-1">
+                        Click here to Add Photos/Video
+                      </span>
+                    </div>
+                  </label>
                 </div>
               </div>
           {/if}
@@ -170,3 +241,20 @@
     </span>
   </Modal>
 {/if}
+
+<style>
+  .embla {
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+  }
+  .embla__container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+  }
+  .embla__slide {
+    flex: 0 0 100%;
+    min-width: 0;
+  }
+ </style>
