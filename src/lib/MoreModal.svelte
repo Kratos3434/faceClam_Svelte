@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { openMore } from "$lib";
+	import { openMore, posts } from "$lib";
   import Saved from 'svelte-material-icons/Bookmark.svelte';
   import Trash from 'svelte-material-icons/DeleteEmpty.svelte';
   import Close from 'svelte-material-icons/Close.svelte';
@@ -51,10 +51,15 @@
     const data = await res.json();
 
     if (data.status) {
-      await queryClient.invalidateQueries({
-        queryKey: ['posts'],
-        refetchType: 'active'
-      });
+      // await queryClient.invalidateQueries({
+      //   queryKey: ['posts'],
+      //   refetchType: 'active'
+      // });
+
+      if ($openMore.post) {
+        $posts.delete($openMore.post.id);
+        $posts = $posts;
+      }
 
       await queryClient.invalidateQueries({
         queryKey: ['userPosts', currentUser.id],
