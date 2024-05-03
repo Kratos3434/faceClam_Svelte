@@ -25,6 +25,7 @@ export interface PostProps {
   shares: ShareProps[]
   author: UserProps,
   likes: LikeProps[],
+  featureImages: string[],
   comments: CommentProps[],
   notifications: NotificationProps[],
   content?: PostProps,

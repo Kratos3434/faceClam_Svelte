@@ -17,13 +17,15 @@
     width: number,
     height: number,
     alt: string,
-    type: string
+    type: string,
+    name: string
   }
 
 
   export let token: string | undefined;
   export let user: UserProps;
 
+  let emblaApi: any;
   let description = "";
   const photos: File[] = [];
   $: photo = photos;
@@ -31,6 +33,7 @@
   let loading = false;
   let spanEl: any;
   let displayedImages: ImagesProps[] = [];
+  let selectedIndex = 0;
   const queryClient = useQueryClient();
 
   const handleDescription = () => {
@@ -45,7 +48,8 @@
       width: 450,
       height: 450,
       alt: 'Chosen Photo',
-      type: e.target.files[0].type
+      type: e.target.files[0].type,
+      name: e.target.files[0].name
     });
     displayedImages = displayedImages;
     console.log(photo)
@@ -53,19 +57,24 @@
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    loading = true;
     if (photo) {
-      const fileType = photo[0].type;
-      if (!checkValidFileType(fileType)) {
-        error = `Invalid image or video, the file type is: ${fileType}`;
-        loading = false;
-        return false;
-      } 
+      // const fileType = photo[0].type;
+      photo.map(e => {
+        if (!checkValidFileType(e.type)) {
+          error = `Invalid image or video, the file type is: ${e.type}`;
+          loading = false;
+          return false;
+        } 
+      })
     }
+    loading = true;
     
     const formdata: any = new FormData();
     formdata.append("description", description);
-    formdata.append("featureImage", photo);
+    // formdata.append("featureImage", photo);
+    photo.map(e => formdata.append('featureImage', e));
+    console.log('featureImage:', formdata.description);
+    // `${userBaseURL}/add/post`
     const res = await fetch(`${userBaseURL}/add/post`, {
       method: "POST",
       headers: {
@@ -100,8 +109,17 @@
       $openAddPost = false;
     }
   }
+
+  function onInit(event: any) {
+    emblaApi = event.detail
+    emblaApi.on('scroll', () => {
+      selectedIndex = emblaApi.selectedScrollSnap();
+    })
+  }
 </script>
 
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y-no-static-element-interactions -->
 <Modal>
   <div class="tw-flex tw-flex-col tw-rounded-md tw-bg-white tw-max-w-[500px] tw-w-full">
     <div class="tw-flex tw-justify-center tw-items-center tw-relative">
@@ -172,11 +190,19 @@
                   {:else}
                     <img  src={displayedImages[0].img} width="450" height="450" alt="Chosen pic" class="tw-w-[450px] tw-h-[221px] tw-bg-gray-100 tw-rounded" />
                   {/if}
+                  <div class="tw-absolute tw-top-0 tw-right-0  tw-flex tw-justify-center tw-items-center">
+                    <span class="tw-rounded-[1234px] tw-bg-gray-200 tw-p-1 tw-px-2 tw-cursor-pointer hover:tw-brightness-75" on:click={() => {
+                      displayedImages = displayedImages.filter(e => e.name != photo[0].name);
+                      photo = photo.filter(e => e.name != photo[0].name);
+                    }}>
+                      <Close width={16} height={16} />
+                    </span>
+                  </div> 
                 {:else}
-                  <div class="embla" use:emblaCarouselSvelte>
+                  <div class="embla" use:emblaCarouselSvelte on:emblaInit="{onInit}">
                     <div class="embla__container">
                       {#each displayedImages as image }
-                        <div class="embla__slide">
+                        <div class="embla__slide tw-relative">
                           {#if image.type === 'video/mp4'}
                             <video width={image.width} height={image.height} controls style={`width: ${image.width}px;height: ${image.height}px;object-fit: fill;`}>
                               <source src={image.img} type="video/mp4" />
@@ -185,17 +211,32 @@
                           {:else}
                             <img src={image.img} width={image.width} height={image.height} alt={image.alt} style={`width: ${image.width}px;height: ${image.height}px`} />
                           {/if}
+                          <div class="tw-absolute tw-top-0 tw-right-0  tw-flex tw-justify-center tw-items-center">
+                            <span class="tw-rounded-[1234px] tw-bg-gray-200 tw-p-2 tw-cursor-pointer hover:tw-brightness-75" on:click={() => {
+                              photo = photo.filter(e => e.name != image.name);
+                              displayedImages = displayedImages.filter(e => e.name != image.name);
+                            }}>
+                              <Close width={16} height={16} />
+                            </span>
+                          </div> 
                         </div>
                       {/each}
                     </div>
                   </div>
                 {/if}
                 <!-- Swiping Image end -->
-                <div class="tw-absolute tw-top-0 tw-right-0  tw-flex tw-justify-center tw-items-center tw-p-3">
+                <!-- <div class="tw-absolute tw-top-0 tw-right-0  tw-flex tw-justify-center tw-items-center tw-p-3">
                   <button class="tw-rounded-[1234px] tw-bg-gray-200 tw-p-1 tw-px-2 tw-cursor-pointer hover:tw-brightness-75" on:click={() => photo = []}>
                     <Close width={16} height={16} />
                   </button>
-                </div> 
+                </div>  -->
+                {#if displayedImages.length > 1}
+                  <div class="tw-absolute tw-flex tw-justify-center tw-w-full tw-bottom-3 tw-gap-2">
+                    {#each displayedImages as _, idx }
+                      <div class={`tw-p-1 tw-rounded-[1000px] ${selectedIndex === idx ? "tw-bg-blue-600" : "tw-bg-gray-400"} tw-w-[15px] tw-h-[15px]`}></div>
+                    {/each}
+                  </div>
+                {/if}
                 <div class="tw-absolute tw-top-0 tw-left-0 tw-p-3">
                   <label class="tw-w-full tw-rounded-md tw-relative tw-items-center">
                     <div class="tw-w-full tw-bg-gray-100 tw-rounded-md tw-flex tw-flex-col tw-justify-center tw-text-center tw-cursor-pointer hover:tw-bg-gray-200 tw-transition-all">
