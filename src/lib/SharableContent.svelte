@@ -3,8 +3,18 @@
   import { generateDate, linkifyDescrip } from "../helpers";
   import { viewPost } from "$lib";
   import placeholder from '$lib/assets/placeholder.png';
+	import Swiper from "./Swiper.svelte";
 
   export let post: PostProps;
+
+  const images = post.featureImages.map(e => {
+    return {
+      img: e,
+      width: 680,
+      height: 680,
+      alt: e
+    }
+  });
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -26,6 +36,8 @@
       $viewPost.status = true;
       }} class="tw-cursor-pointer" />
     {/if}
+  {:else if post.featureImages.length > 0}
+      <Swiper {images} />
   {/if}
 {:else}
   {#if post.content.featureImage}
