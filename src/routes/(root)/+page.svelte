@@ -90,7 +90,7 @@
 </svelte:head>
 
 <!-- <svelte:window bind:scrollY={$scrollPosition} /> -->
-<div class="tw-flex tw-justify-center tw-gap-[32px] tw-pt-[70px]">
+<div class="tw-flex tw-justify-between tw-gap-[32px] tw-pt-[70px]">
   {#if data.currentUser}
     <HomeSideNav bind:user={data.currentUser} />
   {:else}
