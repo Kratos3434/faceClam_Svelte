@@ -47,7 +47,7 @@
   </div>
   <div class="tw-absolute tw-flex tw-justify-center tw-w-full tw-bottom-3 tw-gap-2">
     {#each images as _, idx }
-      <div class={`tw-p-1 tw-rounded-[1000px] ${selectedIndex === idx ? "tw-bg-blue-600" : "tw-bg-gray-400"} tw-w-[15px] tw-h-[15px]`}></div>
+      <div class={`tw-p-1 tw-rounded-[1000px] ${selectedIndex === idx ? "tw-bg-blue-600" : "tw-bg-gray-400"} tw-w-[10px] tw-h-[10px]`}></div>
     {/each}
   </div>
 </div>
