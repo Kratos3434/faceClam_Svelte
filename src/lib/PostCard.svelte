@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { PostProps, UserProps } from "../types";
+	import type { UserProps } from "../types";
   import placeholder from '$lib/assets/placeholder.png';
 	import { generateDate, linkifyDescrip } from "../helpers";
   import More from 'svelte-material-icons/DotsHorizontal.svelte';
@@ -192,7 +192,7 @@
         </div>
       </div>
     </div>
-    <span class={`tw-text-[15px] tw-pt-2 descrip`}>{@html linkifyDescrip(post.description).__html}</span>
+    <span class={`tw-text-[15px] tw-pt-2 descrip tw-whitespace-pre-line`}>{@html linkifyDescrip(post.description).__html}</span>
   </div>
   <SharableContent {post} />
   <div class="tw-flex tw-justify-between tw-px-5 tw-text-[#65676B] tw-text-[15px] tw-py-2">

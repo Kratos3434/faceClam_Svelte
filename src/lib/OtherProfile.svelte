@@ -28,10 +28,10 @@
       path: `/${encodeURI(name)}`,
       name: "Posts"
     },
-    {
-      path: `/${encodeURI(name)}/about`,
-      name: "About"
-    },
+    // {
+    //   path: `/${encodeURI(name)}/about`,
+    //   name: "About"
+    // },
     {
       path: `/${encodeURI(name)}/friends`,
       name: "Friends"
@@ -39,6 +39,10 @@
     {
       path: `/${encodeURI(name)}/photos`,
       name: 'Photos'
+    },
+    {
+      path: `/${encodeURI(name)}/blogs`,
+      name: 'Blogs'
     },
   ];
   // `${userBaseURL}/send/request/${user.id}`

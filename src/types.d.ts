@@ -112,3 +112,15 @@ export interface SavedProps {
   createdAt: string,
   updatedAt?: string
 }
+
+export interface BlogProps {
+  id: number,
+  author: UserProps,
+  authorId: number,
+  title: string,
+  featureImage: string,
+  subtitle: string,
+  content: string,
+  createdAt: string,
+  updatedAt?: string
+}
