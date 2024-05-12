@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { browser } from "$app/environment";
-	import { openAddPost, openAddStatus, openMenu, openMore, openPopup, openShare, viewLikes, viewPost, viewShares } from "$lib";
+	import { openAddBlog, openAddPost, openAddStatus, openMenu, openMore, openPopup, openShare, viewLikes, viewPost, viewShares } from "$lib";
 	import ViewLikes from "$lib/ViewLikes.svelte";
   import "../app.css";
   import { QueryClient, QueryClientProvider } from '@tanstack/svelte-query';
@@ -16,6 +16,7 @@
 	import MoreModal from "$lib/MoreModal.svelte";
 	import ShareModal from "$lib/ShareModal.svelte";
 	import ViewShares from "$lib/ViewShares.svelte";
+	import AddBlog from "$lib/AddBlog.svelte";
 
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -105,9 +106,13 @@
   {#if $viewShares.status}
     <ViewShares />
   {/if}
+
+  {#if $openAddBlog}
+    <AddBlog token={data.token} currentUserId={data.currentUser.id} />
+  {/if}
 </QueryClientProvider>
 
-{#if $viewLikes.status || $openPopup || $viewPost.status || $openAddPost || $openAddStatus || $openMenu || $openMore.status || $openShare.status || $viewShares.status} 
+{#if $viewLikes.status || $openPopup || $viewPost.status || $openAddPost || $openAddStatus || $openMenu || $openMore.status || $openShare.status || $viewShares.status || $openAddBlog} 
   <style>
     body {
       overflow: hidden;

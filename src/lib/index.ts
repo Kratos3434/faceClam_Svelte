@@ -11,6 +11,8 @@ export const openPopup = writable(false);
 
 export const openAddPost = writable(false);
 
+export const openAddBlog = writable(false);
+
 export const openAddStatus = writable(false);
 
 export const viewLikes = writable({ status: false, postId: 0 });
