@@ -55,7 +55,7 @@
     openModal = true;
     try {
       loading = true;
-      const res = await fetch(`${publicBaseURL}/resend/${data.email}`, {
+      const res = await fetch(`${publicBaseURL}/resend/otp/${data.email}`, {
         method: 'POST',
         headers: {
           "Content-Type": 'application/json',
